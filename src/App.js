@@ -1,24 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import React, { useState } from "react";
+import DOMParserReact from "./parse";
 
 function App() {
+  const [value, setValue] = useState(
+    "<div><button>hi</button><button>bye</button></div>"
+  );
+  const [element, setElement] = useState("");
+  const [submit, setSubmit] = useState(false);
+
+  function onSubmitHandler(e) {
+    e.preventDefault();
+
+    setElement(value);
+    setSubmit(true);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <form onSubmit={onSubmitHandler}>
+        <textarea value={value} onChange={(e) => setValue(e.target.value)} />
+        <button>button</button>
+      </form>
+      {submit && <DOMParserReact source={element} />}
+    </>
   );
 }
 
