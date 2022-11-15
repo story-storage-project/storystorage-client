@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const Wrapper = styled.img`
+  display: inline-block;
   width: ${props => (props.width ? props.width : '1rem')};
   height: ${props => (props.height ? props.height : '1rem')};
 `;

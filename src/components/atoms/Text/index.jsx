@@ -6,12 +6,12 @@ const TextStyle = styled.div(
   ({ theme, ...props }) => `
     padding: ${props.padding ? props.padding : '0.3rem'};
     margin: ${props.margin ? props.margin : '0'};
-    color: ${theme.colors[props.textColor]};
+    color: ${props.color ? props.color : theme.colors[props.textColor]};
     font-size: ${
       props.size ? theme.fontSize[props.size] : theme.fontSize.default
     };
     background-color: ${props.bg ? theme.colors.lightGray : 'none'};
-    font-weight: ${props.bold ? 'bold' : 'default'};
+    font-weight: ${props.bold ? props.bold : 'Medium'};
     border-bottom: ${props.bolder ? '4px' : 0} solid ${theme.colors.lightGray};
   `,
 );
