@@ -11,9 +11,7 @@ export default function Layout({ children }) {
         <LeftMenu />
         <BodyWrapper>
           <Body>{children}</Body>
-          <RightMenu>
-            <div />
-          </RightMenu>
+          <RightMenu />
         </BodyWrapper>
       </Wrapper>
     </div>
@@ -27,9 +25,11 @@ Layout.propTypes = {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
+  height: 100vh;
 
   @media ${props => props.theme.viewSize.mobile} {
     flex-direction: column;
+    height: auto;
   }
 `;
 
@@ -43,11 +43,11 @@ const BodyWrapper = styled.div`
 `;
 
 const Body = styled.div`
-  padding: 1rem;
-  height: 100vh;
-  width: 90%;
+  box-sizing: content-box;
+  height: 100%;
+  width: 100%;
 
   @media ${props => props.theme.viewSize.tablet} {
-    height: auto;
+    /* height: auto; */
   }
 `;

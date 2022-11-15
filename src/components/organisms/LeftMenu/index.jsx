@@ -4,15 +4,26 @@ import Text from '../../atoms/Text';
 import ImageIcon from '../../atoms/ImageIcon';
 import MobileHiddenToggleViewer from '../../atoms/MobileHiddenToggleViewer';
 import Button from '../../atoms/Button';
+import Toggle from '../../molecules/Toggle';
+import List from '../../atoms/List';
+import Ul from '../../molecules/Ul';
 
 function LeftMenu() {
   return (
     <Wrapper modalMode={false}>
       <Header className="menuheader">
         <div className="menuFirstLine">
-          <Text textColor="pointColor" size="large">
-            StoryStorage
-          </Text>
+          <Logo>
+            <LogoIcon
+              icon="storybook_logo_icon"
+              alt="storybook-logo"
+              width="1.4rem"
+              height="1.4rem"
+            />
+            <Text textColor="pointColor" size="large" bold="600">
+              StoryStorage
+            </Text>
+          </Logo>
           <MobileHiddenToggleViewer reverse>
             <ImageIcon icon="menu" alt="menu-icon" />
           </MobileHiddenToggleViewer>
@@ -20,17 +31,28 @@ function LeftMenu() {
       </Header>
       <MobileHiddenToggleViewer>
         <Body>
-          <Button border borderRadius="20rem" margin="0 0 1rem 0">
+          {/* <Button border borderRadius="20rem" margin="0 0 1rem 0">
             Sign in
+          </Button> */}
+          <Button
+            border
+            bg="pointColor"
+            borderRadius="20rem"
+            margin="0 0 1rem 0"
+            textColor="whiteColor"
+          >
+            Add Story
           </Button>
-          <Toggle>
-            <summary>category</summary>
-            <div className="list">
-              <div>list</div>
-              <div>list</div>
-              <div>list</div>
-              <div>list</div>
-            </div>
+          <Text size="small" color="DarkGray" margin="0.5rem 0">
+            Element
+          </Text>
+          <Toggle summary="All Button">
+            <Ul>
+              <List>list</List>
+              <List>list</List>
+              <List>list</List>
+              <List>list</List>
+            </Ul>
           </Toggle>
         </Body>
       </MobileHiddenToggleViewer>
@@ -49,7 +71,6 @@ const Wrapper = styled.div(
     min-width: 10%;
     padding: 3rem 2rem;
     background-color: ${theme.colors.leftMenu};
-    border: 1px solid black;
 
     @media ${theme.viewSize.tablet} {
       width: 15rem;
@@ -92,32 +113,14 @@ const Body = styled.div`
   }
 `;
 
-const Toggle = styled.details`
-  summary {
-    list-style: none;
-  }
-  summary::-webkit-details-marker {
-    display: none;
-    width: 100px;
-  }
+const Logo = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
-  & summary::before {
-    display: inline-block;
-    content: '▸ ';
-    color: ${props => props.theme.colors.darkGray};
-    width: 15px;
-  }
-
-  &[open] summary::before {
-    display: inline-block;
-    content: '▾ ';
-    color: ${props => props.theme.colors.pointColor};
-    width: 15px;
-  }
-
-  .list {
-    padding-left: 1rem;
-  }
+const LogoIcon = styled(ImageIcon)`
+  filter: invert(36%) sepia(100%) saturate(1092%) hue-rotate(189deg)
+    brightness(95%) contrast(85%);
 `;
 
 export default LeftMenu;

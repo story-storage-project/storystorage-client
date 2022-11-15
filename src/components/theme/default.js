@@ -7,6 +7,7 @@ export const lightTheme = {
   lightGray: '#0000000F',
   darkGray: '#37352F66',
   pointColor: '#2383E2',
+  whiteColor: '#ffffff',
   body: '#FBFBFB',
   leftMenu: '#f2f2f2',
   rightMenu: '#19171113',
@@ -31,6 +32,7 @@ base.viewSize = {
 base.fontSize = {
   small: '0.8rem',
   default: '0.9rem',
+  defaultLarge: '1.1rem',
   large: '1.2rem',
   xLarge: '1.8rem',
 };

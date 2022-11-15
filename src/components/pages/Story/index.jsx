@@ -47,6 +47,7 @@ const Wrapper = styled.div`
 
 const P = styled.p`
   margin: 1rem 0 2rem 0;
+  padding: 0.3rem;
 `;
 
 const Preview = styled.div`

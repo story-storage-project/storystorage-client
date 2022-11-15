@@ -121,8 +121,6 @@ export default function RightMenu() {
 
 const Container = styled.div`
   padding: 4rem 1.5rem;
-  width: 90%;
-  height: 100vh;
   background-color: ${props => props.theme.colors.rightMenu};
 `;
 
