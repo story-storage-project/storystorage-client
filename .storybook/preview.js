@@ -1,5 +1,3 @@
-import { addDecorator } from '@storybook/react';
-import { withThemesProvider } from 'storybook-addon-styled-component-theme';
 import { ThemeProvider } from 'styled-components';
 import base, { lightTheme } from '../src/components/theme/default';
 import GlobalStyle from '../src/components/theme/GlobalStyle';

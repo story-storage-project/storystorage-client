@@ -8,6 +8,8 @@ module.exports = {
     'storybook-addon-styled-component-theme',
     'storybook-addon-styled-component-theme/dist/preset',
     '@storybook/addon-viewport',
+    '@storybook/addon-actions',
+    '@storybook/addon-controls',
   ],
   framework: '@storybook/react',
   core: {
