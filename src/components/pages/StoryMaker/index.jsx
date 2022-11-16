@@ -1,7 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import styled from 'styled-components';
 import htmlElementsSet from '../../../data/htmlElements';
-import reactHtmlAttributes from '../../../data/reactHtmlAttributes';
+import cssPropertiesMap from '../../../data/cssProperties';
+import {
+  htmlKeyOfhtmlJsxAttributes,
+  jsxKeyOfhtmlJsxAttributes,
+} from '../../../data/htmlJsxAttributes';
 import {
   getCaretPosition,
   setCaretPosition,
@@ -9,6 +13,7 @@ import {
   insertBracket,
 } from '../../../utils/codeEditor';
 import keyMaker from '../../../utils/keyMaker';
+import TextEditor from '../../molecules/TextEditor';
 
 export default function StoryMaker() {
   const divHtmlTextAreaRef = useRef();
@@ -26,134 +31,144 @@ export default function StoryMaker() {
   const [cssOriginalData, setCssOriginalData] = useState('');
   const [css, setCss] = useState('');
 
-  const handleHtmlKeyDOwn = e => {
-    setHtml(htmlOriginalData);
+  const handleHtmlKeyDown = useCallback(
+    e => {
+      setHtml(htmlOriginalData);
 
-    if (e.key === 'Tab') {
-      const htmlValue = insertTab(
-        e.currentTarget,
-        e.currentTarget.selectionStart,
-      );
-      e.preventDefault();
+      if (e.key === 'Tab') {
+        const htmlValue = insertTab(
+          e.currentTarget,
+          e.currentTarget.selectionStart,
+        );
+        e.preventDefault();
 
-      setHtmlOriginalData(htmlValue);
-      setHtml(htmlValue);
-    }
+        setHtmlOriginalData(htmlValue);
+        setHtml(htmlValue);
+      }
 
-    if (e.key === 'Enter') {
-      isClickEnter.current = true;
-    }
+      if (e.key === 'Enter') {
+        isClickEnter.current = true;
+      }
 
-    if (e.key === '<') {
-      setHtmlBracket(() => ({
-        isInside: true,
-        data: '',
-      }));
-    }
+      if (e.key === '<') {
+        setHtmlBracket(() => ({
+          isInside: true,
+          data: '',
+        }));
+      }
 
-    if (htmlBracket.isInside) {
-      if (e.key === '/') {
+      if (htmlBracket.isInside) {
+        if (e.key === '/') {
+          setHtmlBracket(() => ({
+            isInside: false,
+            data: '',
+          }));
+
+          return;
+        }
+
+        if (e.key.length > 1) {
+          return;
+        }
+
+        if (e.key === 'Backspace') {
+          setHtmlBracket(prev => ({
+            ...prev,
+            data: prev.data.slice(0, -1),
+          }));
+        }
+        setHtmlBracket(prev => ({
+          ...prev,
+          data: prev.data + e.key,
+        }));
+      }
+
+      if (e.key === '>' && htmlBracket.data) {
         setHtmlBracket(() => ({
           isInside: false,
           data: '',
         }));
+        const newValue = insertBracket(
+          e.currentTarget,
+          e.currentTarget.selectionStart,
+          `<${htmlBracket.data}>`,
+        );
 
-        return;
+        setHtmlOriginalData(newValue);
+        setHtml(newValue);
+
+        const caretPosition = getCaretPosition(
+          e.currentTarget,
+          e.currentTarget.selectionStart,
+        );
+
+        setHtmlCursorPosition(caretPosition);
+        setAutoHtmlBracketMode(true);
+      }
+    },
+    [htmlOriginalData, html],
+  );
+
+  const handleHtmlTextChange = useCallback(
+    e => {
+      if (autoHtmlBracketMode) {
+        setAutoHtmlBracketMode(false);
+        setCaretPosition(e.target, htmlcursorPosition + 1);
+        e.target.focus();
       }
 
-      if (e.key.length > 1) {
-        return;
+      const { value } = e.target;
+      setHtmlOriginalData(value);
+
+      if (isClickEnter.current) {
+        setHtml(`${value}\n`);
+        isClickEnter.current = false;
+      } else {
+        setHtml(value);
       }
-
-      if (e.key === 'Backspace') {
-        setHtmlBracket(prev => ({
-          ...prev,
-          data: prev.data.slice(0, -1),
-        }));
-      }
-      setHtmlBracket(prev => ({
-        ...prev,
-        data: prev.data + e.key,
-      }));
-    }
-
-    if (e.key === '>' && htmlBracket.data) {
-      setHtmlBracket(() => ({
-        isInside: false,
-        data: '',
-      }));
-      const newValue = insertBracket(
-        e.currentTarget,
-        e.currentTarget.selectionStart,
-        `<${htmlBracket.data}>`,
-      );
-
-      setHtmlOriginalData(newValue);
-      setHtml(newValue);
-
-      const caretPosition = getCaretPosition(
-        e.currentTarget,
-        e.currentTarget.selectionStart,
-      );
-
-      setHtmlCursorPosition(caretPosition);
-      setAutoHtmlBracketMode(true);
-    }
-  };
-
-  const handleHtmlTextChange = e => {
-    if (autoHtmlBracketMode) {
-      setAutoHtmlBracketMode(false);
-      setCaretPosition(e.target, htmlcursorPosition + 1);
-      e.target.focus();
-    }
-
-    const { value } = e.target;
-    setHtmlOriginalData(value);
-
-    if (isClickEnter.current) {
-      setHtml(`${value}\n`);
-      isClickEnter.current = false;
-    } else {
-      setHtml(value);
-    }
-  };
+    },
+    [autoHtmlBracketMode, htmlcursorPosition],
+  );
 
   const handleHtmlScroll = e => {
     divHtmlTextAreaRef.current.scrollTop = e.target.scrollTop;
     divHtmlTextAreaRef.current.selectionDirection = e.target.selectionDirection;
   };
 
-  const handleCssKeyDOwn = e => {
-    setCss(cssOriginalData);
+  const handleCssKeyDOwn = useCallback(
+    e => {
+      setCss(cssOriginalData);
 
-    if (e.key === 'Tab') {
-      const cssValue = insertTab(
-        e.currentTarget,
-        e.currentTarget.selectionStart,
-      );
-      e.preventDefault();
+      if (e.key === 'Tab') {
+        const cssValue = insertTab(
+          e.currentTarget,
+          e.currentTarget.selectionStart,
+        );
+        e.preventDefault();
 
-      setCssOriginalData(cssValue);
-      setCss(cssValue);
-    }
+        setCssOriginalData(cssValue);
+        setCss(cssValue);
+      }
 
-    if (e.key === 'Enter') {
-      isClickEnter.current = true;
-    }
+      if (e.key === 'Enter') {
+        isClickEnter.current = true;
+      }
 
-    if (e.key === '{' || e.key === '`') {
-      const newValue = insertBracket(
-        e.currentTarget,
-        e.currentTarget.selectionStart,
-        e.key === '{' ? '{' : '`',
-      );
+      if (e.key === '{' || e.key === '`') {
+        const newValue = insertBracket(
+          e.currentTarget,
+          e.currentTarget.selectionStart,
+          e.key === '{' ? '}' : '`',
+        );
 
-      setCssOriginalData(newValue);
-      setCss(newValue);
-    }
-  };
-  const handleCssTextChange = e => {
+        setCssOriginalData(newValue);
+        setCss(newValue);
+      }
+    },
+    [cssOriginalData],
+  );
+
+  const handleCssTextChange = useCallback(e => {
     const { value } = e.target;
     setCssOriginalData(value);
 
@@ -163,18 +178,17 @@ export default function StoryMaker() {
     } else {
       setCss(value);
     }
-  };
+  }, []);
 
   const handleCssScroll = e => {
     divCssTextAreaRef.current.scrollTop = e.target.scrollTop;
     divCssTextAreaRef.current.selectionDirection = e.target.selectionDirection;
   };
 
-  const htmlHighlightQueryText = code => {
+  const htmlHighlightQueryText = useCallback(code => {
     const bracketSplit = code.split(/(<!--| |-->|<|>)/);
-    // input.split(/(\/\/)/)
 
-    let isInTag = false;
+    let tagName = '';
 
     return bracketSplit.map((item, i) => {
       if (bracketSplit[i - 1] === '<!--' && bracketSplit[i + 1] === '-->') {
@@ -182,7 +196,7 @@ export default function StoryMaker() {
       }
 
       if (item === '<') {
-        isInTag = true;
+        tagName = bracketSplit[i + 1];
         return <Punctuati key={keyMaker(10) + item}>{item}</Punctuati>;
       }
 
@@ -197,11 +211,14 @@ export default function StoryMaker() {
         );
       }
 
-      if (isInTag && item !== '>') {
+      if (tagName && item !== '>') {
         const splitAttribute = item.split(/(=)/);
-        const lowerCase = splitAttribute[0].toLowerCase();
-        const isHtmlAttribute = reactHtmlAttributes[lowerCase];
-        return isHtmlAttribute ? (
+        const attributeName = splitAttribute[0];
+        const isCorrectAttributeName =
+          htmlKeyOfhtmlJsxAttributes[attributeName] ||
+          jsxKeyOfhtmlJsxAttributes[attributeName];
+
+        return isCorrectAttributeName ? (
           <>
             <AttributeName key={keyMaker(10) + item}>
               {splitAttribute[0]}
@@ -225,16 +242,16 @@ export default function StoryMaker() {
       }
 
       if (item === '>') {
-        isInTag = false;
+        tagName = '';
         return <Punctuati key={keyMaker(10) + item}>{item}</Punctuati>;
       }
 
       return item;
     });
-  };
+  }, []);
 
-  const cssHighlightQueryText = code => {
-    const bracketSplit = code.split(/(<!--| |-->|<|>|)/);
+  const cssHighlightQueryText = useCallback(code => {
+    const bracketSplit = code.split(/(<!--|{|-->|}|;|:)/);
     let isInTag = false;
 
     return bracketSplit.map((item, i) => {
@@ -242,57 +259,50 @@ export default function StoryMaker() {
         return <Punctuati key={keyMaker(10) + item}>{item}</Punctuati>;
       }
 
-      if (item === '<') {
+      if (item === '{') {
         isInTag = true;
         return <Punctuati key={keyMaker(10) + item}>{item}</Punctuati>;
       }
 
-      if (bracketSplit[i - 1] === '<') {
-        const itemData = item[0] === '/' ? item.slice(1) : item;
-        const isHtmlElement = htmlElementsSet.has(itemData);
-
-        return isHtmlElement ? (
+      if (
+        (isInTag && bracketSplit[i - 1] === '{') ||
+        bracketSplit[i - 1] === ';'
+      ) {
+        const removeEscapeChr = item.replace(/\n| |\t/g, '');
+        const isCssProperty = cssPropertiesMap.has(removeEscapeChr);
+        return isCssProperty ? (
           <TagCode key={keyMaker(10) + item}>{item}</TagCode>
         ) : (
           <IncorrectTagCode key={keyMaker(10) + item}>{item}</IncorrectTagCode>
         );
       }
 
-      if (isInTag && item !== '>') {
-        const splitAttribute = item.split(/(=)/);
-        const lowerCase = splitAttribute[0].toLowerCase();
-        const isHtmlAttribute = reactHtmlAttributes[lowerCase];
-        return isHtmlAttribute ? (
-          <>
-            <AttributeName key={keyMaker(10) + item}>
-              {splitAttribute[0]}
-            </AttributeName>
-            <Punctuati key={keyMaker(10) + item}>{splitAttribute[1]}</Punctuati>
-            <AttributeValue key={keyMaker(10) + item}>
-              {splitAttribute[2]}
-            </AttributeValue>
-          </>
+      if (isInTag && item === ':') {
+        return <Punctuati key={keyMaker(10) + item}>{item}</Punctuati>;
+      }
+
+      if (isInTag && bracketSplit[i - 1] === ':') {
+        const removeSpace = item.replace(/ /g, '');
+
+        return bracketSplit[i + 1] === ';' &&
+          removeSpace[0] === '"' &&
+          removeSpace.slice(-1) === '"' ? (
+          <AttributeName key={keyMaker(10) + item}>{item}</AttributeName>
         ) : (
-          <>
-            <InCorrectAttributeName key={keyMaker(10) + item}>
-              {splitAttribute[0]}
-            </InCorrectAttributeName>
-            <Punctuati key={keyMaker(10) + item}>{splitAttribute[1]}</Punctuati>
-            <AttributeValue key={keyMaker(10) + item}>
-              {splitAttribute[2]}
-            </AttributeValue>
-          </>
+          <InCorrectAttributeName key={keyMaker(10) + item}>
+            {item}
+          </InCorrectAttributeName>
         );
       }
 
-      if (item === '>') {
+      if (item === '}') {
         isInTag = false;
         return <Punctuati key={keyMaker(10) + item}>{item}</Punctuati>;
       }
 
       return item;
     });
-  };
+  }, []);
 
   return (
     <Container>
@@ -310,38 +320,26 @@ export default function StoryMaker() {
           <input id="margin" />
         </InputWrapper>
         <CodeEditorContainer>
-          <CodeEditorWrapper>
-            <InvisibleHtmlTextArea
-              spellCheck="false"
-              value={htmlOriginalData}
-              onChange={handleHtmlTextChange}
-              onKeyDown={handleHtmlKeyDOwn}
-              placeholder="Please enter HTML code"
-              onScroll={handleHtmlScroll}
-              wrap="hard"
-              cols="20"
-              rows="3"
-            />
-            <DivHtmlTextArea ref={divHtmlTextAreaRef} unselectable="on">
-              {htmlHighlightQueryText(html)}
-            </DivHtmlTextArea>
-          </CodeEditorWrapper>
-          <CodeEditorWrapper>
-            <InvisibleHtmlTextArea
-              spellCheck="false"
-              value={cssOriginalData}
-              onChange={handleCssTextChange}
-              onKeyDown={handleCssKeyDOwn}
-              placeholder="Please enter CSS code"
-              onScroll={handleCssScroll}
-              wrap="hard"
-              cols="20"
-              rows="3"
-            />
-            <DivCssTextArea ref={divCssTextAreaRef} unselectable="on">
-              {css}
-            </DivCssTextArea>
-          </CodeEditorWrapper>
+          <TextEditor
+            value={htmlOriginalData}
+            onChange={handleHtmlTextChange}
+            onKeyDown={handleHtmlKeyDown}
+            placeholder="Please enter HTML code"
+            onScroll={handleHtmlScroll}
+            ref={divHtmlTextAreaRef}
+          >
+            {htmlHighlightQueryText(html)}
+          </TextEditor>
+          <TextEditor
+            value={cssOriginalData}
+            onChange={handleCssTextChange}
+            onKeyDown={handleCssKeyDOwn}
+            placeholder="Please enter CSS code"
+            onScroll={handleCssScroll}
+            ref={divCssTextAreaRef}
+          >
+            {cssHighlightQueryText(css)}
+          </TextEditor>
         </CodeEditorContainer>
       </Wrapper>
     </Container>
@@ -395,85 +393,6 @@ const CodeEditorContainer = styled.div`
     justify-content: flex-start;
   }
 `;
-
-const CodeEditorWrapper = styled.div`
-  box-sizing: content-box;
-  position: relative;
-  width: 50%;
-  height: 100%;
-  margin: 2rem;
-
-  @media ${props => props.theme.viewSize.tablet} {
-    width: 90%;
-    height: 100vh;
-    flex-shrink: 1;
-  }
-`;
-
-const InvisibleHtmlTextArea = styled.textarea`
-  display: block;
-  position: absolute;
-  overflow-wrap: break-word;
-  white-space: break-spaces;
-  word-wrap: break-word;
-  word-break: break-all;
-  z-index: 2;
-  box-sizing: border-box;
-
-  width: 100%;
-  height: 80%;
-  margin: 0;
-  padding: 1rem;
-  border-radius: 1rem;
-  border: 1px solid ${props => props.theme.colors.lightGray};
-  box-sizing: border-box;
-  outline: none;
-
-  resize: none;
-  line-height: 1.2;
-  letter-spacing: 1px;
-
-  font-family: 'Mukta', sans-serif;
-  font-size: ${props => props.theme.fontSize.code};
-  font-weight: 300;
-  color: transparent;
-  background-color: transparent;
-  caret-color: black;
-
-  &:hover {
-    border: 1px solid ${props => props.theme.colors.pointColor};
-  }
-`;
-
-const DivHtmlTextArea = styled.div`
-  position: absolute;
-  overflow-wrap: break-word;
-  white-space: break-spaces;
-  word-wrap: break-word;
-  word-break: break-all;
-  box-sizing: border-box;
-
-  overflow: scroll;
-  overflow-y: scroll;
-
-  width: 100%;
-  height: 80%;
-  margin: 0;
-  padding: 1rem;
-  border: none;
-  border-radius: 1rem;
-  box-sizing: border-box;
-
-  letter-spacing: 1px;
-  line-height: 1.2;
-
-  font-family: 'Mukta', sans-serif;
-  font-size: ${props => props.theme.fontSize.code};
-  font-weight: 300;
-  background-color: ${props => props.theme.codeThemeBright.backgrounColor};
-`;
-
-const DivCssTextArea = styled(DivHtmlTextArea)``;
 
 const Code = styled.span`
   max-width: inherit;

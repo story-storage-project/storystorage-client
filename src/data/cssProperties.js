@@ -3,7 +3,7 @@
 // gist.github.com/simurai/40902209f695b2d080e1
 // codepen.io/lordliquid/pen/GvzpRJ
 
-const cssProperties = {
+const cssKeyOfcssProperties = {
   'align-content': 'alignContent',
   'align-items': 'alignItems',
   'align-self': 'alignSelf',
@@ -259,7 +259,7 @@ const cssProperties = {
   'transition-delay': 'transitionDelay',
   'transition-duration': 'transitionDuration',
   'transition-property': 'transitionProperty',
-  '// transition-timing-function': 'transitionTimingFunction',
+  'transition-timing-function': 'transitionTimingFunction',
   'unicode-bidi': 'unicodeBidi',
   'vector-effect': 'vectorEffect',
   'vertical-align': 'verticalAlign',
@@ -325,6 +325,6 @@ const cssProperties = {
   '-webkit-user-modify': 'webkitUserModify',
 };
 
-const cssPropertiesSet = new Set(cssProperties);
+const cssPropertiesMap = new Map(Object.entries(cssKeyOfcssProperties));
 
-export default cssPropertiesSet;
+export default cssPropertiesMap;
