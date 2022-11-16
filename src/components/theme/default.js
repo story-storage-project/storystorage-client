@@ -23,10 +23,20 @@ export const darkTheme = {
   rightMenu: '#50577A',
 };
 
+base.codeThemeBright = {
+  backgrounColor: '#f7f6f3',
+  tagColor: '#DD4A68',
+  tagUnderLineColor: '#ff7878',
+  punctuation: '#999',
+  attributeName: '#690',
+  attributeValue: '#07a',
+};
+
 base.viewSize = {
-  mobile: `(max-width: 480px)`,
+  mobile: `(max-width: 750px)`,
   tablet: `(max-width: 900px)`,
   desktop: `(max-width: 1024px)`,
+  backgrounColor: 'red',
 };
 
 base.fontSize = {
@@ -35,6 +45,7 @@ base.fontSize = {
   defaultLarge: '1.1rem',
   large: '1.2rem',
   xLarge: '1.8rem',
+  code: '0.95rem',
 };
 
 export default base;
