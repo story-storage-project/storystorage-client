@@ -5,8 +5,8 @@ import Text from '../Text';
 
 const Wrapper = styled.li`
   list-style: none;
-  margin: 0.3rem;
-  font-weight: 400;
+  margin: 0.1rem;
+  font-weight: 300;
 `;
 
 const EmojiText = styled(Text)`

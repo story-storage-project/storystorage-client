@@ -11,7 +11,7 @@ const TextStyle = styled.div(
       props.size ? theme.fontSize[props.size] : theme.fontSize.default
     };
     background-color: ${props.bg ? theme.colors.lightGray : 'none'};
-    font-weight: ${props.bold ? props.bold : 'Medium'};
+    font-weight: ${props.bold ? props.bold : '300'};
     border-bottom: ${props.bolder ? '4px' : 0} solid ${theme.colors.lightGray};
   `,
 );

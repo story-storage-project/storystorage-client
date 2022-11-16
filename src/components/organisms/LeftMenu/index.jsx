@@ -68,7 +68,7 @@ const Wrapper = styled.div(
     z-index: 10;
     top: 0;
     width: 15rem;
-    min-width: 10%;
+    min-width: 10rem;
     padding: 3rem 2rem;
     background-color: ${theme.colors.leftMenu};
 
@@ -79,7 +79,8 @@ const Wrapper = styled.div(
     }
 
     @media ${theme.viewSize.mobile} {
-      width: 90%;
+      box-sizing: border-box;
+      width: 100%;
       height: ${props.modalMode ? '100vh' : '100%'};
       padding: 1rem;
     }
@@ -91,6 +92,7 @@ const Header = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     /* padding: 1rem; */
   }
 
