@@ -23,12 +23,12 @@ const Wrapper = styled.div`
   }
 `;
 
-function Icon({ children, ...props }) {
+function RoundButton({ children, ...props }) {
   return <Wrapper {...props}>{children}</Wrapper>;
 }
 
-Icon.propTypes = {
+RoundButton.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export default Icon;
+export default RoundButton;
