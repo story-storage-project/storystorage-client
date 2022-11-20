@@ -12,36 +12,36 @@ const StyledButton = styled.button(
   box-sizing: border-box;
   transition: background-color 250ms ease-out, color 250ms ease-out,
     border-color 250ms ease-out;
+  width: ${props.width ? props.width : 'fit-content'};
   border: 0.0625em solid ${
     props.border ? theme.colors.darkGray : 'transparent'
   };
   border-radius: ${props.borderRadius ? props.borderRadius : 0};
   background-color: ${props.bg ? theme.colors[props.bg] : 'transparent'};
-  padding: ${props.padding ? props.padding : '0.5rem'};
+  padding: ${props.padding ? props.padding : '0.5rem 1rem'};
   margin: ${props.margin ? props.margin : 0.3};
+  cursor: pointer;
+
+  &:hover {
+    border: 1px solid blue;
+  }
+
   color: ${
     props.textColor ? theme.colors[props.textColor] : theme.colors.textColor
   }
 `,
 );
 
-function Button({ children, bg, ...props }) {
-  return (
-    <StyledButton bg={bg} {...props}>
-      {children}
-    </StyledButton>
-  );
+export default function Button({ children, ...props }) {
+  return <StyledButton {...props}>{children}</StyledButton>;
 }
 
 Button.propTypes = {
   children: PropTypes.string.isRequired,
   textColor: PropTypes.string,
-  bg: PropTypes.string,
 };
 
 Button.defaultProps = {
   textColor: 'textColor',
-  bg: 'lightGray',
+  // bg: 'lightGray',
 };
-
-export default Button;
