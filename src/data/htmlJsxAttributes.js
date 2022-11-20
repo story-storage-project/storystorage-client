@@ -17,7 +17,7 @@ export const htmlKeyOfhtmlJsxAttributes = {
   cellpadding: 'cellPadding',
   cellspacing: 'cellSpacing',
   challenge: 'challenge',
-  charset: 'charset',
+  charset: 'charSet',
   checked: 'checked',
   cite: 'cite',
   class: 'className',
