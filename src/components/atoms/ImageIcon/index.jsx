@@ -6,6 +6,7 @@ const Wrapper = styled.img`
   display: inline-block;
   width: ${props => (props.width ? props.width : '1rem')};
   height: ${props => (props.height ? props.height : '1rem')};
+  cursor: ${props => (props.pointer ? 'pointer' : 'default')};
 `;
 
 function ImageIcon({ icon, alt, ...props }) {

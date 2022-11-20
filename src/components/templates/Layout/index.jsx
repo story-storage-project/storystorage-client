@@ -1,34 +1,36 @@
 import React from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
+import { Outlet } from 'react-router-dom';
 import LeftMenu from '../../organisms/LeftMenu';
-import RightMenu from '../../organisms/RightMenu';
 
-export default function Layout({ children }) {
+export default function Layout() {
   return (
     <div>
       <Wrapper>
         <LeftMenu />
         <BodyWrapper>
-          <Body>{children}</Body>
-          <RightMenu />
+          <Body>
+            <Outlet />
+          </Body>
         </BodyWrapper>
       </Wrapper>
     </div>
   );
 }
 
-Layout.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-
 const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
+  height: auto;
   height: 100vh;
+  overflow: hidden;
 
-  @media ${props => props.theme.viewSize.mobile} {
+  @media ${props => props.theme.viewSize.tablet} {
     flex-direction: column;
+    height: 100%;
+  }
+
+  @media ${props => props.theme.viewSize.tablet} {
     height: auto;
   }
 `;
@@ -36,6 +38,9 @@ const Wrapper = styled.div`
 const BodyWrapper = styled.div`
   display: flex;
   width: 100%;
+  height: 100vh;
+  min-height: 100vh;
+  overflow: auto;
 
   @media ${props => props.theme.viewSize.tablet} {
     flex-direction: column;
@@ -44,10 +49,9 @@ const BodyWrapper = styled.div`
 
 const Body = styled.div`
   box-sizing: content-box;
-  height: 100%;
   width: 100%;
 
   @media ${props => props.theme.viewSize.tablet} {
-    /* height: auto; */
+    overflow: auto;
   }
 `;

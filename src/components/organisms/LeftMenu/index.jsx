@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import Text from '../../atoms/Text';
 import ImageIcon from '../../atoms/ImageIcon';
 import MobileHiddenToggleViewer from '../../atoms/MobileHiddenToggleViewer';
@@ -8,12 +9,27 @@ import Toggle from '../../molecules/Toggle';
 import List from '../../atoms/List';
 import Ul from '../../molecules/Ul';
 
-function LeftMenu() {
+export default function LeftMenu() {
+  const [onToggle, setOnToggle] = useState(false);
+  const navigate = useNavigate();
+
+  const logoClickHandler = () => {
+    navigate('/');
+  };
+
+  const addStoryClickHandler = () => {
+    navigate('/story-maker');
+  };
+
+  const menuClickHandler = () => {
+    setOnToggle(!onToggle);
+  };
+
   return (
     <Wrapper modalMode={false}>
       <Header className="menuheader">
         <div className="menuFirstLine">
-          <Logo>
+          <Logo onClick={logoClickHandler}>
             <LogoIcon
               icon="storybook_logo_icon"
               alt="storybook-logo"
@@ -25,11 +41,16 @@ function LeftMenu() {
             </Text>
           </Logo>
           <MobileHiddenToggleViewer reverse>
-            <ImageIcon icon="menu" alt="menu-icon" />
+            <ImageIcon
+              icon="menu"
+              alt="menu-icon"
+              pointer
+              onClick={menuClickHandler}
+            />
           </MobileHiddenToggleViewer>
         </div>
       </Header>
-      <MobileHiddenToggleViewer>
+      <MobileHiddenToggleViewer toggle={onToggle}>
         <Body>
           {/* <Button border borderRadius="20rem" margin="0 0 1rem 0">
             Sign in
@@ -40,6 +61,7 @@ function LeftMenu() {
             borderRadius="20rem"
             margin="0 0 1rem 0"
             textColor="whiteColor"
+            onClick={addStoryClickHandler}
           >
             Add Story
           </Button>
@@ -67,33 +89,26 @@ const Wrapper = styled.div(
     position: sticky;
     z-index: 10;
     top: 0;
-    width: 15rem;
+    width: 10rem;
+    height: 100%;
     min-width: 10rem;
     padding: 3rem 2rem;
     background-color: ${theme.colors.leftMenu};
 
     @media ${theme.viewSize.tablet} {
-      width: 15rem;
-      min-width: 10%;
-      padding: 2rem 1rem;
-    }
-
-    @media ${theme.viewSize.mobile} {
       box-sizing: border-box;
       width: 100%;
-      height: ${props.modalMode ? '100vh' : '100%'};
+      height: ${props.modalMode ? '100vh' : '5rem'};
       padding: 1rem;
     }
 `,
 );
 
 const Header = styled.div`
-  @media ${props => props.theme.viewSize.mobile} {
+  @media ${props => props.theme.viewSize.tablet} {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    /* padding: 1rem; */
   }
 
   .menuFirstLine {
@@ -107,8 +122,10 @@ const Header = styled.div`
 const Body = styled.div`
   display: flex;
   flex-direction: column;
+  position: sticky;
   padding: 1rem 0;
   width: 100%;
+  height: inherit;
 
   @media ${props => props.theme.viewSize.mobile} {
     width: 100%;
@@ -118,11 +135,11 @@ const Body = styled.div`
 const Logo = styled.div`
   display: flex;
   align-items: center;
+  user-select: none;
+  cursor: pointer;
 `;
 
 const LogoIcon = styled(ImageIcon)`
   filter: invert(36%) sepia(100%) saturate(1092%) hue-rotate(189deg)
     brightness(95%) contrast(85%);
 `;
-
-export default LeftMenu;

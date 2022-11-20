@@ -18,6 +18,7 @@ export const darkTheme = {
   lightGray: '#0000000F',
   darkGray: '#37352F66',
   pointColor: '#2383E2',
+  whiteColor: '#ffffff',
   body: '#474E68',
   leftMenu: '#404258',
   rightMenu: '#50577A',
@@ -37,6 +38,13 @@ base.viewSize = {
   tablet: `(max-width: 900px)`,
   desktop: `(max-width: 1024px)`,
   backgrounColor: 'red',
+};
+
+base.codeEditorSize = {
+  mobile: `(max-width: 400px)`,
+  tablet: `(max-width: 800px)`,
+  laptop: `(max-width: 1024px)`,
+  desktop: `(max-width: 1480px)`,
 };
 
 base.fontSize = {

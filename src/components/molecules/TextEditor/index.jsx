@@ -12,9 +12,6 @@ const TextEditor = forwardRef((props, ref) => {
         onKeyDown={props.onKeyDown}
         placeholder={props.placeholder}
         onScroll={props.onScroll}
-        wrap="hard"
-        cols="20"
-        rows="3"
       />
       <DivTextArea ref={ref} unselectable="on">
         {props.children}
@@ -35,32 +32,72 @@ TextEditor.propTypes = {
 const Wrapper = styled.div`
   box-sizing: content-box;
   position: relative;
-  width: 50%;
+  width: 100%;
   height: 100%;
-  margin: 2rem;
+  margin: 0 2rem 2rem 2rem;
+  flex: 1;
 
-  @media ${props => props.theme.viewSize.tablet} {
-    width: 90%;
-    height: 100vh;
-    flex-shrink: 1;
+  @media (min-width: 2001px) {
+    width: 50rem;
+    height: 70rem;
+  }
+
+  @media (min-width: 1501px) and (max-width: 2000px) {
+    width: 40rem;
+    height: 50rem;
+  }
+
+  @media (min-width: 1301px) and (max-width: 1500px) {
+    width: 500px;
+    height: 600px;
+  }
+
+  @media (min-width: 1101px) and (max-width: 1300px) {
+    width: 400px;
+    height: 600px;
+  }
+
+  @media (min-width: 901px) and (max-width: 1100px) {
+    width: 300px;
+    height: 500px;
+  }
+
+  @media (min-width: 801px) and (max-width: 900px) {
+    width: 500px;
+    height: 350px;
+  }
+
+  @media ${props => props.theme.codeEditorSize.tablet} {
+    width: 500px;
+    height: 350px;
+  }
+
+  @media (max-width: 500px) {
+    width: 400px;
+    height: 300px;
+  }
+
+  @media ${props => props.theme.codeEditorSize.mobile} {
+    width: 300px;
+    height: 300px;
   }
 `;
 
 const InvisibleTextArea = styled.textarea`
   display: block;
   position: absolute;
-  overflow-wrap: break-word;
+  overflow-x: scroll;
   white-space: break-spaces;
   word-wrap: break-word;
   word-break: break-all;
   z-index: 2;
   box-sizing: border-box;
 
-  width: 100%;
-  height: 80%;
+  width: inherit;
+  height: inherit;
   margin: 0;
-  padding: 1rem;
-  border-radius: 1rem;
+  padding: 10px;
+  border-radius: 10px;
   border: 1px solid ${props => props.theme.colors.lightGray};
   box-sizing: border-box;
   outline: none;
@@ -87,17 +124,18 @@ const DivTextArea = styled.div`
   white-space: break-spaces;
   word-wrap: break-word;
   word-break: break-all;
-  box-sizing: border-box;
 
-  overflow: scroll;
+  box-sizing: border-box;
+  outline: none;
+
   overflow-y: scroll;
 
-  width: 100%;
-  height: 80%;
+  width: inherit;
+  height: inherit;
   margin: 0;
-  padding: 1rem;
-  border: none;
-  border-radius: 1rem;
+  padding: 10px;
+  border: 1px solid transparent;
+  border-radius: 10px;
   box-sizing: border-box;
 
   letter-spacing: 1px;
