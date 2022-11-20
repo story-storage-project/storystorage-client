@@ -31,11 +31,22 @@ function validateCss(css) {
 function getCssMode(key) {
   const firstCha = key[0];
   if (firstCha === '.') {
-    return 'class';
+    return 'className';
   }
 
   if (firstCha === '#') {
     return 'id';
+  }
+
+  // if (
+  //   (key.includes('[') && htmlElementsSet.has(key.split('[')[0])) ||
+  //   key.includes('>')
+  // ) {
+  //   return 'element';
+  // }
+
+  if (key === '*') {
+    return 'element';
   }
 
   if (!htmlElementsSet.has(key)) {
@@ -53,22 +64,53 @@ function getCssAllKey(css) {
     if (curr === '{') {
       isInsideBracket = true;
 
+      // div, .class, div..
+      key = key.trim();
       if (key.includes(',')) {
         const sliceKeyArr = key.split(',');
         const validatedKeyArr = [];
 
         sliceKeyArr.forEach(sliceKey => {
           const mode = getCssMode(sliceKey);
+
+          let copySliceKey = sliceKey;
+
+          if (mode === 'className') {
+            copySliceKey = sliceKey.replace(/./, '');
+          }
+
           const keyObject = {};
 
           if (mode !== VALIDATION_ERROR_MESSAGE.CSS.INCORRECT_KEY) {
             keyObject.mode = mode;
-            keyObject.key = sliceKey;
-
-            validatedKeyArr.push(keyObject);
+            keyObject.key = copySliceKey;
           }
+          validatedKeyArr.push(keyObject);
         });
+
         acc.push(validatedKeyArr);
+        key = '';
+
+        return acc;
+      }
+
+      // div.className
+      if (
+        (key[0] !== '.' && key.includes('.')) ||
+        (key[0] !== '#' && key.includes('#'))
+      ) {
+        const mode = key.includes('.') ? 'className' : 'id';
+        const sliceKeyArr = key.split(mode === 'className' ? '.' : '#');
+        const element = sliceKeyArr[0];
+
+        if (!htmlElementsSet.has(element)) {
+          acc.push({});
+        }
+
+        key = `${element}🔥${sliceKeyArr[1]}`;
+        const keyObject = { mode, key };
+
+        acc.push(keyObject);
         key = '';
 
         return acc;
@@ -76,7 +118,14 @@ function getCssAllKey(css) {
 
       const mode = getCssMode(key);
 
+      if (mode === 'className') {
+        key = key.replace(/./, '');
+      }
+
       if (mode === VALIDATION_ERROR_MESSAGE.CSS.INCORRECT_KEY) {
+        acc.push({});
+        key = '';
+
         return acc;
       }
 
@@ -106,7 +155,7 @@ function getCssAllKey(css) {
   return cssAllKey;
 }
 
-function removeSpace(string) {
+function removeSpaceQuote(string) {
   return string.replace(/\s|"|'/g, '');
 }
 
@@ -119,11 +168,11 @@ function getCssAllValue(css) {
 
   const cssAllValue = [...css].reduce((acc, curr) => {
     if (curr === ';') {
-      const prop = removeSpace(property);
+      const trimProp = removeSpaceQuote(property);
 
-      if (!(jsxKeyOfCssProperties[prop] || cssKeyOfcssProperties[prop])) {
-        return acc;
-      }
+      const prop = trimProp.includes('-')
+        ? cssKeyOfcssProperties[trimProp]
+        : trimProp;
 
       obj[prop] = value;
 
@@ -170,11 +219,11 @@ export default function getParsingCss(css) {
 
   if (validateMessage !== 'pass') return validateMessage;
 
-  const cssKeyArr = getCssAllKey(removeSpace(css));
+  const cssKeyArr = getCssAllKey(css);
   const cssValuesArr = getCssAllValue(css);
 
   const storedStyleObj = {
-    class: {},
+    className: {},
     id: {},
     element: {},
   };
@@ -186,6 +235,8 @@ export default function getParsingCss(css) {
       }
 
       const { mode, key } = keyObj;
+
+      if (!mode || !key) return store;
 
       const property = duplicateValueIndex
         ? cssValuesArr[duplicateValueIndex]

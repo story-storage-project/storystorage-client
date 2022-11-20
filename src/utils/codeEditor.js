@@ -7,10 +7,10 @@ export function getCaretPosition(textBox, caretPosition) {
   return caretPosition;
 }
 
-export function setCaretPosition(item, pos) {
-  if (item.setSelectionRange) {
-    item.focus();
-    item.setSelectionRange(pos, pos);
+export function setCaretPosition(textBox, pos) {
+  if (textBox.setSelectionRange) {
+    textBox.focus();
+    textBox.setSelectionRange(pos, pos);
   }
 }
 
@@ -26,7 +26,7 @@ export function insertTab(textBox, caretPositionArg) {
   return copyTextBox.value;
 }
 
-export function insertBracket(textBox, caretPositionArg, text) {
+export function insertText(textBox, caretPositionArg, text) {
   const caretPosition = getCaretPosition(textBox, caretPositionArg);
   const preText = textBox.value.substring(0, caretPosition);
   const postText = textBox.value.substring(caretPosition, textBox.value.length);
