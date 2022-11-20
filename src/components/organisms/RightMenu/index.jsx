@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from '../../atoms/Button';
 import Text from '../../atoms/Text';
 
 export default function RightMenu() {
+  const [color, setColor] = useState('#ffffff');
+
+  const onChangeColorHandler = e => {
+    setColor(e.target.value);
+  };
+
   return (
     <Container>
-      <Nav>
+      {/* <Nav>
         <Text padding="0.7rem 1rem" textColor="pointColor" bold bolder>
           Code
         </Text>
@@ -66,6 +72,14 @@ export default function RightMenu() {
             </label>
           </CheckBox>
         </Head>
+        <label id="favcolor">{color}</label>
+        <input
+          type="color"
+          id="favcolor"
+          name="favcolor"
+          value={color}
+          onChange={onChangeColorHandler}
+        />
         <div>
           {`.btn {
             width: 10rem;
@@ -77,7 +91,97 @@ export default function RightMenu() {
           `}
         </div>
       </Code>
-      {/* <Nav>
+      <Code>
+        <Head>
+          <Heading>
+            <Text padding="0.7rem 1rem" size="large" margin="1rem 0">
+              CSS
+            </Text>
+            <Button
+              textColor="darkGray"
+              bg
+              borderRadius="1rem"
+              margin="0 0 0 1rem"
+            >
+              Copy
+            </Button>
+          </Heading>
+          <CheckBox>
+            <input id="html" checked type="radio" />
+            <label htmlFor="css" id="css">
+              CSS
+            </label>
+            <input id="html" type="radio" />
+            <label htmlFor="sc" id="sc">
+              Styled Components
+            </label>
+          </CheckBox>
+        </Head>
+        <label id="favcolor">{color}</label>
+        <input
+          type="color"
+          id="favcolor"
+          name="favcolor"
+          value={color}
+          onChange={onChangeColorHandler}
+        />
+        <div>
+          {`.btn {
+            width: 10rem;
+            height: 3rem;
+            margin: 0px;
+            font-size: 20px;
+            color: #2c2c2c;
+          }
+          `}
+        </div>
+      </Code>
+      <Code>
+        <Head>
+          <Heading>
+            <Text padding="0.7rem 1rem" size="large" margin="1rem 0">
+              CSS
+            </Text>
+            <Button
+              textColor="darkGray"
+              bg
+              borderRadius="1rem"
+              margin="0 0 0 1rem"
+            >
+              Copy
+            </Button>
+          </Heading>
+          <CheckBox>
+            <input id="html" checked type="radio" />
+            <label htmlFor="css" id="css">
+              CSS
+            </label>
+            <input id="html" type="radio" />
+            <label htmlFor="sc" id="sc">
+              Styled Components
+            </label>
+          </CheckBox>
+        </Head>
+        <label id="favcolor">{color}</label>
+        <input
+          type="color"
+          id="favcolor"
+          name="favcolor"
+          value={color}
+          onChange={onChangeColorHandler}
+        />
+        <div>
+          {`.btn {
+            width: 10rem;
+            height: 3rem;
+            margin: 0px;
+            font-size: 20px;
+            color: #2c2c2c;
+          }
+          `}
+        </div>
+      </Code> */}
+      <Nav>
         <Text padding="0.7rem 1rem">Code</Text>
         <Text padding="0.7rem 1rem" textColor="pointColor" bold bolder>
           Option
@@ -92,7 +196,9 @@ export default function RightMenu() {
           </Heading>
         </Head>
         <InputWrapper>
-          <label id="value">valu</label>
+          <label htmlFor="value" id="value">
+            value
+          </label>
           <input id="value" />
         </InputWrapper>
         <Head>
@@ -103,25 +209,46 @@ export default function RightMenu() {
           </Heading>
         </Head>
         <InputWrapper>
-          <label id="width">width</label>
+          <label htmlFor="width" id="width">
+            width
+          </label>
           <input id="width" />
         </InputWrapper>
         <InputWrapper>
-          <label id="height">height</label>
+          <label htmlFor="height" id="height">
+            height
+          </label>
           <input id="height" />
         </InputWrapper>
         <InputWrapper>
-          <label id="margin">margin</label>
+          <label htmlFor="margin" id="margin">
+            margin
+          </label>
           <input id="margin" />
         </InputWrapper>
-      </Code> */}
+      </Code>
     </Container>
   );
 }
 
 const Container = styled.div`
-  padding: 4rem 1.5rem;
-  background-color: ${props => props.theme.colors.rightMenu};
+  display: flex;
+  flex-direction: column;
+  min-width: 20rem;
+  height: auto;
+  border-radius: 20px;
+  border: 1px solid ${props => props.theme.colors.rightMenu};
+  /* height: 100vh; */
+  /* min-height: 100vh; */
+  /* padding: 4rem 1.5rem 4rem 1.5rem; */
+  margin: 3rem;
+  /* background-color: ${props => props.theme.colors.rightMenu}; */
+
+  @media ${props => props.theme.viewSize.tablet} {
+    flex-direction: column;
+    max-width: 100%;
+    min-height: auto;
+  }
 `;
 
 const Nav = styled.div`
