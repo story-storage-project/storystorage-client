@@ -1,27 +1,23 @@
-import React, { useCallback, Fragment, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import htmlElementsSet from '../../../data/htmlElements';
-import {
-  cssKeyOfcssProperties,
-  jsxKeyOfCssProperties,
-} from '../../../data/cssJsxProperties';
-import {
-  htmlKeyOfhtmlJsxAttributes,
-  jsxKeyOfhtmlJsxAttributes,
-} from '../../../data/htmlJsxAttributes';
+import useHtmlHighLightQueryText from '../../../hooks/useHtmlHighLightQueryText';
+import useCssHighLightQueryText from '../../../hooks/useCssHighLightQueryText';
 import {
   getCaretPosition,
   setCaretPosition,
   insertTab,
   insertText,
 } from '../../../utils/codeEditor';
-import keyMaker from '../../../utils/keyMaker';
 import TextEditor from '../../molecules/TextEditor';
 import Button from '../../atoms/Button';
 import Text from '../../atoms/Text';
 import cssPropertyParser from '../../../utils/cssPropertyParser';
-import validateHtml from '../../../utils/htmlValidate';
+import {
+  convertJsxToHtml,
+  validateHtml,
+  exportInlineStyle,
+} from '../../../utils/htmlValidate';
 import { VALIDATION_ERROR_MESSAGE } from '../../../constants/errorMessage';
 
 export default function CodeEditor({ saveStoryData }) {
@@ -38,35 +34,56 @@ export default function CodeEditor({ saveStoryData }) {
   const [htmlOriginalData, setHtmlOriginalData] = useState('');
   const [htmlcursorPosition, setHtmlCursorPosition] = useState();
   const [autoHtmlBracketMode, setAutoHtmlBracketMode] = useState(false);
-  const [html, setHtml] = useState('');
+  const [htmlCode, queryHtml, setQueryHtml] = useHtmlHighLightQueryText();
+
+  const [cssCode, queryCss, setQueryCss] = useCssHighLightQueryText('asdfasdf');
   const isClickEnter = useRef();
   const [prevKeyCode, setPrevKeyCode] = useState('');
   const divCssTextAreaRef = useRef();
   const [cssOriginalData, setCssOriginalData] = useState('');
-  const [css, setCss] = useState(`
-    .test {
-      color: red;
-    }
-  `);
 
   const handleOnClick = () => {
     if (validateMessage) {
       setValidateMessage('');
     }
-    if (!html || !css || !storyName || !categoryName) {
+
+    if (!htmlCode || !cssCode || !storyName || !categoryName) {
       setValidateMessage(VALIDATION_ERROR_MESSAGE.NULL);
       return;
     }
-    const validateHtmlResult = validateHtml(html);
+
+    const [deleteInlineStyleHtml, inlineStyle] = exportInlineStyle(
+      htmlCode,
+      selectedCodeMode,
+    );
+
+    let html = deleteInlineStyleHtml;
+    let css = cssCode;
+
+    if (inlineStyle) {
+      inlineStyle.forEach(style => {
+        css += style;
+      });
+    }
+
+    if (selectedCodeMode === 'JSX') {
+      html = convertJsxToHtml(htmlCode);
+    }
+
+    const validateHtmlResult = validateHtml(html, selectedCodeMode);
+
     if (validateHtmlResult !== 'pass') {
       setValidateMessage(prev => `${prev} ${validateHtmlResult}`);
       return;
     }
+
     const parsingCssResult = cssPropertyParser(css);
     if (typeof parsingCssResult === 'string') {
       setValidateMessage(prev => `${prev} ${parsingCssResult}`);
+
       return;
     }
+
     const data = {
       name: storyName,
       category: categoryName,
@@ -92,13 +109,11 @@ export default function CodeEditor({ saveStoryData }) {
 
   const handleHtmlKeyDown = useCallback(
     e => {
-      setHtml(htmlOriginalData);
-
       if (e.key === 'v' && prevKeyCode === 91) {
         return insertText(
           e.currentTarget,
           e.currentTarget.selectionStart,
-          '  ',
+          '   ',
         );
       }
 
@@ -112,7 +127,7 @@ export default function CodeEditor({ saveStoryData }) {
         e.preventDefault();
 
         setHtmlOriginalData(htmlValue);
-        setHtml(htmlValue);
+        setQueryHtml(htmlValue);
       }
 
       if (e.key === 'Enter') {
@@ -167,7 +182,7 @@ export default function CodeEditor({ saveStoryData }) {
         );
 
         setHtmlOriginalData(newValue);
-        setHtml(newValue);
+        setQueryHtml(newValue);
 
         const caretPosition = getCaretPosition(
           e.currentTarget,
@@ -177,8 +192,9 @@ export default function CodeEditor({ saveStoryData }) {
         setHtmlCursorPosition(caretPosition);
         setAutoHtmlBracketMode(true);
       }
+      setQueryHtml(htmlOriginalData);
     },
-    [htmlOriginalData, htmlBracket, html, prevKeyCode],
+    [htmlOriginalData, htmlBracket, prevKeyCode, htmlCode],
   );
 
   const handleHtmlTextChange = useCallback(
@@ -193,10 +209,12 @@ export default function CodeEditor({ saveStoryData }) {
       setHtmlOriginalData(value);
 
       if (isClickEnter.current) {
-        setHtml(`${value}\n`);
+        // setHtml(`${value}\n`);
+        setQueryHtml(`${value}\n`);
         isClickEnter.current = false;
       } else {
-        setHtml(value);
+        // setHtml(value);
+        setQueryHtml(value);
       }
     },
 
@@ -210,7 +228,7 @@ export default function CodeEditor({ saveStoryData }) {
 
   const handleCssKeyDOwn = useCallback(
     e => {
-      setCss(cssOriginalData);
+      setQueryCss(cssOriginalData);
 
       if (e.key === 'v' && e.target.value.slice(-1) !== 'v') {
         insertText(e.currentTarget, e.currentTarget.selectionStart, '  ');
@@ -224,7 +242,7 @@ export default function CodeEditor({ saveStoryData }) {
         e.preventDefault();
 
         setCssOriginalData(cssValue);
-        setCss(cssValue);
+        setQueryCss(cssValue);
       }
 
       if (e.key === 'Enter') {
@@ -239,7 +257,7 @@ export default function CodeEditor({ saveStoryData }) {
         );
 
         setCssOriginalData(newValue);
-        setCss(newValue);
+        setQueryCss(newValue);
       }
     },
     [cssOriginalData],
@@ -250,10 +268,10 @@ export default function CodeEditor({ saveStoryData }) {
     setCssOriginalData(value);
 
     if (isClickEnter.current) {
-      setCss(`${value}\n`);
+      setQueryCss(`${value}\n`);
       isClickEnter.current = false;
     } else {
-      setCss(value);
+      setQueryCss(value);
     }
   }, []);
 
@@ -261,122 +279,6 @@ export default function CodeEditor({ saveStoryData }) {
     divCssTextAreaRef.current.scrollTop = e.target.scrollTop;
     divCssTextAreaRef.current.selectionDirection = e.target.selectionDirection;
   };
-
-  const htmlHighlightQueryText = useCallback(code => {
-    const bracketSplit = code.split(/(<!--| |-->|<|>)/);
-    let tagName = '';
-
-    return bracketSplit.map((item, i) => {
-      if (bracketSplit[i - 1] === '<!--' && bracketSplit[i + 1] === '-->') {
-        return <Punctuati key={keyMaker(10) + item}>{item}</Punctuati>;
-      }
-
-      if (item === '<') {
-        tagName = bracketSplit[i + 1];
-        return <Punctuati key={keyMaker(10) + item}>{item}</Punctuati>;
-      }
-
-      if (bracketSplit[i - 1] === '<') {
-        const itemData = item[0] === '/' ? item.slice(1) : item;
-        const isHtmlElement = htmlElementsSet.has(itemData);
-
-        return isHtmlElement ? (
-          <TagCode key={keyMaker(10) + item}>{item}</TagCode>
-        ) : (
-          <IncorrectTagCode key={keyMaker(10) + item}>{item}</IncorrectTagCode>
-        );
-      }
-
-      if (tagName && item !== '>') {
-        const splitAttribute = item.split(/(=)/);
-        const equalLength = splitAttribute.filter(itme => itme === '=').length;
-
-        if (equalLength > 1) {
-          return (
-            <AttributeValue key={keyMaker(10) + item}>{item}</AttributeValue>
-          );
-        }
-
-        const attributeName = splitAttribute[0];
-        const isCorrectAttributeName =
-          htmlKeyOfhtmlJsxAttributes[attributeName] ||
-          jsxKeyOfhtmlJsxAttributes[attributeName];
-
-        return isCorrectAttributeName ? (
-          <Fragment key={keyMaker(10) + item}>
-            <AttributeName>{splitAttribute[0]}</AttributeName>
-            <Punctuati>{splitAttribute[1]}</Punctuati>
-            <AttributeValue>{splitAttribute[2]}</AttributeValue>
-          </Fragment>
-        ) : (
-          <Fragment key={keyMaker(10) + item}>
-            <InCorrectAttributeName>{splitAttribute[0]}</InCorrectAttributeName>
-            <Punctuati>{splitAttribute[1]}</Punctuati>
-            <AttributeValue>{splitAttribute[2]}</AttributeValue>
-          </Fragment>
-        );
-      }
-
-      if (item === '>') {
-        tagName = '';
-        return <Punctuati key={keyMaker(10) + item}>{item}</Punctuati>;
-      }
-
-      return item;
-    });
-  }, []);
-
-  const cssHighlightQueryText = useCallback(code => {
-    const bracketSplit = code.split(/(<!--|{|-->|}|;|:)/);
-    let isInTag = false;
-
-    return bracketSplit.map((item, i) => {
-      if (bracketSplit[i - 1] === '<!--' && bracketSplit[i + 1] === '-->') {
-        return <Punctuati key={keyMaker(10) + item}>{item}</Punctuati>;
-      }
-
-      if (item === '{') {
-        isInTag = true;
-        return <Punctuati key={keyMaker(10) + item}>{item}</Punctuati>;
-      }
-
-      if (
-        (isInTag && bracketSplit[i - 1] === '{') ||
-        bracketSplit[i - 1] === ';'
-      ) {
-        const removeEscapeChr = item.replace(/\n| |\t/g, '');
-        const isCssProperty =
-          cssKeyOfcssProperties[removeEscapeChr] ||
-          jsxKeyOfCssProperties[removeEscapeChr];
-        return isCssProperty ? (
-          <TagCode key={keyMaker(10) + item}>{item}</TagCode>
-        ) : (
-          <IncorrectTagCode key={keyMaker(10) + item}>{item}</IncorrectTagCode>
-        );
-      }
-
-      if (isInTag && item === ':') {
-        return <Punctuati key={keyMaker(10) + item}>{item}</Punctuati>;
-      }
-
-      if (isInTag && bracketSplit[i - 1] === ':') {
-        return bracketSplit[i + 1] === ';' ? (
-          <AttributeName key={keyMaker(10) + item}>{item}</AttributeName>
-        ) : (
-          <InCorrectAttributeName key={keyMaker(10) + item}>
-            {item}
-          </InCorrectAttributeName>
-        );
-      }
-
-      if (item === '}') {
-        isInTag = false;
-        return <Punctuati key={keyMaker(10) + item}>{item}</Punctuati>;
-      }
-
-      return item;
-    });
-  }, []);
 
   return (
     <Container>
@@ -438,7 +340,7 @@ export default function CodeEditor({ saveStoryData }) {
             onScroll={handleHtmlScroll}
             ref={divHtmlTextAreaRef}
           >
-            {htmlHighlightQueryText(html)}
+            {queryHtml}
           </TextEditor>
         </CodeEditorWrapper>
         <CodeEditorWrapper>
@@ -454,7 +356,7 @@ export default function CodeEditor({ saveStoryData }) {
             onScroll={handleCssScroll}
             ref={divCssTextAreaRef}
           >
-            {cssHighlightQueryText(css)}
+            {queryCss}
           </TextEditor>
         </CodeEditorWrapper>
       </CodeEditorContainer>
@@ -496,8 +398,6 @@ const InputWrapper = styled.div`
   }
 `;
 
-const Wrapper = styled.div``;
-
 const CodeEditorWrapper = styled.div`
   margin-top: 1rem;
 `;
@@ -522,41 +422,4 @@ const CodeEditorContainer = styled.div`
     justify-content: flex-start;
     height: 100vh;
   }
-`;
-
-const Code = styled.span`
-  max-width: inherit;
-  overflow-wrap: break-word;
-  white-space: break-spaces;
-  word-wrap: break-word;
-  word-break: break-all;
-  box-sizing: border-box;
-`;
-
-const TagCode = styled(Code)`
-  max-width: inherit;
-  word-break: break-all;
-  color: ${props => props.theme.codeThemeBright.tagColor};
-`;
-
-const IncorrectTagCode = styled(TagCode)`
-  text-decoration: underline dotted;
-`;
-
-const Punctuati = styled(Code)`
-  max-width: inherit;
-  word-break: break-all;
-  color: ${props => props.theme.codeThemeBright.punctuation};
-`;
-
-const AttributeName = styled(Code)`
-  color: ${props => props.theme.codeThemeBright.attributeName};
-`;
-
-const InCorrectAttributeName = styled(AttributeName)`
-  text-decoration: underline dotted;
-`;
-
-const AttributeValue = styled(Code)`
-  color: ${props => props.theme.codeThemeBright.attributeValue};
 `;
