@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import CodeEditor from '../../organisms/CodeEditor';
+import PreviewStory from '../../organisms/PreviewStory';
 import { createStory } from '../../../service/api';
 import { REQUEST_ERROR } from '../../../constants/errorMessage';
+import CodeProvider from '../../../context/CodeProvider';
 
 export default function StoryMaker() {
   const navigate = useNavigate();
@@ -34,10 +35,12 @@ export default function StoryMaker() {
 
   return (
     <Container>
-      <CodeEditor
-        createFailMessage={createFailMessage}
-        saveStoryData={saveStoryData}
-      />
+      <CodeProvider>
+        <PreviewStory
+          createFailMessage={createFailMessage}
+          createStoryRequest={saveStoryData}
+        />
+      </CodeProvider>
     </Container>
   );
 }

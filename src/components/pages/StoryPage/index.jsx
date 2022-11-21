@@ -3,6 +3,7 @@ import { useLoaderData, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Story from '../../organisms/Story';
 import Text from '../../atoms/Text';
+import CodeProvider from '../../../context/CodeProvider';
 
 export default function StoryPage() {
   const { data: storyData } = useLoaderData();
@@ -11,20 +12,17 @@ export default function StoryPage() {
 
   return (
     <>
-      <CategoryText size="xLarge">{categoryName}</CategoryText>
-      <CategoryText size="small">Button</CategoryText>
+      <CategoryText size="small">{categoryName}</CategoryText>
       <Container>
         <Wrapper>
-          {storyData.length &&
-            storyData.map(data => {
-              const { _id: id } = data;
-              return <Story key={id} data={data} />;
-            })}
-          {storyData.length &&
-            storyData.map(data => {
-              const { _id: id } = data;
-              return <Story key={id} data={data} />;
-            })}
+          <CodeProvider>
+            {storyData.length &&
+              storyData.map(data => {
+                const { _id: id } = data;
+
+                return <Story key={id} responseData={data} />;
+              })}
+          </CodeProvider>
         </Wrapper>
       </Container>
     </>
@@ -55,9 +53,10 @@ const CategoryText = styled(Text)`
 `;
 
 const Wrapper = styled.div`
-  width: 100%;
   position: relative;
+  width: 100%;
   height: 100%;
+  margin: 1rem 0 0 0;
 
   @media ${props => props.theme.viewSize.mobile} {
     padding: 0 0 2rem 0;

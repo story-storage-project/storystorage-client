@@ -13,6 +13,7 @@ const StyledButton = styled.button(
   transition: background-color 250ms ease-out, color 250ms ease-out,
     border-color 250ms ease-out;
   width: ${props.width ? props.width : 'fit-content'};
+  height: ${props.height ? props.height : 'fit-content'};
   border: 0.0625em solid ${
     props.border ? theme.colors.darkGray : 'transparent'
   };
@@ -43,5 +44,4 @@ Button.propTypes = {
 
 Button.defaultProps = {
   textColor: 'textColor',
-  // bg: 'lightGray',
 };
