@@ -100,7 +100,7 @@ const Punctuati = styled(Code)`
 `;
 
 const AttributeName = styled(Code)`
-  color: ${props => props.theme.codeThemeBright.attributeName};
+  color: ${props => props.theme.codeThemeBright.cssAttributeValue};
 `;
 
 const InCorrectAttributeName = styled(AttributeName)`

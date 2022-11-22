@@ -5,14 +5,20 @@ import CssCodeEditor from '../CssCodeEditor';
 import { CodeContext } from '../../../context/CodeProvider';
 
 export default function CodeEditor() {
-  const { codeViewMode } = useContext(CodeContext);
+  const { codeViewMode, selectMenu, page } = useContext(CodeContext);
 
   return (
     <Container>
-      <CodeEditorContainerAbsolute viewMode={codeViewMode}>
-        <HtmlCodeEditor style={{ position: 'relative' }} />
-        <CssCodeEditor style={{ position: 'absolute' }} />
-      </CodeEditorContainerAbsolute>
+      {page === 'story' ? (
+        <CodeEditorContainer viewMode={codeViewMode}>
+          {selectMenu !== 'CSS' ? <HtmlCodeEditor /> : <CssCodeEditor />}
+        </CodeEditorContainer>
+      ) : (
+        <CodeEditorContainer viewMode={codeViewMode}>
+          <HtmlCodeEditor />
+          <CssCodeEditor />
+        </CodeEditorContainer>
+      )}
     </Container>
   );
 }
@@ -40,29 +46,4 @@ const CodeEditorContainer = styled.div`
     align-items: center;
     height: 100vh;
   }
-`;
-
-const CodeEditorContainerAbsolute = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: ${props => props.viewMode};
-  justify-content: center;
-  align-items: stretch;
-
-  width: 100%;
-  height: 100%;
-
-  @media ${props => props.theme.viewSize.tablet} {
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    height: 100vh;
-  }
-`;
-
-const HtmlCodeEditorWrapper = styled(HtmlCodeEditor)`
-  position: relative;
-`;
-const CssCodeEditorWrapper = styled(CssCodeEditor)`
-  position: absolute;
 `;

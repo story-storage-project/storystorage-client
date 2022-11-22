@@ -16,15 +16,25 @@ import {
 import TextEditor from '../../molecules/TextEditor';
 import Button from '../../atoms/Button';
 import Text from '../../atoms/Text';
-import { validateHtml } from '../../../utils/htmlValidate';
+import {
+  validateHtml,
+  convertHtmlToJsx,
+  convertJsxToHtml,
+} from '../../../utils/htmlValidate';
 import { CodeContext } from '../../../context/CodeProvider';
 
 export default function HtmlCodeEditor() {
-  const { html, writeHtml } = useContext(CodeContext);
+  const {
+    html,
+    writeHtml,
+    page,
+    selectMenu,
+    setSelectedMenu,
+    toggleCodeEditSave,
+  } = useContext(CodeContext);
 
   const [htmlValidateMessage, setHtmlValidateMessage] = useState('');
 
-  const [selectedCodeMode, setSelectedCodeMode] = useState('HTML');
   const divHtmlTextAreaRef = useRef();
   const [htmlBracket, setHtmlBracket] = useState({
     isInside: false,
@@ -37,16 +47,30 @@ export default function HtmlCodeEditor() {
 
   const [prevKeyCode, setPrevKeyCode] = useState('');
   const isClickEnter = useRef();
+  const [jsx, setJsx] = useState('');
 
   useEffect(() => {
     if (!htmlCode) return;
 
-    const validateResultMessage = validateHtml(htmlCode, selectedCodeMode);
+    const validateResultMessage = validateHtml(htmlCode, selectMenu);
 
     setHtmlValidateMessage(validateResultMessage);
 
-    if (!validateResultMessage) writeHtml(htmlCode);
+    if (!validateResultMessage) {
+      writeHtml(convertJsxToHtml(htmlCode));
+    }
   }, [htmlCode]);
+
+  const menuClickHandle = e => {
+    setSelectedMenu(e);
+    const menuTitle = e.target.value;
+
+    if (menuTitle === 'HTML') {
+      setQueryHtml(convertJsxToHtml(htmlCode));
+    } else {
+      setQueryHtml(convertHtmlToJsx(htmlCode));
+    }
+  };
 
   const handleHtmlKeyDown = useCallback(
     e => {
@@ -171,21 +195,32 @@ export default function HtmlCodeEditor() {
         <Text>{htmlValidateMessage && htmlValidateMessage}</Text>
       </ValidateMessageWrapper>
       <TitleWrapper>
-        <Button
-          width="70px"
-          textColor={selectedCodeMode === 'HTML' ? 'pointColor' : 'textColor'}
-          onClick={() => setSelectedCodeMode('HTML')}
+        <MenuButton
+          value="HTML"
+          textColor={selectMenu === 'HTML' ? 'pointColor' : 'textColor'}
+          onClick={menuClickHandle}
         >
           HTML
-        </Button>
-        {/* <Button
-          width="70px"
-          textColor={selectedCodeMode === 'JSX' ? 'pointColor' : 'textColor'}
-          onClick={() => setSelectedCodeMode('JSX')}
+        </MenuButton>
+        <MenuButton
+          value="JSX"
+          textColor={selectMenu === 'JSX' ? 'pointColor' : 'textColor'}
+          onClick={menuClickHandle}
         >
           JSX
-        </Button> */}
-        <Button width="70px">SAVE</Button>
+        </MenuButton>
+        {page === 'story' && (
+          <MenuButton
+            value="CSS"
+            textColor={selectMenu === 'CSS' ? 'pointColor' : 'textColor'}
+            onClick={setSelectedMenu}
+          >
+            CSS
+          </MenuButton>
+        )}
+        {page === 'story' && (
+          <MenuButton onClick={toggleCodeEditSave}>SAVE</MenuButton>
+        )}
       </TitleWrapper>
       <TextEditor
         title="HTML"
@@ -205,13 +240,17 @@ export default function HtmlCodeEditor() {
 
 const CodeEditorWrapper = styled.div``;
 
+const ValidateMessageWrapper = styled.div`
+  margin: 0 2rem;
+  min-height: 2rem;
+  max-height: 2rem;
+`;
+
 const TitleWrapper = styled.div`
   display: flex;
   margin: 0 0 0 2rem;
 `;
 
-const ValidateMessageWrapper = styled.div`
-  margin: 0 2rem;
-  min-height: 2rem;
-  max-height: 2rem;
+const MenuButton = styled(Button)`
+  width: 70px;
 `;

@@ -17,6 +17,7 @@ import insertClass from '../../../utils/insertPreviewClass';
 import CodeEditor from '../CodeEditor';
 import Button from '../../atoms/Button';
 import { CodeContext } from '../../../context/CodeProvider';
+import { patchStory } from '../../../service/api';
 
 export default function Story({ responseData }) {
   const {
@@ -26,11 +27,20 @@ export default function Story({ responseData }) {
     html: htmlCode,
     css: cssCode,
   } = responseData;
-  const { html, writeHtml, css, writeCss, changeCodeViewMode } =
-    useContext(CodeContext);
+  const {
+    html,
+    writeHtml,
+    css,
+    writeCss,
+    changeCodeViewMode,
+    setCurrentPage,
+    isCodeEditingSave,
+    toggleCodeEditSave,
+  } = useContext(CodeContext);
   const [storyName, setStoryName] = useState(name);
   const [categoryName, setCategoryName] = useState(category);
   const [codeToggle, setCodeToggle] = useState(false);
+  const [editButtonToggle, setEditButtonToggle] = useState('Edit');
   const style = useRef();
   const conditionalCss = useRef();
 
@@ -38,6 +48,7 @@ export default function Story({ responseData }) {
     writeHtml(htmlCode);
     writeCss(cssCode);
     changeCodeViewMode('column');
+    setCurrentPage('story');
 
     if (!style.current) {
       style.current = document.createElement('style');
@@ -71,25 +82,54 @@ export default function Story({ responseData }) {
     [storyName],
   );
 
-  const handleOnChangeCategoryInput = useCallback(
-    e => {
-      setCategoryName(e.target.value);
-    },
-    [categoryName],
-  );
+  // const handleOnChangeCategoryInput = useCallback(
+  //   e => {
+  //     setCategoryName(e.target.value);
+  //   },
+  //   [categoryName],
+  // );
 
-  const onClickHandler = () => {
-    const data = {
-      category: categoryName,
-      name: storyName,
-      html,
-      css,
-    };
+  useEffect(() => {
+    if (isCodeEditingSave) {
+      toggleCodeEditSave();
+      console.log('hi');
+    }
 
-    // createStoryRequest(data);
+    // TODO
+    // patchStory(data)
+  }, [isCodeEditingSave]);
+
+  const onClickHandler = async () => {
+    if (editButtonToggle === 'Edit') {
+      setEditButtonToggle('Save');
+    } else {
+      setEditButtonToggle('Edit');
+      const data = {
+        name: storyName,
+        html,
+        css,
+      };
+
+      // TODO
+      // patchStory(data)
+      // try {
+      //   await patchStory(data);
+      // } catch (error) {
+      //   if (!error.response) {
+      //     setCreateFailMessage(REQUEST_ERROR.TIME_OUT);
+      //   }
+
+      //   if (error.status === 404) {
+      //     navigate('/not-found');
+      //   }
+
+      //   if (error.status >= 500) {
+      //     navigate('/500');
+      //   }
+      // }
+    }
   };
 
-  // TODO class이름 id로 바꾸기
   return (
     <Container codeToggle={codeToggle}>
       <Wrapper>
@@ -103,6 +143,7 @@ export default function Story({ responseData }) {
                 id="margin"
                 value={storyName}
                 onChange={handleOnChangeNameInput}
+                disabled
               />
             </InputWrapper>
             <InputWrapper>
@@ -113,7 +154,7 @@ export default function Story({ responseData }) {
                 width="2.5rem"
                 onClick={onClickHandler}
               >
-                Edit
+                {editButtonToggle}
               </Button>
             </InputWrapper>
             <InputWrapper>
@@ -135,7 +176,11 @@ export default function Story({ responseData }) {
           </Preview>
         </PreviewWrapper>
       </Wrapper>
-      <OptionWrapper>{codeToggle && <CodeEditor />}</OptionWrapper>
+      {codeToggle && (
+        <OptionWrapper>
+          <CodeEditor />
+        </OptionWrapper>
+      )}
     </Container>
   );
 }
@@ -235,6 +280,7 @@ const PreviewWrapper = styled.div`
 const Preview = styled.div`
   margin: 2rem 0;
   width: fit-content;
+  height: fit-content;
   padding: 0.3rem;
 `;
 

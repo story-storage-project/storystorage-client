@@ -9,13 +9,20 @@ import styled from 'styled-components';
 import useCssHighLightQueryText from '../../../hooks/useCssHighLightQueryText';
 import { insertTab, insertText } from '../../../utils/codeEditor';
 import TextEditor from '../../molecules/TextEditor';
-import Button from '../../atoms/Button';
 import Text from '../../atoms/Text';
 import validateCss from '../../../utils/cssValidate';
 import { CodeContext } from '../../../context/CodeProvider';
+import Button from '../../atoms/Button';
 
 export default function CssCodeEditor() {
-  const { writeCss, css } = useContext(CodeContext);
+  const {
+    writeCss,
+    css,
+    page,
+    selectMenu,
+    setSelectedMenu,
+    toggleCodeEditSave,
+  } = useContext(CodeContext);
   const [cssValidateMessage, setCssValidateMessage] = useState('');
   const [cssOriginalData, setCssOriginalData] = useState(css);
   const [cssCode, queryCss, setQueryCss] = useCssHighLightQueryText(css);
@@ -96,8 +103,34 @@ export default function CssCodeEditor() {
         <Text>{cssValidateMessage && cssValidateMessage}</Text>
       </ValidateMessageWrapper>
       <TitleWrapper>
-        <Button width="70px">CSS</Button>
-        <Button width="70px">SAVE</Button>
+        {page === 'story' && (
+          <>
+            <MenuButton
+              value="HTML"
+              textColor={selectMenu === 'HTML' ? 'pointColor' : 'textColor'}
+              onClick={setSelectedMenu}
+            >
+              HTML
+            </MenuButton>
+            <MenuButton
+              value="JSX"
+              textColor={selectMenu === 'JSX' ? 'pointColor' : 'textColor'}
+              onClick={setSelectedMenu}
+            >
+              JSX
+            </MenuButton>
+          </>
+        )}
+        <MenuButton
+          value="CSS"
+          textColor={selectMenu === 'CSS' ? 'pointColor' : 'textColor'}
+          onClick={setSelectedMenu}
+        >
+          CSS
+        </MenuButton>
+        {page === 'story' && (
+          <MenuButton onClick={toggleCodeEditSave}>SAVE</MenuButton>
+        )}
       </TitleWrapper>
       <TextEditor
         title="CSS"
@@ -125,4 +158,8 @@ const ValidateMessageWrapper = styled.div`
   margin: 0 2rem;
   min-height: 2rem;
   max-height: 2rem;
+`;
+
+const MenuButton = styled(Button)`
+  width: 70px;
 `;

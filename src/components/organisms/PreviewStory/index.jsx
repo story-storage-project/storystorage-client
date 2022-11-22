@@ -23,9 +23,10 @@ export default function PreviewStory({ createStoryRequest }) {
   const [categoryName, setCategoryName] = useState('');
   const style = useRef();
   const conditionalCss = useRef();
-  const { html, css } = useContext(CodeContext);
+  const { html, css, setCurrentPage } = useContext(CodeContext);
 
   useEffect(() => {
+    setCurrentPage('story-maker');
     if (!style.current) {
       style.current = document.createElement('style');
       document.head.appendChild(style.current);
@@ -85,10 +86,10 @@ export default function PreviewStory({ createStoryRequest }) {
               <label htmlFor="category">
                 Category
                 <Input
-                  placeholder="custom"
                   list="category"
                   name="categroy"
                   onChange={handleOnChangeCategoryInput}
+                  placeholder="Please select or enter a category"
                 />
               </label>
               <datalist id="category">
@@ -105,6 +106,7 @@ export default function PreviewStory({ createStoryRequest }) {
                 id="margin"
                 value={storyName}
                 onChange={handleOnChangeNameInput}
+                placeholder="Please enter a story name"
               />
             </InputWrapper>
             <InputWrapper>
@@ -141,10 +143,6 @@ const Container = styled.div`
   flex-direction: column;
   width: 100%;
   height: inherit;
-
-  @media ${props => props.theme.viewSize.mobile} {
-    flex-direction: column;
-  }
 `;
 
 const Wrapper = styled.div`
@@ -155,6 +153,10 @@ const Wrapper = styled.div`
 const Header = styled.div`
   display: flex;
   justify-content: flex-start;
+
+  @media ${props => props.theme.viewSize.mobile} {
+    justify-content: center;
+  }
 `;
 
 const InputContainer = styled.div`
@@ -169,6 +171,7 @@ const InputContainer = styled.div`
 
   @media ${props => props.theme.viewSize.mobile} {
     flex-direction: column;
+    justify-content: center;
   }
 `;
 

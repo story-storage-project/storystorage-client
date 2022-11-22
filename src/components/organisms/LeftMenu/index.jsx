@@ -17,6 +17,10 @@ export default function LeftMenu() {
     navigate('/');
   };
 
+  const loginClickHandler = () => {
+    navigate('/login');
+  };
+
   const addStoryClickHandler = () => {
     navigate('/story-maker');
   };
@@ -52,9 +56,14 @@ export default function LeftMenu() {
       </Header>
       <MobileHiddenToggleViewer toggle={onToggle}>
         <Body>
-          {/* <Button border borderRadius="20rem" margin="0 0 1rem 0">
+          <Button
+            border
+            borderRadius="20rem"
+            margin="0 0 1rem 0"
+            onClick={loginClickHandler}
+          >
             Sign in
-          </Button> */}
+          </Button>
           <Button
             border
             bg="pointColor"
@@ -98,24 +107,28 @@ const Wrapper = styled.div(
     @media ${theme.viewSize.tablet} {
       box-sizing: border-box;
       width: 100%;
-      height: ${props.modalMode ? '100vh' : '5rem'};
+      height: ${props.modalMode ? '100vh' : 'auto'};
       padding: 1rem;
+    }
+
+    @media ${theme.viewSize.mobile} {
+      height: auto;
     }
 `,
 );
 
 const Header = styled.div`
-  @media ${props => props.theme.viewSize.tablet} {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
   .menuFirstLine {
     display: flex;
     width: 100%;
     align-items: center;
     justify-content: space-between;
+  }
+
+  @media ${props => props.theme.viewSize.tablet} {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 `;
 
