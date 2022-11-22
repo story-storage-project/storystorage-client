@@ -90,7 +90,7 @@ export function storeAllElementProperties(nodeList) {
 
   const data = {};
 
-  data.type = 'span';
+  data.type = 'fragment';
   data.children = Array.prototype.map
     .call(nodeList, node => storeChildElementProperties(node))
     .filter(Boolean);

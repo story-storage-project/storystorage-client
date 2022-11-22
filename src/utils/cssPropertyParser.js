@@ -1,32 +1,7 @@
 import htmlElementsSet from '../data/htmlElements';
-import {
-  cssKeyOfcssProperties,
-  jsxKeyOfCssProperties,
-} from '../data/cssJsxProperties';
+import { cssKeyOfcssProperties } from '../data/cssJsxProperties';
 import { VALIDATION_ERROR_MESSAGE } from '../constants/errorMessage';
-
-function validateCss(css) {
-  if (!css.length) {
-    return VALIDATION_ERROR_MESSAGE.NULL;
-  }
-
-  const validateBrackets = css.match(/{/g).length === css.match(/}/g).length;
-  const validateSemicolon = css.match(/:/g).length === css.match(/;/g).length;
-
-  if (validateBrackets && validateSemicolon) {
-    return 'pass';
-  }
-
-  if (!validateBrackets && !validateSemicolon) {
-    return VALIDATION_ERROR_MESSAGE.CSS.MISSING_ALL;
-  }
-
-  if (!validateBrackets) {
-    return VALIDATION_ERROR_MESSAGE.CSS.MISSING_BRACKETS;
-  }
-
-  return VALIDATION_ERROR_MESSAGE.CSS.MISSING_SEMICOLON;
-}
+import validateCss from './cssValidate';
 
 function getCssMode(key) {
   const firstCha = key[0];
@@ -37,13 +12,6 @@ function getCssMode(key) {
   if (firstCha === '#') {
     return 'id';
   }
-
-  // if (
-  //   (key.includes('[') && htmlElementsSet.has(key.split('[')[0])) ||
-  //   key.includes('>')
-  // ) {
-  //   return 'element';
-  // }
 
   if (key === '*') {
     return 'element';
@@ -217,7 +185,7 @@ function getCssAllValue(css) {
 export default function getParsingCss(css) {
   const validateMessage = validateCss(css);
 
-  if (validateMessage !== 'pass') return validateMessage;
+  if (validateMessage) return validateMessage;
 
   const cssKeyArr = getCssAllKey(css);
   const cssValuesArr = getCssAllValue(css);
