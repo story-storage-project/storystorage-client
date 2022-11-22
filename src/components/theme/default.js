@@ -31,6 +31,9 @@ base.codeThemeBright = {
   punctuation: '#999',
   attributeName: '#690',
   attributeValue: '#07a',
+  cssTag: '#690',
+  cssAttributeName: '#07a',
+  cssAttributeValue: '#e90',
 };
 
 base.viewSize = {
