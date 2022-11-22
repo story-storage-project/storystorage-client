@@ -3,6 +3,7 @@ import {
   htmlKeyOfhtmlJsxAttributes,
   jsxKeyOfhtmlJsxAttributes,
 } from '../data/htmlJsxAttributes';
+import htmlElementsSet from '../data/htmlElements';
 import keyMaker from './keyMaker';
 
 function basicValidateHtml(html) {
@@ -16,57 +17,42 @@ function basicValidateHtml(html) {
 
   const arrowRemoveHtml = html.replace(/=>/g, '');
   const validateBrackets =
-    arrowRemoveHtml.match(/</g).length === arrowRemoveHtml.match(/>/g).length;
+    arrowRemoveHtml?.match(/</g)?.length ===
+    arrowRemoveHtml?.match(/>/g)?.length;
 
-  return validateBrackets
-    ? 'pass'
-    : VALIDATION_ERROR_MESSAGE.HTML.MISSING_BRACKETS;
+  return validateBrackets ? '' : VALIDATION_ERROR_MESSAGE.HTML.MISSING_BRACKETS;
 }
 
 export function validateHtml(html, mode) {
-  const basicValidationResult = basicValidateHtml(html);
+  if (!html) return;
 
-  if (basicValidationResult !== 'pass') {
-    return basicValidationResult;
+  const basicValidationError = basicValidateHtml(html);
+
+  if (basicValidationError) {
+    return basicValidationError;
   }
 
-  let element = '';
-  let isInsideBracket = false;
+  const bracketSplitCode = html.split(/(<!--| |-->|<|>)/);
+  let tagName = '';
+  let errorMessage = '';
 
-  [...html].forEach((value, i) => {
-    if (value === '<' && html[i + 1] !== '/') {
-      isInsideBracket = true;
-    }
+  bracketSplitCode.forEach((item, i) => {
+    if (item === '<' && bracketSplitCode[i + 1] !== '/') {
+      tagName = bracketSplitCode[i + 1];
 
-    if (value === '>') {
-      if (element) {
-        const splitSpaceArr = element.split(' ');
-        const cleanElement = splitSpaceArr[0].replace(/\//g, '');
+      if (tagName[0] === '/') return;
 
-        let isCorrectElement;
-
-        if (mode === 'HTML') {
-          isCorrectElement = htmlKeyOfhtmlJsxAttributes[cleanElement];
-        }
-
-        if (mode === 'JSX') {
-          isCorrectElement = jsxKeyOfhtmlJsxAttributes[cleanElement];
-        }
-
-        if (!isCorrectElement) {
-          return VALIDATION_ERROR_MESSAGE.HTML.INCORRECT_ELEMENT;
-        }
+      if (!htmlElementsSet.has(tagName)) {
+        errorMessage = VALIDATION_ERROR_MESSAGE.HTML.INCORRECT_ELEMENT;
       }
-
-      isInsideBracket = false;
     }
 
-    if (isInsideBracket) {
-      element += value;
+    if (item === '>') {
+      tagName = '';
     }
   });
 
-  return 'pass';
+  return errorMessage;
 }
 
 export function exportInlineStyle(code, mode) {
@@ -236,6 +222,94 @@ export function convertJsxToHtml(html) {
       return acc;
     }
 
+    // if (item === '/>') {
+    //   acc.push(`></${tagName}>`);
+
+    //   return acc;
+    // }
+
+    if (splitHtml[i - 1] === '<') {
+      if (item.slice(0, 1) === '/') {
+        tagName = '';
+
+        acc.push(item);
+
+        return acc;
+      }
+
+      acc.push(item);
+
+      return acc;
+    }
+
+    if (isStyle) {
+      if (item.slice(-1) === '}') {
+        isStyle = false;
+
+        return acc;
+      }
+
+      return acc;
+    }
+
+    if (tagName && item !== '>') {
+      const splitProperty = item.split(/(=)/);
+
+      if (splitProperty[0].length > 1) {
+        if (splitProperty[0] === 'style') {
+          return acc;
+        }
+
+        const convertProperty = jsxKeyOfhtmlJsxAttributes[splitProperty[0]];
+
+        splitProperty[0] = convertProperty || splitProperty[0];
+
+        acc.push(splitProperty.join(''));
+
+        return acc;
+      }
+
+      acc.push(item);
+
+      return acc;
+    }
+
+    if (item === '>') {
+      tagName = '';
+
+      acc.push(item);
+
+      return acc;
+    }
+
+    acc.push(item);
+
+    return acc;
+  }, []);
+
+  return convert.join('');
+}
+
+export function convertHtmlToJsx(Jsx) {
+  const splitHtml = Jsx.split(/(<!--| |-->|<|>|\/)/);
+
+  let tagName = '';
+  let isStyle = false;
+
+  const convert = splitHtml.reduce((acc, item, i) => {
+    if (item === '<!--' || item === '-->') {
+      acc.push(item);
+
+      return acc;
+    }
+    if (item === '<') {
+      tagName = splitHtml[i + 1];
+
+      acc.push(item);
+
+      return acc;
+    }
+
     if (item === '/>') {
       acc.push(`></${tagName}>`);
 
@@ -274,8 +348,8 @@ export function convertJsxToHtml(html) {
           return acc;
         }
 
-        const convertProperty = jsxKeyOfhtmlJsxAttributes[splitProperty[0]];
-        splitProperty[0] = convertProperty;
+        const convertProperty = htmlKeyOfhtmlJsxAttributes[splitProperty[0]];
+        splitProperty[0] = convertProperty || splitProperty[0];
 
         acc.push(splitProperty.join(''));
 

@@ -1,4 +1,10 @@
-import React, { Fragment, useState, useRef, useCallback } from 'react';
+import React, {
+  Fragment,
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+} from 'react';
 import styled from 'styled-components';
 import htmlElementsSet from '../data/htmlElements';
 import {
@@ -9,10 +15,12 @@ import keyMaker from '../utils/keyMaker';
 
 export default function useHtmlHighLightQueryText(htmlCode) {
   const copyHtmlCode = useRef(htmlCode);
-  const highlightElement = useRef();
+  const highlightElement = useRef(htmlCode);
+  const [, setRender] = useState(htmlCode);
 
   const query = useCallback(code => {
     copyHtmlCode.current = code;
+
     const bracketSplitCode = code.split(/(<!--| |-->|<|>)/);
     let tagName = '';
 
@@ -79,6 +87,11 @@ export default function useHtmlHighLightQueryText(htmlCode) {
     });
 
     highlightElement.current = element;
+    setRender(element);
+  }, []);
+
+  useEffect(() => {
+    query(htmlCode);
   }, []);
 
   return [copyHtmlCode.current, highlightElement.current, query];
