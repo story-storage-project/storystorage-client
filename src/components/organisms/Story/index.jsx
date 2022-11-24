@@ -8,7 +8,7 @@ import React, {
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import useElementCompiler from '../../../hooks/useElementCompiler';
 import {
   getNodeList,
@@ -24,7 +24,7 @@ import {
   page,
   isClickedSaveButton,
 } from '../../../store/codeState';
-import { patchStory } from '../../../service/storyApi';
+import { deleteStory, patchStory } from '../../../service/storyApi';
 import { VALIDATION_ERROR_MESSAGE } from '../../../constants/errorMessage';
 import Text from '../../atoms/Text';
 
@@ -41,7 +41,7 @@ export default function Story({
     html: htmlData,
     css: cssData,
   } = responseData;
-
+  const navigate = useNavigate();
   const [storyName, setStoryName] = useState(name);
   const [codeToggle, setCodeToggle] = useState(false);
   const [editButtonToggle, setEditButtonToggle] = useState('Edit');
@@ -130,6 +130,11 @@ export default function Story({
     }
   };
 
+  const deleteHandler = async () => {
+    await deleteStory(userInfo.id, id);
+    navigate(0);
+  };
+
   return (
     <Container codeToggle={codeToggle}>
       <Wrapper>
@@ -146,30 +151,48 @@ export default function Story({
                 disabled={editButtonToggle === 'Edit'}
               />
             </InputWrapper>
-            {isLogin && (
+            <ButtonWrapper>
+              {isLogin && (
+                <InputWrapper>
+                  <Button
+                    border
+                    borderRadius="3px"
+                    bg="lightGray"
+                    width="2.5rem"
+                    padding="0.5rem 1.5rem"
+                    onClick={editNameHandler}
+                  >
+                    {editButtonToggle}
+                  </Button>
+                </InputWrapper>
+              )}
               <InputWrapper>
                 <Button
                   border
                   borderRadius="3px"
                   bg="lightGray"
                   width="2.5rem"
-                  onClick={editNameHandler}
+                  padding="0.5rem 1.5rem"
+                  onClick={() => setCodeToggle(!codeToggle)}
                 >
-                  {editButtonToggle}
+                  Code
                 </Button>
               </InputWrapper>
-            )}
-            <InputWrapper>
-              <Button
-                border
-                borderRadius="3px"
-                bg="lightGray"
-                width="2.5rem"
-                onClick={() => setCodeToggle(!codeToggle)}
-              >
-                Code
-              </Button>
-            </InputWrapper>
+              {isLogin && (
+                <InputWrapper>
+                  <Button
+                    border
+                    borderRadius="3px"
+                    bg="lightGray"
+                    width="2.5rem"
+                    padding="0.5rem 1.5rem"
+                    onClick={deleteHandler}
+                  >
+                    Delete
+                  </Button>
+                </InputWrapper>
+              )}
+            </ButtonWrapper>
           </InputContainer>
           {errorMessage && (
             <Message>
@@ -177,16 +200,16 @@ export default function Story({
             </Message>
           )}
         </Header>
-        <PreviewWrapper>
-          <Link
-            style={{ textDecoration: 'none' }}
-            to={`/story/${category}/${id}`}
-          >
+        <Link
+          style={{ textDecoration: 'none' }}
+          to={`/story/${category}/${id}`}
+        >
+          <PreviewWrapper>
             <Preview className={`a${id}`}>
               {allProperties && renderElements()}
             </Preview>
-          </Link>
-        </PreviewWrapper>
+          </PreviewWrapper>
+        </Link>
       </Wrapper>
       {codeToggle && (
         <OptionWrapper>
@@ -249,6 +272,7 @@ const InputContainer = styled.div`
   @media ${props => props.theme.viewSize.mobile} {
     min-width: 7rem;
     max-width: 7rem;
+    margin: 0;
   }
 `;
 
@@ -259,6 +283,10 @@ const InputWrapper = styled.div`
     padding: 0;
     color: black;
   }
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
 `;
 
 const Input = styled.input`
@@ -299,6 +327,10 @@ const PreviewWrapper = styled.div`
 
   @media ${props => props.theme.viewSize.tablet} {
     height: 10rem;
+  }
+
+  a:-webkit-any-link {
+    color: black;
   }
 `;
 

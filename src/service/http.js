@@ -18,7 +18,7 @@ API.interceptors.request.use(
 
 API.interceptors.response.use(
   res => {
-    if (!res.data) {
+    if (res.status !== 204 && !res.data) {
       throw new Error('No data transferred');
     }
 

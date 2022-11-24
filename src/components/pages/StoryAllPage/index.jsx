@@ -22,47 +22,47 @@ export default function StoryAllPage() {
 
     const list = {};
     list[categoryName] = userStoryLists[categoryName];
-
-    setUserCategoryStoryList(() => ({ ...list }));
-  }, [userStoryLists]);
+    setUserCategoryStoryList(() => list);
+  }, [userStoryLists, categoryName]);
 
   const setUserStory = editData => {
     setUserStoryList(editData);
   };
 
   return (
-    <>
-      {Object.entries(storyCategoryList).map(stories => {
-        const [category, storiesArray] = stories;
+    <div>
+      {Object.values(storyCategoryList)[0] &&
+        Object.entries(storyCategoryList).map(stories => {
+          const [category, storiesArray] = stories;
 
-        return (
-          <>
-            <CategoryText size="small" key={category}>
-              {category}
-            </CategoryText>
-            <Container>
-              <Wrapper>
-                {storiesArray.map(story => {
-                  const { _id: id } = story;
+          return (
+            <>
+              <CategoryText size="small" key={category}>
+                {category}
+              </CategoryText>
+              <Container>
+                <Wrapper>
+                  {storiesArray.map(story => {
+                    const { _id: id } = story;
 
-                  return (
-                    <RecoilRoot>
-                      <Story
-                        key={id}
-                        userInfo={userInfo}
-                        responseData={story}
-                        isLogin={loggedIn}
-                        setUserStoryList={setUserStory}
-                      />
-                    </RecoilRoot>
-                  );
-                })}
-              </Wrapper>
-            </Container>
-          </>
-        );
-      })}
-    </>
+                    return (
+                      <RecoilRoot>
+                        <Story
+                          key={id}
+                          userInfo={userInfo}
+                          responseData={story}
+                          isLogin={loggedIn}
+                          setUserStoryList={setUserStory}
+                        />
+                      </RecoilRoot>
+                    );
+                  })}
+                </Wrapper>
+              </Container>
+            </>
+          );
+        })}
+    </div>
   );
 }
 
