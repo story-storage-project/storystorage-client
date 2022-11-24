@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, redirect } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import Text from '../../atoms/Text';
 import ImageIcon from '../../atoms/ImageIcon';
 import MobileHiddenToggleViewer from '../../atoms/MobileHiddenToggleViewer';
@@ -8,9 +9,46 @@ import Button from '../../atoms/Button';
 import Toggle from '../../molecules/Toggle';
 import List from '../../atoms/List';
 import Ul from '../../molecules/Ul';
+import { userData, isLogin, userStoryList } from '../../../store/userState';
+import { getMe, logout } from '../../../service/authApi';
+import useQuery from '../../../hooks/useQuery';
 
 export default function LeftMenu() {
   const [onToggle, setOnToggle] = useState(false);
+  const [loggedIn, setIsLogin] = useRecoilState(isLogin);
+  const [user, setUser] = useRecoilState(userData);
+  const [storyList, setStoryList] = useRecoilState(userStoryList);
+  const { data, result } = useQuery({
+    api: getMe,
+    isRequireLogin: true,
+  });
+
+  useEffect(() => {
+    if (!result) return;
+
+    if (result === 'authError' || !data) {
+      setIsLogin(false);
+      return setUser(() => ({}));
+    }
+
+    const { _id: id, email, name, picture, elementList } = data;
+    setUser(() => ({ id, email, name, picture }));
+    setIsLogin(true);
+
+    const elements = elementList.reduce((category, element) => {
+      if (category[element.category]) {
+        category[element.category].push(element);
+        return category;
+      }
+      // eslint-disable-next-line no-param-reassign
+      category[element.category] = [];
+      category[element.category].push(element);
+      return category;
+    }, {});
+
+    setStoryList(() => ({ ...elements }));
+  }, [data]);
+
   const navigate = useNavigate();
 
   const logoClickHandler = () => {
@@ -21,12 +59,29 @@ export default function LeftMenu() {
     navigate('/login');
   };
 
+  const logOutClickHandler = () => {
+    logout();
+
+    setIsLogin(false);
+    setUser(() => ({}));
+
+    navigate(0);
+  };
+
   const addStoryClickHandler = () => {
     navigate('/story-maker');
   };
 
   const menuClickHandler = () => {
     setOnToggle(!onToggle);
+  };
+
+  const categoryClickHandler = category => {
+    navigate(`story/${category}`);
+  };
+
+  const categoryListClickHandler = (category, id) => {
+    navigate(`story/${category}/${id}`);
   };
 
   return (
@@ -56,35 +111,64 @@ export default function LeftMenu() {
       </Header>
       <MobileHiddenToggleViewer toggle={onToggle}>
         <Body>
-          <Button
-            border
-            borderRadius="20rem"
-            margin="0 0 1rem 0"
-            onClick={loginClickHandler}
-          >
-            Sign in
-          </Button>
-          <Button
-            border
-            bg="pointColor"
-            borderRadius="20rem"
-            margin="0 0 1rem 0"
-            textColor="whiteColor"
-            onClick={addStoryClickHandler}
-          >
-            Add Story
-          </Button>
+          {loggedIn ? (
+            <>
+              <Button
+                border
+                borderRadius="20rem"
+                margin="0 0 1rem 0"
+                onClick={logOutClickHandler}
+              >
+                Sign out
+              </Button>
+              <Button
+                border
+                bg="pointColor"
+                borderRadius="20rem"
+                margin="0 0 1rem 0"
+                textColor="whiteColor"
+                onClick={addStoryClickHandler}
+              >
+                Add Story
+              </Button>
+            </>
+          ) : (
+            <Button
+              border
+              borderRadius="20rem"
+              margin="0 0 1rem 0"
+              onClick={loginClickHandler}
+            >
+              Sign in
+            </Button>
+          )}{' '}
           <Text size="small" color="DarkGray" margin="0.5rem 0">
             Element
           </Text>
-          <Toggle summary="All Button">
-            <Ul>
-              <List>list</List>
-              <List>list</List>
-              <List>list</List>
-              <List>list</List>
-            </Ul>
-          </Toggle>
+          {Object.entries(storyList).map(stories => {
+            const [category, storiesArray] = stories;
+            return (
+              <Toggle summary={category} key={category}>
+                <Ul>
+                  <List onClick={() => categoryClickHandler(category)}>
+                    All
+                  </List>
+                  {storiesArray.map(story => {
+                    const { _id: id } = story;
+
+                    return (
+                      <List
+                        key={id}
+                        onClick={() => categoryListClickHandler(category, id)}
+                      >
+                        {story.name}
+                      </List>
+                    );
+                  })}
+                </Ul>
+              </Toggle>
+            );
+          })}
         </Body>
       </MobileHiddenToggleViewer>
     </Wrapper>
