@@ -13,6 +13,7 @@ export default function useCssHighLightQueryText(cssCode) {
 
   const query = useCallback(code => {
     copyCssCode.current = code;
+
     const bracketSplit = code.split(/(<!--|{|-->|}|;|:)/);
     let isInTag = false;
 
