@@ -29,12 +29,12 @@ export default [
       white-space: nowrap;
       cursor: pointer;
     }
-    
+
     .button-63:active,
     .button-63:hover {
       outline: 0;
     }
-    
+
     @media (min-width: 768px) {
       .button-63 {
         font-size: 24px;
@@ -71,11 +71,11 @@ export default [
       vertical-align: bottom;
       width: 190px;
     }
-    
+
     .button-69:hover {
       opacity: .7;
     }
-    
+
     @media screen and (max-width: 1000px) {
       .button-69 {
         font-size: 14px;
@@ -108,16 +108,16 @@ export default [
       -webkit-user-select: none;
       touch-action: manipulation;
     }
-    
+
     .button-74:hover {
       background-color: #fff;
     }
-    
+
     .button-74:active {
       box-shadow: #422800 2px 2px 0 0;
       transform: translate(2px, 2px);
     }
-    
+
     @media (min-width: 768px) {
       .button-74 {
         min-width: 120px;
@@ -148,7 +148,7 @@ export default [
       -webkit-user-select: none;
       touch-action: manipulation;
     }
-    
+
     .button-82-shadow {
       position: absolute;
       top: 0;
@@ -164,7 +164,7 @@ export default [
         600ms
         cubic-bezier(.3, .7, .4, 1);
     }
-    
+
     .button-82-edge {
       position: absolute;
       top: 0;
@@ -180,7 +180,7 @@ export default [
         hsl(340deg 100% 16%) 100%
       );
     }
-    
+
     .button-82-front {
       display: block;
       position: relative;
@@ -196,19 +196,19 @@ export default [
         600ms
         cubic-bezier(.3, .7, .4, 1);
     }
-    
+
     @media (min-width: 768px) {
       .button-82-front {
         font-size: 1.25rem;
         padding: 12px 42px;
       }
     }
-    
+
     .button-82-pushable:hover {
       filter: brightness(110%);
       -webkit-filter: brightness(110%);
     }
-    
+
     .button-82-pushable:hover .button-82-front {
       transform: translateY(-6px);
       transition:
@@ -216,12 +216,12 @@ export default [
         250ms
         cubic-bezier(.3, .7, .4, 1.5);
     }
-    
+
     .button-82-pushable:active .button-82-front {
       transform: translateY(-2px);
       transition: transform 34ms;
     }
-    
+
     .button-82-pushable:hover .button-82-shadow {
       transform: translateY(4px);
       transition:
@@ -229,12 +229,12 @@ export default [
         250ms
         cubic-bezier(.3, .7, .4, 1.5);
     }
-    
+
     .button-82-pushable:active .button-82-shadow {
       transform: translateY(1px);
       transition: transform 34ms;
     }
-    
+
     .button-82-pushable:focus:not(:focus-visible) {
       outline: none;
     }`,
@@ -270,7 +270,7 @@ export default [
       z-index: 9;
       border: 0;
     }
-    
+
     .button-41:hover {
       background: #00bd68;
     }`,
@@ -307,7 +307,7 @@ export default [
       -webkit-user-select: none;
       touch-action: manipulation;
     }
-    
+
     .button-35:hover {
       box-shadow: #121212 0 0 0 3px, transparent 0 0 0 0;
     }`,
@@ -333,17 +333,17 @@ export default [
       -webkit-user-select: none;
       touch-action: manipulation;
     }
-    
+
     .button-51:hover,
     .button-51:active {
       outline: 0;
     }
-    
+
     .button-51:hover {
       background-color: transparent;
       cursor: pointer;
     }
-    
+
     .button-51:before {
       background-color: #D5EDF6;
       content: "";
@@ -355,11 +355,11 @@ export default [
       width: 100%;
       z-index: -1;
     }
-    
+
     .button-51:hover:before {
       background-color: #6DCFF6;
     }
-    
+
     @media (min-width: 768px) {
       .button-51 {
         padding: 16px 32px;
@@ -385,7 +385,7 @@ export default [
       -webkit-user-select: none;
       touch-action: manipulation;
     }
-    
+
     .button-52:after {
       content: "";
       background-color: #ffe54c;
@@ -397,12 +397,12 @@ export default [
       left: 7px;
       transition: 0.2s;
     }
-    
+
     .button-52:hover:after {
       top: 0px;
       left: 0px;
     }
-    
+
     @media (min-width: 768px) {
       .button-52 {
         padding: 13px 50px 13px;
@@ -430,13 +430,13 @@ export default [
       -webkit-user-select: none;
       touch-action: manipulation;
     }
-    
+
     .button-57 span:first-child {
       position: relative;
       transition: color 600ms cubic-bezier(0.48, 0, 0.12, 1);
       z-index: 10;
     }
-    
+
     .button-57 span:last-child {
       color: white;
       display: block;
@@ -451,7 +451,7 @@ export default [
       height: 14px;
       line-height: 13px;
     }
-    
+
     .button-57:after {
       content: "";
       position: absolute;
@@ -465,12 +465,12 @@ export default [
       transform: skewY(9.3deg) scaleY(0);
       z-index: 50;
     }
-    
+
     .button-57:hover:after {
       transform-origin: bottom center;
       transform: skewY(9.3deg) scaleY(2);
     }
-    
+
     .button-57:hover span:last-child {
       transform: translateX(-50%) translateY(-100%);
       opacity: 1;
@@ -499,14 +499,14 @@ export default [
       -webkit-user-select: none;
       touch-action: manipulation;
     }
-    
+
     .button-32:not(:disabled):hover,
     .button-32:not(:disabled):focus {
       outline: 0;
       background: #f4e603;
       box-shadow: 0 0 0 2px rgba(0,0,0,.2), 0 3px 8px 0 rgba(0,0,0,.15);
     }
-    
+
     .button-32:disabled {
       filter: saturate(0.2) opacity(0.5);
       -webkit-filter: saturate(0.2) opacity(0.5);
@@ -548,16 +548,16 @@ export default [
       will-change: box-shadow,transform;
       font-size: 18px;
     }
-    
+
     .button-29:focus {
       box-shadow: #3c4fe0 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
     }
-    
+
     .button-29:hover {
       box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
       transform: translateY(-2px);
     }
-    
+
     .button-29:active {
       box-shadow: #3c4fe0 0 3px 7px inset;
       transform: translateY(2px);

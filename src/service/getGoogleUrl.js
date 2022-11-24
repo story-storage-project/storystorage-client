@@ -1,9 +1,11 @@
+import config from '../../config';
+
 const getGoogleUrl = from => {
   const rootUrl = `https://accounts.google.com/o/oauth2/v2/auth`;
 
   const options = {
-    redirect_uri: process.env.REACT_APP_GOOGLE_OAUTH_REDIRECT,
-    client_id: process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID,
+    redirect_uri: config.googleOauth.redirect,
+    client_id: config.googleOauth.clientId,
     access_type: 'offline',
     response_type: 'code',
     prompt: 'consent',
