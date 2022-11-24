@@ -24,11 +24,7 @@ import {
   isClickedSaveButton,
 } from '../../../store/codeState';
 
-export default function HtmlCodeEditor({
-  userInfo,
-  isLogin,
-  setUserStoryList,
-}) {
+export default function HtmlCodeEditor({ isLogin }) {
   const [htmlData, setHtmlCode] = useRecoilState(html);
   const currentPage = useRecoilValue(page);
   const [selectedCodeType, setSelectCodeType] = useRecoilState(selectCodeType);
@@ -249,9 +245,7 @@ export default function HtmlCodeEditor({
 }
 
 HtmlCodeEditor.propTypes = {
-  userInfo: PropTypes.object.isRequired,
   isLogin: PropTypes.bool.isRequired,
-  setUserStoryList: PropTypes.func.isRequired,
 };
 
 const CodeEditorWrapper = styled.div``;

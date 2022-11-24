@@ -6,7 +6,7 @@ import HtmlCodeEditor from '../HtmlCodeEditor';
 import CssCodeEditor from '../CssCodeEditor';
 import { codeViewMode, page, selectCodeType } from '../../../store/codeState';
 
-export default function CodeEditor({ userInfo, isLogin, setUserStoryList }) {
+export default function CodeEditor({ isLogin }) {
   const currentPage = useRecoilValue(page);
   const editorFlexType = useRecoilValue(codeViewMode);
   const selectedCodeType = useRecoilValue(selectCodeType);
@@ -16,31 +16,15 @@ export default function CodeEditor({ userInfo, isLogin, setUserStoryList }) {
       {currentPage === 'story' ? (
         <CodeEditorContainer viewMode={editorFlexType}>
           {selectedCodeType === 'CSS' ? (
-            <CssCodeEditor
-              userInfo={userInfo}
-              isLogin={isLogin}
-              setUserStoryList={setUserStoryList}
-            />
+            <CssCodeEditor isLogin={isLogin} />
           ) : (
-            <HtmlCodeEditor
-              userInfo={userInfo}
-              isLogin={isLogin}
-              setUserStoryList={setUserStoryList}
-            />
+            <HtmlCodeEditor isLogin={isLogin} />
           )}
         </CodeEditorContainer>
       ) : (
         <CodeEditorContainer viewMode={editorFlexType}>
-          <HtmlCodeEditor
-            userInfo={userInfo}
-            isLogin={isLogin}
-            setUserStoryList={setUserStoryList}
-          />
-          <CssCodeEditor
-            userInfo={userInfo}
-            isLogin={isLogin}
-            setUserStoryList={setUserStoryList}
-          />
+          <HtmlCodeEditor isLogin={isLogin} />
+          <CssCodeEditor isLogin={isLogin} />
         </CodeEditorContainer>
       )}
     </Container>
@@ -48,9 +32,7 @@ export default function CodeEditor({ userInfo, isLogin, setUserStoryList }) {
 }
 
 CodeEditor.propTypes = {
-  userInfo: PropTypes.object.isRequired,
   isLogin: PropTypes.bool.isRequired,
-  setUserStoryList: PropTypes.func.isRequired,
 };
 
 const Container = styled.div`

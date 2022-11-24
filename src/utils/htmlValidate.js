@@ -23,7 +23,7 @@ function basicValidateHtml(html) {
   return validateBrackets ? '' : VALIDATION_ERROR_MESSAGE.HTML.MISSING_BRACKETS;
 }
 
-export function validateHtml(html, mode) {
+export function validateHtml(html) {
   if (!html) return;
 
   const basicValidationError = basicValidateHtml(html);

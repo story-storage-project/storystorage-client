@@ -15,7 +15,7 @@ import useCssHighLightQueryText from '../../../hooks/useCssHighLightQueryText';
 import { insertTab, insertText } from '../../../utils/codeEditor';
 import validateCss from '../../../utils/cssValidate';
 
-export default function CssCodeEditor({ userInfo, isLogin, setUserStoryList }) {
+export default function CssCodeEditor({ isLogin }) {
   const [cssData, setCssCode] = useRecoilState(css);
   const currentPage = useRecoilValue(page);
   const [isClickSaveButton, setIsClickedSaveButton] =
@@ -169,9 +169,7 @@ export default function CssCodeEditor({ userInfo, isLogin, setUserStoryList }) {
 }
 
 CssCodeEditor.propTypes = {
-  userInfo: PropTypes.object.isRequired,
   isLogin: PropTypes.bool.isRequired,
-  setUserStoryList: PropTypes.func.isRequired,
 };
 
 const CodeEditorWrapper = styled.div``;

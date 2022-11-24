@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate, redirect } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import Text from '../../atoms/Text';
 import ImageIcon from '../../atoms/ImageIcon';
 import MobileHiddenToggleViewer from '../../atoms/MobileHiddenToggleViewer';
@@ -16,7 +16,7 @@ import useQuery from '../../../hooks/useQuery';
 export default function LeftMenu() {
   const [onToggle, setOnToggle] = useState(false);
   const [loggedIn, setIsLogin] = useRecoilState(isLogin);
-  const [user, setUser] = useRecoilState(userData);
+  const setUser = useSetRecoilState(userData);
   const [storyList, setStoryList] = useRecoilState(userStoryList);
   const { data, result } = useQuery({
     api: getMe,

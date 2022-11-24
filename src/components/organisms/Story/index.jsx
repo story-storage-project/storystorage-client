@@ -28,12 +28,7 @@ import { deleteStory, patchStory } from '../../../service/storyApi';
 import { VALIDATION_ERROR_MESSAGE } from '../../../constants/errorMessage';
 import Text from '../../atoms/Text';
 
-export default function Story({
-  userInfo,
-  responseData,
-  isLogin,
-  setUserStoryList,
-}) {
+export default function Story({ userInfo, responseData, isLogin }) {
   const {
     _id: id,
     category,
@@ -213,11 +208,7 @@ export default function Story({
       </Wrapper>
       {codeToggle && (
         <OptionWrapper>
-          <CodeEditor
-            userInfo={userInfo}
-            isLogin={isLogin}
-            setUserStoryList={setUserStoryList}
-          />
+          <CodeEditor isLogin={isLogin} />
         </OptionWrapper>
       )}
     </Container>
@@ -228,7 +219,6 @@ Story.propTypes = {
   userInfo: PropTypes.object.isRequired,
   isLogin: PropTypes.bool.isRequired,
   responseData: PropTypes.object.isRequired,
-  setUserStoryList: PropTypes.func.isRequired,
 };
 
 const Container = styled.div`
