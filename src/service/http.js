@@ -1,5 +1,5 @@
 import axios from 'axios';
-import configData from '../../config';
+import configData from '../config';
 
 const baseURL = configData.base;
 
