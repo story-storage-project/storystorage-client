@@ -7,6 +7,7 @@ const Wrapper = styled.li`
   list-style: none;
   margin: 0.1rem;
   font-weight: 300;
+  cursor: pointer;
 `;
 
 const EmojiText = styled(Text)`
