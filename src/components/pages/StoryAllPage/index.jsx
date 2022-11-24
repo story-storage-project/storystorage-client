@@ -6,24 +6,25 @@ import Story from '../../organisms/Story';
 import Text from '../../atoms/Text';
 import { userData, isLogin, userStoryList } from '../../../store/userState';
 
-export default function StoryPage() {
+export default function StoryAllPage() {
   const params = useParams();
-  const { categoryName, storyId } = params;
+  const { categoryName } = params;
   const [userStoryLists, setUserStoryList] = useRecoilState(userStoryList);
+  const [storyCategoryList, setUserCategoryStoryList] =
+    useState(userStoryLists);
   const userInfo = useRecoilValue(userData);
-  const [story, setStory] = useState();
   const loggedIn = useRecoilValue(isLogin);
 
   useEffect(() => {
-    const storyList = userStoryLists[categoryName];
+    if (!categoryName) {
+      return setUserCategoryStoryList(userStoryLists);
+    }
 
-    const filterStory = storyList.filter(data => {
-      const { _id: id } = data;
-      return id === storyId;
-    });
+    const list = {};
+    list[categoryName] = userStoryLists[categoryName];
 
-    setStory(...filterStory);
-  }, [userStoryLists, story, storyId]);
+    setUserCategoryStoryList(() => ({ ...list }));
+  }, [userStoryLists]);
 
   const setUserStory = editData => {
     setUserStoryList(editData);
@@ -31,21 +32,36 @@ export default function StoryPage() {
 
   return (
     <>
-      <CategoryText size="small">{categoryName}</CategoryText>
-      <Container>
-        <Wrapper>
-          <RecoilRoot>
-            {story && (
-              <Story
-                responseData={story}
-                userInfo={userInfo}
-                isLogin={loggedIn}
-                setUserStoryList={setUserStory}
-              />
-            )}
-          </RecoilRoot>
-        </Wrapper>
-      </Container>
+      {Object.entries(storyCategoryList).map(stories => {
+        const [category, storiesArray] = stories;
+
+        return (
+          <>
+            <CategoryText size="small" key={category}>
+              {category}
+            </CategoryText>
+            <Container>
+              <Wrapper>
+                {storiesArray.map(story => {
+                  const { _id: id } = story;
+
+                  return (
+                    <RecoilRoot>
+                      <Story
+                        key={id}
+                        userInfo={userInfo}
+                        responseData={story}
+                        isLogin={loggedIn}
+                        setUserStoryList={setUserStory}
+                      />
+                    </RecoilRoot>
+                  );
+                })}
+              </Wrapper>
+            </Container>
+          </>
+        );
+      })}
     </>
   );
 }

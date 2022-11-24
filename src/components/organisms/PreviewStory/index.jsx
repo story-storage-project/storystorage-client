@@ -4,10 +4,10 @@ import React, {
   useState,
   useMemo,
   useCallback,
-  useContext,
 } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import CodeEditor from '../CodeEditor';
 import useElementCompiler from '../../../hooks/useElementCompiler';
 import {
@@ -16,17 +16,30 @@ import {
 } from '../../../utils/stringHtmlParser';
 import insertClass from '../../../utils/insertPreviewClass';
 import Button from '../../atoms/Button';
-import { CodeContext } from '../../../context/CodeProvider';
+import { html, css, page } from '../../../store/codeState';
+import Text from '../../atoms/Text';
+import { userData, userStoryList, isLogin } from '../../../store/userState';
+import { VALIDATION_ERROR_MESSAGE } from '../../../constants/errorMessage';
 
-export default function PreviewStory({ createStoryRequest }) {
+export default function PreviewStory({
+  createFailMessage,
+  createStoryRequest,
+}) {
+  const loggedIn = useRecoilValue(isLogin);
   const [storyName, setStoryName] = useState('');
   const [categoryName, setCategoryName] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const style = useRef();
   const conditionalCss = useRef();
-  const { html, css, setCurrentPage } = useContext(CodeContext);
+  const setUserStoryList = useSetRecoilState(userStoryList);
+  const userInfo = useRecoilValue(userData);
+
+  const htmlCode = useRecoilValue(html);
+  const cssCode = useRecoilValue(css);
+  const setPage = useSetRecoilState(page);
 
   useEffect(() => {
-    setCurrentPage('story-maker');
+    setPage('story-maker');
     if (!style.current) {
       style.current = document.createElement('style');
       document.head.appendChild(style.current);
@@ -34,18 +47,22 @@ export default function PreviewStory({ createStoryRequest }) {
   }, []);
 
   useEffect(() => {
-    if (!style.current || !css) return;
-    conditionalCss.current = insertClass('preview', css);
+    setErrorMessage(createFailMessage);
+  }, [createFailMessage]);
+
+  useEffect(() => {
+    if (!style.current || !cssCode) return;
+    conditionalCss.current = insertClass('preview', cssCode);
 
     style.current.innerHTML = conditionalCss.current;
-  }, [css]);
+  }, [cssCode]);
 
   const allProperties = useMemo(() => {
-    const nodeList = getNodeList(`${html}`);
+    const nodeList = getNodeList(`${htmlCode}`);
     const parsedElement = storeAllElementProperties(nodeList);
 
     return parsedElement;
-  }, [html]);
+  }, [htmlCode]);
 
   const renderElements = () => {
     if (!allProperties) return;
@@ -66,15 +83,26 @@ export default function PreviewStory({ createStoryRequest }) {
     [categoryName],
   );
 
-  const onClickHandler = () => {
+  const createStoryHandler = () => {
+    if (!categoryName || !storyName || !htmlCode || !cssCode) {
+      setErrorMessage(VALIDATION_ERROR_MESSAGE.NULL);
+      return;
+    }
+
+    setErrorMessage('');
+
     const data = {
       category: categoryName,
       name: storyName,
-      html,
-      css,
+      html: htmlCode,
+      css: cssCode,
     };
 
     createStoryRequest(data);
+  };
+
+  const setUserStory = editData => {
+    setUserStoryList(editData);
   };
 
   return (
@@ -114,12 +142,17 @@ export default function PreviewStory({ createStoryRequest }) {
                 border
                 borderRadius="3px"
                 bg="lightGray"
-                onClick={onClickHandler}
+                onClick={createStoryHandler}
               >
                 Save
               </Button>
             </InputWrapper>
           </InputContainer>
+          {errorMessage && (
+            <Message>
+              <Text>{errorMessage}</Text>
+            </Message>
+          )}
         </Header>
         <PreviewWrapper>
           <Preview className="apreview">
@@ -128,14 +161,23 @@ export default function PreviewStory({ createStoryRequest }) {
         </PreviewWrapper>
       </Wrapper>
       <OptionWrapper>
-        <CodeEditor />
+        <CodeEditor
+          userInfo={userInfo}
+          isLogin={loggedIn}
+          setUserStoryList={setUserStory}
+        />
       </OptionWrapper>
     </Container>
   );
 }
 
 PreviewStory.propTypes = {
+  createFailMessage: PropTypes.string,
   createStoryRequest: PropTypes.func.isRequired,
+};
+
+PreviewStory.defaultProps = {
+  createFailMessage: '',
 };
 
 const Container = styled.div`
@@ -153,10 +195,15 @@ const Wrapper = styled.div`
 const Header = styled.div`
   display: flex;
   justify-content: flex-start;
+  flex-direction: column;
 
   @media ${props => props.theme.viewSize.mobile} {
     justify-content: center;
   }
+`;
+
+const Message = styled.div`
+  margin: 0 0 0 2rem;
 `;
 
 const InputContainer = styled.div`

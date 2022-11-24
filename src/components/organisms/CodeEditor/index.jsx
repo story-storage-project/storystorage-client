@@ -1,27 +1,57 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import { useRecoilValue } from 'recoil';
 import HtmlCodeEditor from '../HtmlCodeEditor';
 import CssCodeEditor from '../CssCodeEditor';
-import { CodeContext } from '../../../context/CodeProvider';
+import { codeViewMode, page, selectCodeType } from '../../../store/codeState';
 
-export default function CodeEditor() {
-  const { codeViewMode, selectMenu, page } = useContext(CodeContext);
+export default function CodeEditor({ userInfo, isLogin, setUserStoryList }) {
+  const currentPage = useRecoilValue(page);
+  const editorFlexType = useRecoilValue(codeViewMode);
+  const selectedCodeType = useRecoilValue(selectCodeType);
 
   return (
     <Container>
-      {page === 'story' ? (
-        <CodeEditorContainer viewMode={codeViewMode}>
-          {selectMenu !== 'CSS' ? <HtmlCodeEditor /> : <CssCodeEditor />}
+      {currentPage === 'story' ? (
+        <CodeEditorContainer viewMode={editorFlexType}>
+          {selectedCodeType === 'CSS' ? (
+            <CssCodeEditor
+              userInfo={userInfo}
+              isLogin={isLogin}
+              setUserStoryList={setUserStoryList}
+            />
+          ) : (
+            <HtmlCodeEditor
+              userInfo={userInfo}
+              isLogin={isLogin}
+              setUserStoryList={setUserStoryList}
+            />
+          )}
         </CodeEditorContainer>
       ) : (
-        <CodeEditorContainer viewMode={codeViewMode}>
-          <HtmlCodeEditor />
-          <CssCodeEditor />
+        <CodeEditorContainer viewMode={editorFlexType}>
+          <HtmlCodeEditor
+            userInfo={userInfo}
+            isLogin={isLogin}
+            setUserStoryList={setUserStoryList}
+          />
+          <CssCodeEditor
+            userInfo={userInfo}
+            isLogin={isLogin}
+            setUserStoryList={setUserStoryList}
+          />
         </CodeEditorContainer>
       )}
     </Container>
   );
 }
+
+CodeEditor.propTypes = {
+  userInfo: PropTypes.object.isRequired,
+  isLogin: PropTypes.bool.isRequired,
+  setUserStoryList: PropTypes.func.isRequired,
+};
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -44,6 +74,5 @@ const CodeEditorContainer = styled.div`
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    height: 100vh;
   }
 `;
