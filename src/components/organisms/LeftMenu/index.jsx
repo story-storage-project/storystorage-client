@@ -187,6 +187,7 @@ const Wrapper = styled.div(
     min-width: 10rem;
     padding: 3rem 2rem;
     background-color: ${theme.colors.leftMenu};
+    overflow-y: scroll;
 
     @media ${theme.viewSize.tablet} {
       box-sizing: border-box;
