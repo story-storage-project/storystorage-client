@@ -1,16 +1,23 @@
 import API from './http';
 
-export async function getUserStory() {
+export function test() {
+  return API({
+    method: 'get',
+    url: `/user/me`,
+  });
+}
+
+export async function getUserAllStory() {
   return API({
     method: 'get',
     url: `/users/stories`,
   });
 }
 
-export async function createStory(data) {
+export async function createStory(userId, data) {
   return API({
     method: 'post',
-    url: `/users/stories`,
+    url: `/users/${userId}/stories`,
     data,
   });
 }
@@ -24,7 +31,7 @@ export async function getStory(params) {
 
 export async function patchStory(userId, storyId, data) {
   return API({
-    method: 'post',
+    method: 'patch',
     url: `/users/${userId}/stories/${storyId}`,
     data,
   });

@@ -21,7 +21,7 @@ function Text({ children, ...props }) {
 }
 
 Text.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   textColor: PropTypes.oneOf([
     'textColor',
     'lightGray',
@@ -33,6 +33,7 @@ Text.propTypes = {
 };
 
 Text.defaultProps = {
+  children: <span />,
   textColor: 'textColor',
   size: 'medium',
   bg: false,

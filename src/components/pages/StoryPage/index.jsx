@@ -1,28 +1,49 @@
-import React from 'react';
-import { useLoaderData, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil';
 import Story from '../../organisms/Story';
 import Text from '../../atoms/Text';
-import CodeProvider from '../../../context/CodeProvider';
+import { userData, isLogin, userStoryList } from '../../../store/userState';
 
 export default function StoryPage() {
-  const { data: storyData } = useLoaderData();
   const params = useParams();
-  const { categoryName } = params;
+  const { categoryName, storyId } = params;
+  const [userStoryLists, setUserStoryList] = useRecoilState(userStoryList);
+  const userInfo = useRecoilValue(userData);
+  const [story, setStory] = useState();
+  const loggedIn = useRecoilValue(isLogin);
+
+  useEffect(() => {
+    const storyList = userStoryLists[categoryName];
+
+    const filterStory = storyList.filter(data => {
+      const { _id: id } = data;
+      return id === storyId;
+    });
+
+    setStory(...filterStory);
+  }, [userStoryLists, story, storyId]);
+
+  const setUserStory = editData => {
+    setUserStoryList(editData);
+  };
 
   return (
     <>
       <CategoryText size="small">{categoryName}</CategoryText>
       <Container>
         <Wrapper>
-          <CodeProvider>
-            {storyData.length &&
-              storyData.map(data => {
-                const { _id: id } = data;
-
-                return <Story key={id} responseData={data} />;
-              })}
-          </CodeProvider>
+          <RecoilRoot>
+            {story && (
+              <Story
+                responseData={story}
+                userInfo={userInfo}
+                isLogin={loggedIn}
+                setUserStoryList={setUserStory}
+              />
+            )}
+          </RecoilRoot>
         </Wrapper>
       </Container>
     </>

@@ -33,6 +33,7 @@
       }
     ],
     "no-unused-vars": [1],
-    "consistent-return": "off"
+    "consistent-return": "off",
+    "no-unused-expressions": ["error", { "allowShortCircuit": true }]
   }
 }

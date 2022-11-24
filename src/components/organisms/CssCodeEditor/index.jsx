@@ -1,31 +1,33 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import useCssHighLightQueryText from '../../../hooks/useCssHighLightQueryText';
-import { insertTab, insertText } from '../../../utils/codeEditor';
+import PropTypes from 'prop-types';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import TextEditor from '../../molecules/TextEditor';
 import Text from '../../atoms/Text';
-import validateCss from '../../../utils/cssValidate';
-import { CodeContext } from '../../../context/CodeProvider';
 import Button from '../../atoms/Button';
+import {
+  css,
+  page,
+  isClickedSaveButton,
+  selectCodeType,
+} from '../../../store/codeState';
+import useCssHighLightQueryText from '../../../hooks/useCssHighLightQueryText';
+import { insertTab, insertText } from '../../../utils/codeEditor';
+import validateCss from '../../../utils/cssValidate';
 
-export default function CssCodeEditor() {
-  const {
-    writeCss,
-    css,
-    page,
-    selectMenu,
-    setSelectedMenu,
-    toggleCodeEditSave,
-  } = useContext(CodeContext);
+export default function CssCodeEditor({ userInfo, isLogin, setUserStoryList }) {
+  const [cssData, setCssCode] = useRecoilState(css);
+  const currentPage = useRecoilValue(page);
+  const [isClickSaveButton, setIsClickedSaveButton] =
+    useRecoilState(isClickedSaveButton);
+  const [selectedCodeType, setSelectedCodeType] =
+    useRecoilState(selectCodeType);
+
   const [cssValidateMessage, setCssValidateMessage] = useState('');
-  const [cssOriginalData, setCssOriginalData] = useState(css);
-  const [cssCode, queryCss, setQueryCss] = useCssHighLightQueryText(css);
+  const [cssOriginalData, setCssOriginalData] = useState(cssData);
+  const [cssCode, queryCss, setQueryCss] = useCssHighLightQueryText(cssData);
+  const [prevKeyCode, setPrevKeyCode] = useState('');
+
   const isClickEnter = useRef();
   const divCssTextAreaRef = useRef();
 
@@ -37,15 +39,26 @@ export default function CssCodeEditor() {
     setCssValidateMessage(validateResultMessage);
 
     if (!validateResultMessage) {
-      writeCss(cssCode);
+      setCssCode(cssCode);
     }
   }, [cssCode]);
 
+  const menuClickHandle = e => {
+    const menuTitle = e.target.value;
+    setSelectedCodeType(menuTitle);
+  };
+
   const handleCssKeyDOwn = useCallback(
     e => {
-      if (e.key === 'v' && e.target.value.slice(-1) !== 'v') {
-        insertText(e.currentTarget, e.currentTarget.selectionStart, '  ');
+      if (e.key === 'v' && prevKeyCode === 91) {
+        return insertText(
+          e.currentTarget,
+          e.currentTarget.selectionStart,
+          '   ',
+        );
       }
+
+      setPrevKeyCode(e.keyCode);
 
       if (e.key === 'Tab') {
         const cssValue = insertTab(
@@ -103,19 +116,23 @@ export default function CssCodeEditor() {
         <Text>{cssValidateMessage && cssValidateMessage}</Text>
       </ValidateMessageWrapper>
       <TitleWrapper>
-        {page === 'story' && (
+        {currentPage === 'story' && (
           <>
             <MenuButton
               value="HTML"
-              textColor={selectMenu === 'HTML' ? 'pointColor' : 'textColor'}
-              onClick={setSelectedMenu}
+              textColor={
+                selectedCodeType === 'HTML' ? 'pointColor' : 'textColor'
+              }
+              onClick={menuClickHandle}
             >
               HTML
             </MenuButton>
             <MenuButton
               value="JSX"
-              textColor={selectMenu === 'JSX' ? 'pointColor' : 'textColor'}
-              onClick={setSelectedMenu}
+              textColor={
+                selectedCodeType === 'JSX' ? 'pointColor' : 'textColor'
+              }
+              onClick={menuClickHandle}
             >
               JSX
             </MenuButton>
@@ -123,13 +140,17 @@ export default function CssCodeEditor() {
         )}
         <MenuButton
           value="CSS"
-          textColor={selectMenu === 'CSS' ? 'pointColor' : 'textColor'}
-          onClick={setSelectedMenu}
+          textColor={selectedCodeType === 'CSS' ? 'pointColor' : 'textColor'}
+          onClick={menuClickHandle}
         >
           CSS
         </MenuButton>
-        {page === 'story' && (
-          <MenuButton onClick={toggleCodeEditSave}>SAVE</MenuButton>
+        {currentPage === 'story' && isLogin && (
+          <MenuButton
+            onClick={() => setIsClickedSaveButton(!isClickSaveButton)}
+          >
+            SAVE
+          </MenuButton>
         )}
       </TitleWrapper>
       <TextEditor
@@ -146,6 +167,12 @@ export default function CssCodeEditor() {
     </CodeEditorWrapper>
   );
 }
+
+CssCodeEditor.propTypes = {
+  userInfo: PropTypes.object.isRequired,
+  isLogin: PropTypes.bool.isRequired,
+  setUserStoryList: PropTypes.func.isRequired,
+};
 
 const CodeEditorWrapper = styled.div``;
 

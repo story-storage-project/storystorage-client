@@ -1,11 +1,7 @@
-import React, {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  useContext,
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import useHtmlHighLightQueryText from '../../../hooks/useHtmlHighLightQueryText';
 import {
   getCaretPosition,
@@ -21,17 +17,23 @@ import {
   convertHtmlToJsx,
   convertJsxToHtml,
 } from '../../../utils/htmlValidate';
-import { CodeContext } from '../../../context/CodeProvider';
+import {
+  html,
+  page,
+  selectCodeType,
+  isClickedSaveButton,
+} from '../../../store/codeState';
 
-export default function HtmlCodeEditor() {
-  const {
-    html,
-    writeHtml,
-    page,
-    selectMenu,
-    setSelectedMenu,
-    toggleCodeEditSave,
-  } = useContext(CodeContext);
+export default function HtmlCodeEditor({
+  userInfo,
+  isLogin,
+  setUserStoryList,
+}) {
+  const [htmlData, setHtmlCode] = useRecoilState(html);
+  const currentPage = useRecoilValue(page);
+  const [selectedCodeType, setSelectCodeType] = useRecoilState(selectCodeType);
+  const [isClickSaveButton, setIsClickedSaveButton] =
+    useRecoilState(isClickedSaveButton);
 
   const [htmlValidateMessage, setHtmlValidateMessage] = useState('');
 
@@ -40,30 +42,32 @@ export default function HtmlCodeEditor() {
     isInside: false,
     data: '',
   });
-  const [htmlOriginalData, setHtmlOriginalData] = useState(html);
-  const [htmlCode, queryHtml, setQueryHtml] = useHtmlHighLightQueryText(html);
+  const [htmlOriginalData, setHtmlOriginalData] = useState(htmlData);
+  const [htmlCode, queryHtml, setQueryHtml] =
+    useHtmlHighLightQueryText(htmlData);
   const [htmlcursorPosition, setHtmlCursorPosition] = useState();
   const [autoHtmlBracketMode, setAutoHtmlBracketMode] = useState(false);
 
   const [prevKeyCode, setPrevKeyCode] = useState('');
   const isClickEnter = useRef();
-  const [jsx, setJsx] = useState('');
 
   useEffect(() => {
     if (!htmlCode) return;
 
-    const validateResultMessage = validateHtml(htmlCode, selectMenu);
+    const validateResultMessage = validateHtml(htmlCode, selectedCodeType);
 
     setHtmlValidateMessage(validateResultMessage);
 
     if (!validateResultMessage) {
-      writeHtml(convertJsxToHtml(htmlCode));
+      setHtmlCode(convertJsxToHtml(htmlCode));
     }
   }, [htmlCode]);
 
   const menuClickHandle = e => {
-    setSelectedMenu(e);
     const menuTitle = e.target.value;
+    setSelectCodeType(menuTitle);
+
+    if (menuTitle === 'CSS') return;
 
     if (menuTitle === 'HTML') {
       setQueryHtml(convertJsxToHtml(htmlCode));
@@ -197,29 +201,35 @@ export default function HtmlCodeEditor() {
       <TitleWrapper>
         <MenuButton
           value="HTML"
-          textColor={selectMenu === 'HTML' ? 'pointColor' : 'textColor'}
+          textColor={selectCodeType === 'HTML' ? 'pointColor' : 'textColor'}
           onClick={menuClickHandle}
         >
           HTML
         </MenuButton>
         <MenuButton
           value="JSX"
-          textColor={selectMenu === 'JSX' ? 'pointColor' : 'textColor'}
+          textColor={selectCodeType === 'JSX' ? 'pointColor' : 'textColor'}
           onClick={menuClickHandle}
         >
           JSX
         </MenuButton>
-        {page === 'story' && (
-          <MenuButton
-            value="CSS"
-            textColor={selectMenu === 'CSS' ? 'pointColor' : 'textColor'}
-            onClick={setSelectedMenu}
-          >
-            CSS
-          </MenuButton>
-        )}
-        {page === 'story' && (
-          <MenuButton onClick={toggleCodeEditSave}>SAVE</MenuButton>
+        {currentPage === 'story' && (
+          <>
+            <MenuButton
+              value="CSS"
+              textColor={selectCodeType === 'CSS' ? 'pointColor' : 'textColor'}
+              onClick={menuClickHandle}
+            >
+              CSS
+            </MenuButton>
+            {isLogin && (
+              <MenuButton
+                onClick={() => setIsClickedSaveButton(!isClickSaveButton)}
+              >
+                SAVE
+              </MenuButton>
+            )}
+          </>
         )}
       </TitleWrapper>
       <TextEditor
@@ -237,6 +247,12 @@ export default function HtmlCodeEditor() {
     </CodeEditorWrapper>
   );
 }
+
+HtmlCodeEditor.propTypes = {
+  userInfo: PropTypes.object.isRequired,
+  isLogin: PropTypes.bool.isRequired,
+  setUserStoryList: PropTypes.func.isRequired,
+};
 
 const CodeEditorWrapper = styled.div``;
 

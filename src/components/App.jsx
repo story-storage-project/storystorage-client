@@ -1,4 +1,5 @@
 import React from 'react';
+import { RecoilRoot } from 'recoil';
 import { ThemeProvider } from 'styled-components';
 import {
   RouterProvider,
@@ -12,16 +13,20 @@ import GlobalStyle from './theme/GlobalStyle';
 import Layout from './templates/Layout';
 import Login from './pages/Login';
 import StoryMaker from './pages/StoryMaker';
-import Story from './pages/Story';
+import StoryPage from './pages/StoryPage';
+import NotFound from './pages/NotFound';
+import StoryAllPage from './pages/StoryAllPage';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <>
-      <Route path="/" element={<Story />} />
+    <Route element={<Layout />}>
+      <Route path="/" element={<StoryAllPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/story-maker" element={<StoryMaker />} />
-      <Route path="/story/:categoryName" element={<Story />} />
-    </>,
+      <Route path="/story/:categoryName" element={<StoryAllPage />} />
+      <Route path="/story/:categoryName/:storyId" element={<StoryPage />} />
+      <Route path="*" element={<NotFound />} />
+    </Route>,
   ),
 );
 
@@ -31,9 +36,9 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <Layout>
-        <RouterProvider router={router} />
-      </Layout>
+      <RecoilRoot>
+        <RouterProvider router={router} fallbackElement={<div>로딩주웅</div>} />
+      </RecoilRoot>
     </ThemeProvider>
   );
 }
