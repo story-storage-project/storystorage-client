@@ -65,7 +65,7 @@ export default function LeftMenu() {
     setIsLogin(false);
     setUser(() => ({}));
 
-    navigate(0);
+    // navigate(0);
   };
 
   const addStoryClickHandler = () => {
