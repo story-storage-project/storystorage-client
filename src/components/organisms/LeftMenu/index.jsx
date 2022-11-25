@@ -14,6 +14,7 @@ import { getMe, logout } from '../../../service/authApi';
 import useQuery from '../../../hooks/useQuery';
 
 export default function LeftMenu() {
+  const [test, setTest] = useState('');
   const [onToggle, setOnToggle] = useState(false);
   const [loggedIn, setIsLogin] = useRecoilState(isLogin);
   const setUser = useSetRecoilState(userData);
@@ -61,7 +62,8 @@ export default function LeftMenu() {
 
   const logOutClickHandler = async () => {
     const res = await logout();
-    alert(res);
+    const { result: resResult } = res;
+    setTest(resResult);
 
     setIsLogin(false);
     setUser(() => ({}));
@@ -87,6 +89,7 @@ export default function LeftMenu() {
 
   return (
     <Wrapper modalMode={false}>
+      <div>{test}</div>
       <Header className="menuheader">
         <div className="menuFirstLine">
           <Logo onClick={logoClickHandler}>
