@@ -60,8 +60,7 @@ export default function LeftMenu() {
   };
 
   const logOutClickHandler = async () => {
-    const res = await logout();
-    console.log(res);
+    await logout();
 
     setIsLogin(false);
     setUser(() => ({}));
