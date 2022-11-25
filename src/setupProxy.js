@@ -6,7 +6,7 @@ module.exports = app => {
       target: process.env.REACT_APP_BASE,
       changeOrigin: true,
       router: {
-        '/auth/google': process.env.REACT_APP_BASE,
+        '/auth/google': process.env.REACT_APP_CLIENT,
       },
       pathRewrite: {
         '^/auth/google': '/auth/google',
