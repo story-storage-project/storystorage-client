@@ -60,10 +60,13 @@ export default function LeftMenu() {
   };
 
   const logOutClickHandler = async () => {
-    await logout();
+    const res = await logout();
+    alert(res);
 
     setIsLogin(false);
     setUser(() => ({}));
+
+    // navigate(0);
   };
 
   const addStoryClickHandler = () => {
