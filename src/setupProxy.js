@@ -1,6 +1,16 @@
-import proxy from 'http-proxy-middleware';
-import config from './config';
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
-export default function (app) {
-  app.use(proxy(['/auth/google'], { target: config.base }));
-}
+module.exports = app => {
+  app.use(
+    createProxyMiddleware(['/auth/google', '/auth/**'], {
+      target: process.env.REACT_APP_BASE,
+      changeOrigin: true,
+      router: {
+        '/v2': process.env.REACT_APP_BASE,
+      },
+      pathRewrite: {
+        '^/v2': '',
+      },
+    }),
+  );
+};
