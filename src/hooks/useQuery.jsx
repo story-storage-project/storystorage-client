@@ -1,40 +1,42 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { REQUEST_ERROR } from '../constants/errorMessage';
 
-export default function useQuery({ api, reqData, isRequireLogin }) {
-  const [apiData, setApiData] = useState();
-  const [result, setResult] = useState('');
+export default function useQuery() {
+  const [result, setResult] = useState();
   const [cookies] = useCookies(['loggedIn']);
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!api || (isRequireLogin && !cookies.loggedIn)) {
-      setApiData(null);
-      return setResult('authError');
-    }
+  const query = async (api, ...arg) => {
+    if (!cookies.loggedIn) return;
+    try {
+      const response = arg ? await api(...arg) : await api();
 
-    const query = async () => {
-      try {
-        const response = reqData ? await api(reqData) : await api();
-        const { data } = response;
+      const { data } = response;
+      const queryResult = { data, result: 'seccess' };
 
-        setApiData(data);
-        setResult('success');
-      } catch (error) {
-        if (!error.response) {
-          return setResult(REQUEST_ERROR.TIME_OUT);
-        }
+      setResult(queryResult);
 
-        if (error.status === 404) {
-          return navigate('/not-found');
-        }
+      return queryResult;
+    } catch (error) {
+      if (!error.response) {
+        const res = {
+          data: REQUEST_ERROR.TIME_OUT,
+          result: 'fail',
+        };
+        setResult(res);
+
+        return res;
       }
-    };
 
-    query();
-  }, [api, cookies.loggedIn]);
+      const res = {
+        data: REQUEST_ERROR.TIME_OUT,
+        result: 'fail',
+      };
+      setResult(res);
 
-  return { data: apiData, result };
+      return res;
+    }
+  };
+
+  return [result, query];
 }
