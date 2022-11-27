@@ -199,6 +199,7 @@ const Header = styled.div`
 
   @media ${props => props.theme.viewSize.mobile} {
     justify-content: center;
+    align-items: center;
   }
 `;
 

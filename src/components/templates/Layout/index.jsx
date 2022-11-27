@@ -33,6 +33,11 @@ const Wrapper = styled.div`
   @media ${props => props.theme.viewSize.tablet} {
     height: auto;
   }
+
+  &::-webkit-scrollbar {
+    display: none;
+    width: 0 !important;
+  }
 `;
 
 const BodyWrapper = styled.div`

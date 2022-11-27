@@ -1,22 +1,20 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  useMemo,
-  useCallback,
-} from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { Link, useNavigate } from 'react-router-dom';
+import Button from '../../atoms/Button';
+import Text from '../../atoms/Text';
+import CodeEditor from '../CodeEditor';
+import { VALIDATION_ERROR_MESSAGE } from '../../../constants/errorMessage';
+import { deleteStory, patchStory } from '../../../service/storyApi';
 import useElementCompiler from '../../../hooks/useElementCompiler';
+import useQuery from '../../../hooks/useQuery';
+import insertClass from '../../../utils/insertPreviewClass';
 import {
   getNodeList,
   storeAllElementProperties,
 } from '../../../utils/stringHtmlParser';
-import insertClass from '../../../utils/insertPreviewClass';
-import CodeEditor from '../CodeEditor';
-import Button from '../../atoms/Button';
 import {
   html,
   css,
@@ -24,11 +22,13 @@ import {
   page,
   isClickedSaveButton,
 } from '../../../store/codeState';
-import { deleteStory, patchStory } from '../../../service/storyApi';
-import { VALIDATION_ERROR_MESSAGE } from '../../../constants/errorMessage';
-import Text from '../../atoms/Text';
 
-export default function Story({ userInfo, responseData, isLogin }) {
+export default function Story({
+  userInfo,
+  responseData,
+  isLogin,
+  setEditUserStory,
+}) {
   const {
     _id: id,
     category,
@@ -36,21 +36,23 @@ export default function Story({ userInfo, responseData, isLogin }) {
     html: htmlData,
     css: cssData,
   } = responseData;
+
   const navigate = useNavigate();
-  const [storyName, setStoryName] = useState(name);
+  const [errorMessage, setErrorMessage] = useState('');
   const [codeToggle, setCodeToggle] = useState(false);
   const [editButtonToggle, setEditButtonToggle] = useState('Edit');
-  const [errorMessage, setErrorMessage] = useState('');
 
-  const style = useRef();
-  const conditionalCss = useRef();
-
+  const [storyName, setStoryName] = useState(name);
   const [htmlCode, setHtmlCode] = useRecoilState(html);
   const [cssCode, setCssCode] = useRecoilState(css);
+  const conditionalCss = useRef();
+  const style = useRef();
+
   const setCodeViewMode = useSetRecoilState(codeViewMode);
   const setPage = useSetRecoilState(page);
   const [isClickSaveButton, setIsClickedSaveButton] =
     useRecoilState(isClickedSaveButton);
+  const [response, query] = useQuery();
 
   useEffect(() => {
     setHtmlCode(htmlData);
@@ -81,53 +83,66 @@ export default function Story({ userInfo, responseData, isLogin }) {
 
   const renderElements = () => {
     if (!allProperties) return;
+
     return useElementCompiler(allProperties);
   };
 
-  const handleOnChangeNameInput = useCallback(
-    e => {
-      setStoryName(e.target.value);
-    },
-    [storyName],
-  );
-
   useEffect(() => {
-    if (isClickSaveButton) {
-      if (!htmlCode || !cssCode) {
-        setErrorMessage(VALIDATION_ERROR_MESSAGE.NULL);
-        return;
+    if (!isClickSaveButton) return;
+
+    if (!htmlCode || !cssCode) {
+      setErrorMessage(VALIDATION_ERROR_MESSAGE.NULL);
+      return;
+    }
+
+    const handleUpdateCode = async () => {
+      setErrorMessage('');
+
+      const editData = { html: htmlCode, css: cssCode };
+
+      const res = await query(patchStory, userInfo.id, id, editData);
+      if (res.result === 'fail') {
+        setErrorMessage(res.data);
       }
+    };
 
-      const editCodeHandler = async () => {
-        setErrorMessage('');
+    handleUpdateCode();
+    setIsClickedSaveButton(false);
+  }, [isClickSaveButton, response]);
 
-        const editData = { html: htmlCode, css: cssCode };
-
-        await patchStory(userInfo.id, id, editData);
-      };
-
-      editCodeHandler();
-      setIsClickedSaveButton(false);
-    }
-  }, [isClickSaveButton]);
-
-  const editNameHandler = async () => {
-    if (editButtonToggle === 'Edit') {
-      setEditButtonToggle('Save');
-    }
-
+  const handleEditStoryName = async () => {
     if (editButtonToggle === 'Save') {
       setEditButtonToggle('Edit');
 
+      if (storyName === name) return;
+
       const editData = { name: storyName };
 
-      await patchStory(userInfo.id, id, editData);
+      const res = await query(patchStory, userInfo.id, id, editData);
+
+      if (res.result === 'fail') {
+        setErrorMessage(res.data);
+      }
+
+      setEditUserStory([category, id, res.data]);
+      return;
     }
+
+    setEditButtonToggle('Save');
   };
 
-  const deleteHandler = async () => {
-    await deleteStory(userInfo.id, id);
+  const handleDeleteStory = async () => {
+    const res = await query(deleteStory, userInfo.id, id);
+
+    if (res.result === 'fail') {
+      setErrorMessage(res.data);
+    }
+
     navigate(0);
+  };
+
+  const handleMoveLocation = () => {
+    navigate(`/story/${category}/${id}`);
   };
 
   return (
@@ -142,7 +157,7 @@ export default function Story({ userInfo, responseData, isLogin }) {
               <Input
                 id="margin"
                 value={storyName}
-                onChange={handleOnChangeNameInput}
+                onChange={e => setStoryName(e.target.value)}
                 disabled={editButtonToggle === 'Edit'}
               />
             </InputWrapper>
@@ -155,7 +170,7 @@ export default function Story({ userInfo, responseData, isLogin }) {
                     bg="lightGray"
                     width="2.5rem"
                     padding="0.5rem 1.5rem"
-                    onClick={editNameHandler}
+                    onClick={handleEditStoryName}
                   >
                     {editButtonToggle}
                   </Button>
@@ -181,7 +196,7 @@ export default function Story({ userInfo, responseData, isLogin }) {
                     bg="lightGray"
                     width="2.5rem"
                     padding="0.5rem 1.5rem"
-                    onClick={deleteHandler}
+                    onClick={handleDeleteStory}
                   >
                     Delete
                   </Button>
@@ -195,16 +210,13 @@ export default function Story({ userInfo, responseData, isLogin }) {
             </Message>
           )}
         </Header>
-        <Link
-          style={{ textDecoration: 'none' }}
-          to={`/story/${category}/${id}`}
-        >
+        <PreviewContainer onClick={handleMoveLocation}>
           <PreviewWrapper>
             <Preview className={`a${id}`}>
               {allProperties && renderElements()}
             </Preview>
           </PreviewWrapper>
-        </Link>
+        </PreviewContainer>
       </Wrapper>
       {codeToggle && (
         <OptionWrapper>
@@ -219,6 +231,7 @@ Story.propTypes = {
   userInfo: PropTypes.object.isRequired,
   isLogin: PropTypes.bool.isRequired,
   responseData: PropTypes.object.isRequired,
+  setEditUserStory: PropTypes.func.isRequired,
 };
 
 const Container = styled.div`
@@ -230,6 +243,7 @@ const Container = styled.div`
 
   @media ${props => props.theme.viewSize.tablet} {
     flex-direction: column;
+    align-items: center;
   }
 `;
 
@@ -237,6 +251,14 @@ const Wrapper = styled.div`
   flex: 1;
   padding: 1rem 0 0 0;
   min-width: 11rem;
+
+  .link {
+    text-decoration: none;
+
+    &:hover {
+      color: #00f;
+    }
+  }
 `;
 
 const Header = styled.div`
@@ -302,33 +324,37 @@ const Input = styled.input`
   }
 `;
 
-const PreviewWrapper = styled.div`
+const PreviewContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-start;
   align-items: flex-start;
-  min-width: 20rem;
+  position: relative;
+  min-width: 23rem;
   min-height: 10rem;
+  width: fit-content;
   height: fit-content;
-  /* height: 30rem; */
   margin: 1rem 2rem 0 2rem;
   padding: 0.3rem 0;
   border: 1px solid ${props => props.theme.colors.lightGray};
   border-radius: 10px;
-
-  @media ${props => props.theme.viewSize.tablet} {
-    height: 10rem;
-  }
 
   a:-webkit-any-link {
     color: black;
   }
 `;
 
-const Preview = styled.div`
+const PreviewWrapper = styled.div`
   margin: 2rem 1rem;
+  place-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 0.3rem;
+`;
+
+const Preview = styled.div`
   width: fit-content;
   height: fit-content;
-  padding: 0.3rem;
 `;
 
 const OptionWrapper = styled.div`

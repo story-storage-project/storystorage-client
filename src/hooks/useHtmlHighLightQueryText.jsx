@@ -20,8 +20,8 @@ export default function useHtmlHighLightQueryText(htmlCode) {
 
   const query = useCallback(code => {
     copyHtmlCode.current = code;
-
     const bracketSplitCode = code.split(/(<!--| |-->|<|>)/);
+
     let tagName = '';
 
     const element = bracketSplitCode.map((item, i) => {
@@ -49,7 +49,7 @@ export default function useHtmlHighLightQueryText(htmlCode) {
       }
 
       if (tagName && item !== '>') {
-        const splitAttribute = item.split(/(=)/);
+        const splitAttribute = item.split(/(=| )/);
         const equalLength = splitAttribute.filter(itme => itme === '=').length;
 
         if (equalLength > 1) {

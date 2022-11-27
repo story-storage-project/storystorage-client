@@ -4,7 +4,6 @@ import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import Layout from '.';
 import Login from '../../pages/Login';
 import NotFound from '../../pages/NotFound';
-import Story from '../../pages/Story';
 import StoryMaker from '../../pages/StoryMaker';
 
 export default {
@@ -19,13 +18,13 @@ export default {
       defaultViewport: 'responsive',
     },
   },
-  subcomponents: { Login, NotFound, Story, StoryMaker },
+  subcomponents: { Login, NotFound, StoryMaker },
 };
 
 function StoryPage(args) {
   return (
     <Layout {...args}>
-      <Story />
+      <StoryMaker />
     </Layout>
   );
 }
@@ -82,9 +81,10 @@ LabtopStoryMakerPage.parameters = {
 
 function NotFoundPage(args) {
   return (
-    <Layout {...args}>
+    <>
       <NotFound />
-    </Layout>
+      <Layout {...args} />
+    </>
   );
 }
 
@@ -109,31 +109,31 @@ LabtopNotFoundPage.parameters = {
   },
 };
 
-function LoginPage(args) {
-  return (
-    <Layout {...args}>
-      <Login />
-    </Layout>
-  );
-}
+// function LoginPage(args) {
+//   return (
+//     <Layout {...args}>
+//       <Login />
+//     </Layout>
+//   );
+// }
 
-export const IphonexLoginPage = LoginPage.bind({});
-IphonexLoginPage.parameters = {
-  viewport: {
-    defaultViewport: 'iphonex',
-  },
-};
+// export const IphonexLoginPage = LoginPage.bind({});
+// IphonexLoginPage.parameters = {
+//   viewport: {
+//     defaultViewport: 'iphonex',
+//   },
+// };
 
-export const TabletLoginPage = LoginPage.bind({});
-TabletLoginPage.parameters = {
-  viewport: {
-    defaultViewport: 'pixelxl',
-  },
-};
+// export const TabletLoginPage = LoginPage.bind({});
+// TabletLoginPage.parameters = {
+//   viewport: {
+//     defaultViewport: 'pixelxl',
+//   },
+// };
 
-export const LabtopLoginPage = LoginPage.bind({});
-LabtopLoginPage.parameters = {
-  viewport: {
-    defaultViewport: 'tablet',
-  },
-};
+// export const LabtopLoginPage = LoginPage.bind({});
+// LabtopLoginPage.parameters = {
+//   viewport: {
+//     defaultViewport: 'tablet',
+//   },
+// };

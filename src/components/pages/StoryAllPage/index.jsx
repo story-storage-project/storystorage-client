@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil';
-import Story from '../../organisms/Story';
+import { RecoilRoot, useRecoilValue, useSetRecoilState } from 'recoil';
 import Text from '../../atoms/Text';
-import { userData, isLogin, userStoryList } from '../../../store/userState';
+import Story from '../../organisms/Story';
+import {
+  userData,
+  isLogin,
+  userStoryList,
+  editUserStoryList,
+} from '../../../store/userState';
 
 export default function StoryAllPage() {
   const params = useParams();
   const { categoryName } = params;
-  const [userStoryLists, setUserStoryList] = useRecoilState(userStoryList);
+  const userStoryLists = useRecoilValue(userStoryList);
   const [storyCategoryList, setUserCategoryStoryList] =
     useState(userStoryLists);
+  const setEditUserStoryList = useSetRecoilState(editUserStoryList);
   const userInfo = useRecoilValue(userData);
   const loggedIn = useRecoilValue(isLogin);
 
@@ -25,8 +31,8 @@ export default function StoryAllPage() {
     setUserCategoryStoryList(() => list);
   }, [userStoryLists, categoryName]);
 
-  const setUserStory = editData => {
-    setUserStoryList(editData);
+  const setEditUserStory = (...editData) => {
+    setEditUserStoryList(...editData);
   };
 
   return (
@@ -52,7 +58,7 @@ export default function StoryAllPage() {
                           userInfo={userInfo}
                           responseData={story}
                           isLogin={loggedIn}
-                          setUserStoryList={setUserStory}
+                          setEditUserStory={setEditUserStory}
                         />
                       </RecoilRoot>
                     );
@@ -78,8 +84,6 @@ const Container = styled.div`
 `;
 
 const CategoryText = styled(Text)`
-  position: fixed;
-  z-index: 10;
   width: 100%;
   color: white;
   background-color: #0088ff;

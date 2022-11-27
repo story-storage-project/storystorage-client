@@ -222,11 +222,11 @@ export function convertJsxToHtml(html) {
       return acc;
     }
 
-    // if (item === '/>') {
-    //   acc.push(`></${tagName}>`);
+    if (item === '/>') {
+      acc.push(`></${tagName}>`);
 
-    //   return acc;
-    // }
+      return acc;
+    }
 
     if (splitHtml[i - 1] === '<') {
       if (item.slice(0, 1) === '/') {
