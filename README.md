@@ -413,13 +413,15 @@ string html을 dom으로 바꾸는 작업을 해주었습니다. 처음의 접�
 
 코드 에디터에서 값이 입력되고 올바른 값인지 체크 후 `new DOMParser()`을 이용해 parser를 만든 후 `parseFromString` 메서드를 이용해 dom 엘리먼트로 변환하여 Node Lists를 얻었습니다.
 
-`React.createElement(component, props, ...children)`
-바로 createElement를 만드는 것이 아닌 1차 가공작업을 하였습니다. 노드 리스트는 트리 형태로 되어 있기 때문에 재귀 함수를 만들어 자식 노드들을 다 거치게 하였습니다.
-(노드 리스트는 배열이 아닌 유사 배열 객체라서 `Array.from...call`을 사용하였습니다.)
-react createElement는 위와 같은 형태를 가지기 때문에 props라는 빈 객체를 만들어 수집한 데이터를 넣어주었고, node type을 체크하여 childNodes가 없을 때까지 노드의 attribute와 textcontent를 수집합니다. props 객체를 노드마다 만들어주면서 수집한 데이터를 안에 넣어주었습니다.
+노드 하나 하나의 정보를 저장하기 위해서 1차 가공작업을 하였습니다. 노드 리스트는 트리 형태로 되어 있기 때문에 재귀 함수를 만들어 자식 노드들을 다 거치게 하였습니다.
+(노드 리스트는 배열이 아닌 유사 배열 객체라서 `Array.from...call`을 사용하였습니다.)  
 
-<img src="./src/assets/readme02.png" alt="node">
-이렇게 데이터를 만든 후에 createElement를 실행하는 함수 안에 데이터를 넣어 element를 만들어주었습니다. 모든 데이터의 취상위 루트를 fragment로 감싸주어 최상위 노드가 여러 개일 경우 발생할 이슈를 방지해주고자 하였습니다.
+`React.createElement(component, props, ...children)`  
+react createElement는 위와 같은 형태를 가지기 때문에 props라는 빈 객체를 만들어 수집한 데이터를 넣어주었고, node type을 체크하여 childNodes가 없을 때까지 노드의 attribute와 textcontent를 수집합니다. props 객체를 노드마다 만들어주면서 수집한 데이터를 안에 넣어주었습니다.  
+
+<img src="./src/assets/readme02.png" alt="node">  
+1차 가공후의 모습입니다.  
+이렇게 정보를 중첩하여 저장한 후 element를 만들어 주는 재귀함수를 실행시킵니다.
 
 ```js
 import { createElement, Fragment } from 'react';
@@ -442,6 +444,9 @@ export default function useElementCompiler(data) {
   return createElement(data.type, data.props, data.children);
 }
 ```
+
+모든 데이터의 취상위 루트를 fragment로 감싸주어 최상위 노드가 여러 개일 경우 발생할 수 있는 이슈를 방지해주고자 하였습니다.
+
 
 #### 느낀 점
 
