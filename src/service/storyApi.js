@@ -1,12 +1,5 @@
 import API from './http';
 
-export function test() {
-  return API({
-    method: 'get',
-    url: `/user/me`,
-  });
-}
-
 export async function getUserAllStory() {
   return API({
     method: 'get',

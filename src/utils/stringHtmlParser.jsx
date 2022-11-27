@@ -1,6 +1,5 @@
 import { TEXT_NODE, COMMENT } from '../constants/nodeTypes';
 import { htmlKeyOfhtmlJsxAttributes } from '../data/htmlJsxAttributes';
-import keyMaker from './keyMaker';
 
 function stringToDomParser(stringHtml) {
   const parser = new DOMParser();
@@ -40,21 +39,6 @@ function nodeAttribute(node) {
   return props;
 }
 
-function nodeStyle(node) {
-  const style = {};
-
-  style.elementClass = `${node.tagName.toLowerCase()}-story`;
-  style.uniqueClass = `${keyMaker(5)}-story-U`;
-  style.idClass = node.id || undefined;
-  style.userClass = {};
-
-  Array.prototype.forEach.call(node.classList, item => {
-    style.userClass[item] = {};
-  });
-
-  return style;
-}
-
 function storeChildElementProperties(node) {
   if (!node || node.nodeType === TEXT_NODE || node.nodeType === COMMENT) {
     return;
@@ -64,11 +48,9 @@ function storeChildElementProperties(node) {
     type: node.tagName.toLowerCase(),
   };
 
-  const style = nodeStyle(node);
   const { textContent } = node;
   const props = nodeAttribute(node) || {};
 
-  data.style = style;
   data.props = props;
   data.textContent = textContent;
 
