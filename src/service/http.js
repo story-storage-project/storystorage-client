@@ -1,6 +1,7 @@
 import axios from 'axios';
+import config from '../config';
 
-const baseURL = process.env.REACT_APP_BASE_URL;
+const baseURL = config.base;
 
 const API = axios.create({
   baseURL,
@@ -26,7 +27,7 @@ API.interceptors.response.use(
   },
 
   async error => {
-    const { config, response } = error;
+    const { config: reqConfig, response } = error;
 
     const currentError = {
       message: error.message,
@@ -37,7 +38,7 @@ API.interceptors.response.use(
     };
 
     if (response && response.status === 401) {
-      const originalRequest = config;
+      const originalRequest = reqConfig;
       try {
         const data = await axios.get(`${baseURL}/auth/refresh`, {
           withCredentials: true,
@@ -49,6 +50,10 @@ API.interceptors.response.use(
       } catch (err) {
         throw currentError;
       }
+    }
+
+    if (response?.status === 404) {
+      window.history.pushState({}, '', '/not-found');
     }
 
     throw currentError;

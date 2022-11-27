@@ -14,7 +14,8 @@ export function setCaretPosition(textBox, pos) {
   }
 }
 
-export function insertTab(textBox, caretPositionArg) {
+export function insertTab(event, textBox, caretPositionArg) {
+  event.preventDefault();
   const caretPosition = getCaretPosition(textBox, caretPositionArg);
   const preText = textBox.value.substring(0, caretPosition);
   const postText = textBox.value.substring(caretPosition, textBox.value.length);
