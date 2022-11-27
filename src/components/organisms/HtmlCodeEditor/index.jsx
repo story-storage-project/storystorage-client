@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { useRecoilState, useRecoilValue } from 'recoil';
 import useHtmlHighLightQueryText from '../../../hooks/useHtmlHighLightQueryText';
+import Button from '../../atoms/Button';
+import Text from '../../atoms/Text';
+import TextEditor from '../../molecules/TextEditor';
 import {
   getCaretPosition,
   setCaretPosition,
   insertTab,
   insertText,
 } from '../../../utils/codeEditor';
-import TextEditor from '../../molecules/TextEditor';
-import Button from '../../atoms/Button';
-import Text from '../../atoms/Text';
 import {
   validateHtml,
   convertHtmlToJsx,
@@ -25,56 +25,63 @@ import {
 } from '../../../store/codeState';
 
 export default function HtmlCodeEditor({ isLogin }) {
-  const [htmlData, setHtmlCode] = useRecoilState(html);
-  const currentPage = useRecoilValue(page);
+  const currentPageName = useRecoilValue(page);
   const [selectedCodeType, setSelectCodeType] = useRecoilState(selectCodeType);
   const [isClickSaveButton, setIsClickedSaveButton] =
     useRecoilState(isClickedSaveButton);
+  const [htmlValidateWarningMessage, setHtmlValidateWarningMessage] =
+    useState('');
 
-  const [htmlValidateMessage, setHtmlValidateMessage] = useState('');
-
-  const divHtmlTextAreaRef = useRef();
-  const [htmlBracket, setHtmlBracket] = useState({
-    isInside: false,
-    data: '',
-  });
-  const [htmlOriginalData, setHtmlOriginalData] = useState(htmlData);
+  const [htmlData, parsingHtml] = useRecoilState(html);
   const [htmlCode, queryHtml, setQueryHtml] =
     useHtmlHighLightQueryText(htmlData);
-  const [htmlcursorPosition, setHtmlCursorPosition] = useState();
-  const [autoHtmlBracketMode, setAutoHtmlBracketMode] = useState(false);
+  const [htmlTextAreaData, setHtmlTextAreaData] = useState(htmlCode);
 
-  const [prevKeyCode, setPrevKeyCode] = useState('');
-  const isClickEnter = useRef();
+  const divHtmlTextAreaRef = useRef();
+  const codeOption = useRef({
+    prevKeyCode: '',
+    autoBracketMode: false,
+    cursorPosition: 0,
+    isClickEnter: false,
+    isInsideBracket: false,
+    dataInTheBracket: '',
+  }).current;
 
   useEffect(() => {
     if (!htmlCode) return;
+    setHtmlValidateWarningMessage('');
 
     const validateResultMessage = validateHtml(htmlCode, selectedCodeType);
 
-    setHtmlValidateMessage(validateResultMessage);
-
-    if (!validateResultMessage) {
-      setHtmlCode(convertJsxToHtml(htmlCode));
-    }
+    return validateResultMessage
+      ? setHtmlValidateWarningMessage(validateResultMessage)
+      : parsingHtml(convertJsxToHtml(htmlCode));
   }, [htmlCode]);
 
-  const menuClickHandle = e => {
+  const handleClickMenu = e => {
     const menuTitle = e.target.value;
     setSelectCodeType(menuTitle);
 
-    if (menuTitle === 'CSS') return;
-
-    if (menuTitle === 'HTML') {
-      setQueryHtml(convertJsxToHtml(htmlCode));
-    } else {
-      setQueryHtml(convertHtmlToJsx(htmlCode));
+    switch (menuTitle) {
+      case 'CSS':
+        return;
+      case 'HTML': {
+        const convertData = convertJsxToHtml(htmlCode);
+        setHtmlTextAreaData(convertData);
+        return setQueryHtml(convertData);
+      }
+      case 'JSX': {
+        const convertData = convertHtmlToJsx(htmlCode);
+        setHtmlTextAreaData(convertData);
+        return setQueryHtml(convertHtmlToJsx(htmlCode));
+      }
+      default:
     }
   };
 
   const handleHtmlKeyDown = useCallback(
     e => {
-      if (e.key === 'v' && prevKeyCode === 91) {
+      if (e.key === 'v' && codeOption.prevKeyCode === 91) {
         return insertText(
           e.currentTarget,
           e.currentTarget.selectionStart,
@@ -82,106 +89,103 @@ export default function HtmlCodeEditor({ isLogin }) {
         );
       }
 
-      setPrevKeyCode(e.keyCode);
+      codeOption.prevKeyCode = e.keyCode;
 
-      if (e.key === 'Tab') {
-        const htmlValue = insertTab(
-          e.currentTarget,
-          e.currentTarget.selectionStart,
-        );
-        e.preventDefault();
+      // eslint-disable-next-line default-case
+      switch (e.key) {
+        case 'Tab': {
+          const htmlValue = insertTab(
+            e,
+            e.currentTarget,
+            e.currentTarget.selectionStart,
+          );
 
-        setHtmlOriginalData(htmlValue);
-        setQueryHtml(htmlValue);
-      }
-
-      if (e.key === 'Enter') {
-        isClickEnter.current = true;
-      }
-
-      if (e.key === '<') {
-        setHtmlBracket(() => ({
-          isInside: true,
-          data: '',
-        }));
-      }
-
-      if (htmlBracket.isInside) {
-        if (e.key === '/') {
-          setHtmlBracket(() => ({
-            isInside: false,
-            data: '',
-          }));
-
+          setHtmlTextAreaData(() => htmlValue);
+          setQueryHtml(htmlValue);
           return;
         }
+        case 'Enter': {
+          codeOption.isClickEnter = true;
+          return setQueryHtml(htmlTextAreaData);
+        }
+        case '<': {
+          codeOption.isInsideBracket = true;
+          codeOption.dataInTheBracket = '';
+          return setQueryHtml(htmlTextAreaData);
+        }
+      }
 
-        if (e.key === 'Backspace') {
-          setHtmlBracket(prev => ({
-            ...prev,
-            data: prev.data.slice(0, -1),
-          }));
-          return;
+      if (codeOption.isInsideBracket) {
+        // eslint-disable-next-line default-case
+        switch (e.key) {
+          case '/': {
+            codeOption.isInsideBracket = false;
+            codeOption.dataInTheBracket = '';
+
+            return;
+          }
+          case 'Backspace': {
+            codeOption.dataInTheBracket = codeOption.dataInTheBracket.slice(
+              0,
+              -1,
+            );
+            return;
+          }
         }
 
         if (e.key.length > 1) {
           return;
         }
 
-        setHtmlBracket(prev => ({
-          ...prev,
-          data: prev.data + e.key,
-        }));
+        codeOption.dataInTheBracket += e.key;
       }
 
-      if (e.key === '>' && htmlBracket.data) {
-        setHtmlBracket(() => ({
-          isInside: false,
-          data: '',
-        }));
-        const cleanData = htmlBracket.data.split(' ')[0];
+      if (e.key === '>' && codeOption.dataInTheBracket) {
         const newValue = insertText(
           e.currentTarget,
           e.currentTarget.selectionStart,
-          `</${cleanData}>`,
+          `</${codeOption.dataInTheBracket}`,
         );
-
-        setHtmlOriginalData(newValue);
-        setQueryHtml(newValue);
 
         const caretPosition = getCaretPosition(
           e.currentTarget,
           e.currentTarget.selectionStart,
         );
 
-        setHtmlCursorPosition(caretPosition);
-        setAutoHtmlBracketMode(true);
+        setHtmlTextAreaData(newValue);
+        setQueryHtml(newValue);
+
+        codeOption.cursorPosition = caretPosition;
+        codeOption.dataInTheBracket = '';
+        codeOption.autoBracketMode = true;
+        codeOption.isInsideBracket = false;
       }
-      setQueryHtml(htmlOriginalData);
+
+      setQueryHtml(htmlTextAreaData);
     },
-    [htmlOriginalData, htmlBracket, prevKeyCode, htmlCode],
+    [htmlTextAreaData, codeOption, htmlCode],
   );
 
   const handleHtmlTextChange = useCallback(
     e => {
-      if (autoHtmlBracketMode) {
-        setAutoHtmlBracketMode(false);
-        setCaretPosition(e.target, htmlcursorPosition + 1);
+      const { value } = e.target;
+      setHtmlTextAreaData(value);
+
+      if (codeOption.autoBracketMode) {
+        codeOption.autoBracketMode = false;
+        setCaretPosition(e.target, codeOption.cursorPosition + 1);
         e.target.focus();
       }
 
-      const { value } = e.target;
-      setHtmlOriginalData(value);
-
-      if (isClickEnter.current) {
+      if (codeOption.isClickEnter) {
         setQueryHtml(`${value}\n`);
-        isClickEnter.current = false;
+        codeOption.isClickEnter = false;
       } else {
         setQueryHtml(value);
       }
     },
 
-    [autoHtmlBracketMode, htmlcursorPosition],
+    [codeOption],
   );
 
   const handleHtmlScroll = e => {
@@ -192,29 +196,31 @@ export default function HtmlCodeEditor({ isLogin }) {
   return (
     <CodeEditorWrapper>
       <ValidateMessageWrapper>
-        <Text>{htmlValidateMessage && htmlValidateMessage}</Text>
+        <Text>{htmlValidateWarningMessage && htmlValidateWarningMessage}</Text>
       </ValidateMessageWrapper>
       <TitleWrapper>
         <MenuButton
           value="HTML"
-          textColor={selectCodeType === 'HTML' ? 'pointColor' : 'textColor'}
-          onClick={menuClickHandle}
+          textColor={selectedCodeType === 'HTML' ? 'pointColor' : 'textColor'}
+          onClick={handleClickMenu}
         >
           HTML
         </MenuButton>
         <MenuButton
           value="JSX"
-          textColor={selectCodeType === 'JSX' ? 'pointColor' : 'textColor'}
-          onClick={menuClickHandle}
+          textColor={selectedCodeType === 'JSX' ? 'pointColor' : 'textColor'}
+          onClick={handleClickMenu}
         >
           JSX
         </MenuButton>
-        {currentPage === 'story' && (
+        {currentPageName === 'story' && (
           <>
             <MenuButton
               value="CSS"
-              textColor={selectCodeType === 'CSS' ? 'pointColor' : 'textColor'}
-              onClick={menuClickHandle}
+              textColor={
+                selectedCodeType === 'CSS' ? 'pointColor' : 'textColor'
+              }
+              onClick={handleClickMenu}
             >
               CSS
             </MenuButton>
@@ -231,7 +237,7 @@ export default function HtmlCodeEditor({ isLogin }) {
       <TextEditor
         title="HTML"
         titleOption={['HTML', 'JSX']}
-        value={htmlOriginalData}
+        value={htmlTextAreaData}
         onChange={handleHtmlTextChange}
         onKeyDown={handleHtmlKeyDown}
         placeholder="Please enter HTML code"

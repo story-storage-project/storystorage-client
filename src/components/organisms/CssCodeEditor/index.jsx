@@ -2,55 +2,56 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import useCssHighLightQueryText from '../../../hooks/useCssHighLightQueryText';
 import TextEditor from '../../molecules/TextEditor';
 import Text from '../../atoms/Text';
 import Button from '../../atoms/Button';
+import { insertTab, insertText } from '../../../utils/codeEditor';
+import validateCss from '../../../utils/cssValidate';
 import {
   css,
   page,
   isClickedSaveButton,
   selectCodeType,
 } from '../../../store/codeState';
-import useCssHighLightQueryText from '../../../hooks/useCssHighLightQueryText';
-import { insertTab, insertText } from '../../../utils/codeEditor';
-import validateCss from '../../../utils/cssValidate';
 
 export default function CssCodeEditor({ isLogin }) {
-  const [cssData, setCssCode] = useRecoilState(css);
-  const currentPage = useRecoilValue(page);
-  const [isClickSaveButton, setIsClickedSaveButton] =
-    useRecoilState(isClickedSaveButton);
+  const currentPageName = useRecoilValue(page);
   const [selectedCodeType, setSelectedCodeType] =
     useRecoilState(selectCodeType);
+  const [isClickSaveButton, setIsClickedSaveButton] =
+    useRecoilState(isClickedSaveButton);
+  const [cssValidateWarningMessage, setCssValidateWarningMessage] =
+    useState('');
 
-  const [cssValidateMessage, setCssValidateMessage] = useState('');
-  const [cssOriginalData, setCssOriginalData] = useState(cssData);
+  const [cssData, parsingCss] = useRecoilState(css);
   const [cssCode, queryCss, setQueryCss] = useCssHighLightQueryText(cssData);
-  const [prevKeyCode, setPrevKeyCode] = useState('');
+  const [cssTextAreaData, setCssTextAreaData] = useState(cssData);
 
-  const isClickEnter = useRef();
   const divCssTextAreaRef = useRef();
+  const codeOption = useRef({
+    prevKeyCode: '',
+    isClickEnter: false,
+  }).current;
 
   useEffect(() => {
     if (!cssCode) return;
 
     const validateResultMessage = validateCss(cssCode);
 
-    setCssValidateMessage(validateResultMessage);
-
-    if (!validateResultMessage) {
-      setCssCode(cssCode);
-    }
+    return validateResultMessage
+      ? setCssValidateWarningMessage(validateResultMessage)
+      : parsingCss(cssCode);
   }, [cssCode]);
 
-  const menuClickHandle = e => {
+  const handleClickMenu = e => {
     const menuTitle = e.target.value;
     setSelectedCodeType(menuTitle);
   };
 
   const handleCssKeyDOwn = useCallback(
     e => {
-      if (e.key === 'v' && prevKeyCode === 91) {
+      if (e.key === 'v' && codeOption.prevKeyCode === 91) {
         return insertText(
           e.currentTarget,
           e.currentTarget.selectionStart,
@@ -58,51 +59,53 @@ export default function CssCodeEditor({ isLogin }) {
         );
       }
 
-      setPrevKeyCode(e.keyCode);
+      codeOption.prevKeyCode = e.keyCode;
+      setQueryCss(cssTextAreaData);
 
-      if (e.key === 'Tab') {
-        const cssValue = insertTab(
-          e.currentTarget,
-          e.currentTarget.selectionStart,
-        );
-        e.preventDefault();
+      // eslint-disable-next-line default-case
+      switch (e.key) {
+        case 'Tab': {
+          const cssValue = insertTab(
+            e,
+            e.currentTarget,
+            e.currentTarget.selectionStart,
+          );
 
-        setCssOriginalData(cssValue);
-        setQueryCss(cssValue);
+          setCssTextAreaData(cssValue);
+          setQueryCss(cssValue);
+          return;
+        }
+        case 'Enter':
+          codeOption.isClickEnter = true;
+          return;
+        case '{' || '`': {
+          const newValue = insertText(
+            e.currentTarget,
+            e.currentTarget.selectionStart,
+            e.key === '{' ? '}' : '`',
+          );
+
+          setCssTextAreaData(newValue);
+          setQueryCss(newValue);
+        }
       }
-
-      if (e.key === 'Enter') {
-        isClickEnter.current = true;
-      }
-
-      if (e.key === '{' || e.key === '`') {
-        const newValue = insertText(
-          e.currentTarget,
-          e.currentTarget.selectionStart,
-          e.key === '{' ? '}' : '`',
-        );
-
-        setCssOriginalData(newValue);
-        setQueryCss(newValue);
-      }
-      setQueryCss(cssOriginalData);
     },
-    [cssOriginalData, cssCode, queryCss],
+    [cssTextAreaData, cssCode, queryCss],
   );
 
   const handleCssTextChange = useCallback(
     e => {
       const { value } = e.target;
-      setCssOriginalData(value);
+      setCssTextAreaData(value);
 
-      if (isClickEnter.current) {
+      if (codeOption.isClickEnter) {
         setQueryCss(`${value}\n`);
-        isClickEnter.current = false;
+        codeOption.isClickEnter = false;
       } else {
         setQueryCss(value);
       }
     },
-    [cssOriginalData, queryCss],
+    [cssTextAreaData, queryCss],
   );
 
   const handleCssScroll = e => {
@@ -113,17 +116,17 @@ export default function CssCodeEditor({ isLogin }) {
   return (
     <CodeEditorWrapper>
       <ValidateMessageWrapper>
-        <Text>{cssValidateMessage && cssValidateMessage}</Text>
+        <Text>{cssValidateWarningMessage && cssValidateWarningMessage}</Text>
       </ValidateMessageWrapper>
       <TitleWrapper>
-        {currentPage === 'story' && (
+        {currentPageName === 'story' && (
           <>
             <MenuButton
               value="HTML"
               textColor={
                 selectedCodeType === 'HTML' ? 'pointColor' : 'textColor'
               }
-              onClick={menuClickHandle}
+              onClick={handleClickMenu}
             >
               HTML
             </MenuButton>
@@ -132,7 +135,7 @@ export default function CssCodeEditor({ isLogin }) {
               textColor={
                 selectedCodeType === 'JSX' ? 'pointColor' : 'textColor'
               }
-              onClick={menuClickHandle}
+              onClick={handleClickMenu}
             >
               JSX
             </MenuButton>
@@ -141,11 +144,11 @@ export default function CssCodeEditor({ isLogin }) {
         <MenuButton
           value="CSS"
           textColor={selectedCodeType === 'CSS' ? 'pointColor' : 'textColor'}
-          onClick={menuClickHandle}
+          onClick={handleClickMenu}
         >
           CSS
         </MenuButton>
-        {currentPage === 'story' && isLogin && (
+        {currentPageName === 'story' && isLogin && (
           <MenuButton
             onClick={() => setIsClickedSaveButton(!isClickSaveButton)}
           >
@@ -155,7 +158,7 @@ export default function CssCodeEditor({ isLogin }) {
       </TitleWrapper>
       <TextEditor
         title="CSS"
-        value={cssOriginalData}
+        value={cssTextAreaData}
         onChange={handleCssTextChange}
         onKeyDown={handleCssKeyDOwn}
         placeholder="Please enter CSS code"

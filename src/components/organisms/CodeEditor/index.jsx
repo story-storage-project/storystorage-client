@@ -12,7 +12,7 @@ export default function CodeEditor({ isLogin }) {
   const selectedCodeType = useRecoilValue(selectCodeType);
 
   return (
-    <Container>
+    <Container editorFlexType={editorFlexType}>
       {currentPage === 'story' ? (
         <CodeEditorContainer viewMode={editorFlexType}>
           {selectedCodeType === 'CSS' ? (
@@ -39,6 +39,17 @@ const Container = styled.div`
   box-sizing: border-box;
   width: inherit;
   height: auto;
+
+  @media ${props => props.theme.viewSize.laptopHalf} {
+    margin-top: ${props => (props.editorFlexType === 'row' ? 0 : '3rem')};
+  }
+
+  @media ${props => props.theme.viewSize.tablet} {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0;
+  }
 `;
 
 const CodeEditorContainer = styled.div`
