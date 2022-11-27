@@ -1,33 +1,36 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil';
-import Story from '../../organisms/Story';
+import { RecoilRoot, useRecoilValue, useSetRecoilState } from 'recoil';
 import Text from '../../atoms/Text';
-import { userData, isLogin, userStoryList } from '../../../store/userState';
+import Story from '../../organisms/Story';
+import {
+  userData,
+  isLogin,
+  isFinishPatch,
+  selectStory,
+  editUserStoryList,
+} from '../../../store/userState';
 
 export default function StoryPage() {
   const params = useParams();
+  const navigate = useNavigate();
   const { categoryName, storyId } = params;
-  const [userStoryLists, setUserStoryList] = useRecoilState(userStoryList);
   const userInfo = useRecoilValue(userData);
-  const [story, setStory] = useState();
   const loggedIn = useRecoilValue(isLogin);
+  const isFinishedPatch = useRecoilValue(isFinishPatch);
+  const setEditUserStoryList = useSetRecoilState(editUserStoryList);
+  const storyData = useRecoilValue(selectStory({ categoryName, storyId }));
+
+  const setEditUserStory = (...editData) => {
+    setEditUserStoryList(...editData);
+  };
 
   useEffect(() => {
-    const storyList = userStoryLists[categoryName];
-
-    const filterStory = storyList.filter(data => {
-      const { _id: id } = data;
-      return id === storyId;
-    });
-
-    setStory(...filterStory);
-  }, [userStoryLists, story, storyId]);
-
-  const setUserStory = editData => {
-    setUserStoryList(editData);
-  };
+    if (isFinishedPatch && !storyData) {
+      navigate('/');
+    }
+  }, [isFinishedPatch]);
 
   return (
     <>
@@ -35,12 +38,12 @@ export default function StoryPage() {
       <Container>
         <Wrapper>
           <RecoilRoot>
-            {story && (
+            {isFinishedPatch && storyData && (
               <Story
-                responseData={story}
+                responseData={storyData}
                 userInfo={userInfo}
                 isLogin={loggedIn}
-                setUserStoryList={setUserStory}
+                setEditUserStory={setEditUserStory}
               />
             )}
           </RecoilRoot>

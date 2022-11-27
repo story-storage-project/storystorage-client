@@ -2,85 +2,86 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
+import { getMe, logout } from '../../../service/authApi';
+import useQuery from '../../../hooks/useQuery';
 import Text from '../../atoms/Text';
 import ImageIcon from '../../atoms/ImageIcon';
 import MobileHiddenToggleViewer from '../../atoms/MobileHiddenToggleViewer';
 import Button from '../../atoms/Button';
-import Toggle from '../../molecules/Toggle';
 import List from '../../atoms/List';
+import Toggle from '../../molecules/Toggle';
 import Ul from '../../molecules/Ul';
-import { userData, isLogin, userStoryList } from '../../../store/userState';
-import { getMe, logout } from '../../../service/authApi';
-import useQuery from '../../../hooks/useQuery';
+import {
+  userData,
+  isLogin,
+  isFinishPatch,
+  userStoryList,
+} from '../../../store/userState';
 
 export default function LeftMenu() {
+  const navigate = useNavigate();
   const [onToggle, setOnToggle] = useState(false);
   const [loggedIn, setIsLogin] = useRecoilState(isLogin);
+  const [userStories, setUserStoryList] = useRecoilState(userStoryList);
   const setUser = useSetRecoilState(userData);
-  const [storyList, setStoryList] = useRecoilState(userStoryList);
-  const { data, result } = useQuery({
-    api: getMe,
-    isRequireLogin: true,
-  });
+  const setIsFinishPatch = useSetRecoilState(isFinishPatch);
+  const [userInfo, query] = useQuery();
+  useEffect(() => {
+    setIsFinishPatch(false);
+
+    query(getMe);
+  }, []);
 
   useEffect(() => {
-    if (!result) return;
+    if (!userInfo) return;
 
-    if (result === 'authError' || !data) {
+    if (userInfo.result === 'fail' || !userInfo) {
       setIsLogin(false);
+      setUserStoryList('reset');
+      setIsFinishPatch(true);
+
       return setUser(() => ({}));
     }
 
-    const { _id: id, email, name, picture, elementList } = data;
+    const { _id: id, email, name, picture, elementList } = userInfo.data;
+
     setUser(() => ({ id, email, name, picture }));
     setIsLogin(true);
+    setUserStoryList(() => elementList);
+    setIsFinishPatch(true);
+  }, [userInfo]);
 
-    const elements = elementList.reduce((category, element) => {
-      if (category[element.category]) {
-        category[element.category].push(element);
-        return category;
-      }
-      // eslint-disable-next-line no-param-reassign
-      category[element.category] = [];
-      category[element.category].push(element);
-      return category;
-    }, {});
-
-    setStoryList(() => ({ ...elements }));
-  }, [data]);
-
-  const navigate = useNavigate();
-
-  const logoClickHandler = () => {
+  const handleClickLogo = () => {
     navigate('/');
   };
 
-  const loginClickHandler = () => {
+  const handleLogin = () => {
     navigate('/login');
   };
 
-  const logOutClickHandler = async () => {
+  const handleLogOut = async () => {
     await logout();
 
     setIsLogin(false);
     setUser(() => ({}));
+    setUserStoryList('reset');
 
     navigate(0);
   };
 
-  const addStoryClickHandler = () => {
+  const handleClickAddButton = () => {
     navigate('/story-maker');
   };
 
-  const menuClickHandler = () => {
+  const handleClickMenu = () => {
     setOnToggle(!onToggle);
   };
 
-  const categoryClickHandler = category => {
+  const handleClickCategory = category => {
     navigate(`story/${category}`);
   };
 
-  const categoryListClickHandler = (category, id) => {
+  const handleClickCategoryList = (category, id) => {
     navigate(`story/${category}/${id}`);
   };
 
@@ -88,7 +89,7 @@ export default function LeftMenu() {
     <Wrapper modalMode={false}>
       <Header className="menuheader">
         <div className="menuFirstLine">
-          <Logo onClick={logoClickHandler}>
+          <Logo onClick={handleClickLogo}>
             <LogoIcon
               icon="storybook_logo_icon"
               alt="storybook-logo"
@@ -104,7 +105,7 @@ export default function LeftMenu() {
               icon="menu"
               alt="menu-icon"
               pointer
-              onClick={menuClickHandler}
+              onClick={handleClickMenu}
             />
           </MobileHiddenToggleViewer>
         </div>
@@ -117,7 +118,7 @@ export default function LeftMenu() {
                 border
                 borderRadius="20rem"
                 margin="0 0 1rem 0"
-                onClick={logOutClickHandler}
+                onClick={handleLogOut}
               >
                 Sign out
               </Button>
@@ -127,7 +128,7 @@ export default function LeftMenu() {
                 borderRadius="20rem"
                 margin="0 0 1rem 0"
                 textColor="whiteColor"
-                onClick={addStoryClickHandler}
+                onClick={handleClickAddButton}
               >
                 Add Story
               </Button>
@@ -137,7 +138,7 @@ export default function LeftMenu() {
               border
               borderRadius="20rem"
               margin="0 0 1rem 0"
-              onClick={loginClickHandler}
+              onClick={handleLogin}
             >
               Sign in
             </Button>
@@ -145,21 +146,20 @@ export default function LeftMenu() {
           <Text size="small" color="DarkGray" margin="0.5rem 0">
             Element
           </Text>
-          {Object.entries(storyList).map(stories => {
+          {Object.entries(userStories).map(stories => {
             const [category, storiesArray] = stories;
+
             return (
               <Toggle summary={category} key={category}>
                 <Ul>
-                  <List onClick={() => categoryClickHandler(category)}>
-                    All
-                  </List>
+                  <List onClick={() => handleClickCategory(category)}>All</List>
                   {storiesArray.map(story => {
                     const { _id: id } = story;
 
                     return (
                       <List
                         key={id}
-                        onClick={() => categoryListClickHandler(category, id)}
+                        onClick={() => handleClickCategoryList(category, id)}
                       >
                         {story.name}
                       </List>
