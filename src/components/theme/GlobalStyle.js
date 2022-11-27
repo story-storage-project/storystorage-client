@@ -19,6 +19,11 @@ body {
   box-sizing: border-box;
   width: 100%;
   height: 100%;
+
+  &::-webkit-scrollbar {
+    display: none;
+    width: 0 !important;
+  }
 }
 `;
 
