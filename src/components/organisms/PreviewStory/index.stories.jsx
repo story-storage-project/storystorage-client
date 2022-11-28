@@ -1,31 +1,20 @@
-import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
-import NotFound from '.';
-import Layout from '../../templates/Layout';
+import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
+import PreviewStory from '.';
 
 export default {
-  title: 'Pages/NotFound',
-  component: NotFound,
+  title: 'Organisms/PreviewStory',
+  component: PreviewStory,
   parameters: {
     viewport: {
       viewports: INITIAL_VIEWPORTS,
       defaultViewport: 'responsive',
     },
   },
-  decorators: [
-    Story => (
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="/*" element={<Story />} />
-        </Route>
-      </Routes>
-    ),
-  ],
 };
 
 function Template(args) {
-  return <NotFound {...args} />;
+  return <PreviewStory {...args} />;
 }
 
 export const IphonexStoryPage = Template.bind({});

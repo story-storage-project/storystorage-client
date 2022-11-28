@@ -33,7 +33,7 @@ Text.propTypes = {
 };
 
 Text.defaultProps = {
-  children: <span />,
+  children: 'Text',
   textColor: 'textColor',
   size: 'medium',
   bg: false,

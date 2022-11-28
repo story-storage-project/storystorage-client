@@ -30,7 +30,7 @@ export default function StoryPage() {
     if (isFinishedPatch && !storyData) {
       navigate('/');
     }
-  }, [isFinishedPatch]);
+  }, [isFinishedPatch, storyData]);
 
   return (
     <>

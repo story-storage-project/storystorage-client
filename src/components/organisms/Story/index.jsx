@@ -281,11 +281,11 @@ const InputContainer = styled.div`
   margin: 0 0 0 2rem;
   min-height: 3rem;
 
-  @media ${props => props.theme.viewSize.mobile} {
+  /* @media ${props => props.theme.viewSize.mobile} {
     min-width: 7rem;
     max-width: 7rem;
     margin: 0;
-  }
+  } */
 `;
 
 const InputWrapper = styled.div`

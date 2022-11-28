@@ -7,9 +7,6 @@ export default {
   argTyps: {
     value: { type: 'string' },
   },
-  actions: {
-    handles: ['click input'],
-  },
 };
 
 function Template(args) {

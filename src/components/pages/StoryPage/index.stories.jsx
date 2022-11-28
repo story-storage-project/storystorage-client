@@ -1,12 +1,14 @@
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import NotFound from '.';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import StoryPage from '.';
+import { isFinishPatch, selectStory } from '../../../store/userState';
 import Layout from '../../templates/Layout';
 
 export default {
-  title: 'Pages/NotFound',
-  component: NotFound,
+  title: 'Pages/StoryPage',
+  component: StoryPage,
   parameters: {
     viewport: {
       viewports: INITIAL_VIEWPORTS,
@@ -25,7 +27,11 @@ export default {
 };
 
 function Template(args) {
-  return <NotFound {...args} />;
+  const setIsFinishPatch = useSetRecoilState(isFinishPatch);
+  setIsFinishPatch(true);
+  selectStory({ categoryName: 'template-button', storyId: 'z0TonHSxtj' });
+
+  return <StoryPage {...args} />;
 }
 
 export const IphonexStoryPage = Template.bind({});

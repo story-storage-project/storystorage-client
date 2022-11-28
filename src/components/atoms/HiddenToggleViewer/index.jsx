@@ -5,7 +5,7 @@ import styled from 'styled-components';
 const Wrapper = styled.span(
   ({ ...props }) => `
     display: ${props.reverse && 'none'};
-    @media ${props.theme.viewSize.tablet} {
+    @media ${props.theme.viewSize[props.hiddenView]} {
       display: ${
         (props.reverse && 'block') || (!props.toggle === true && 'none')
       };

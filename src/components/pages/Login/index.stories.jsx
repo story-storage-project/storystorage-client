@@ -1,12 +1,21 @@
-import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import React from 'react';
+import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
+import { object } from 'prop-types';
 import { Route, Routes } from 'react-router-dom';
-import NotFound from '.';
+import Login from '.';
+import templates from '../../../data/templates/templates';
 import Layout from '../../templates/Layout';
 
 export default {
-  title: 'Pages/NotFound',
-  component: NotFound,
+  title: 'Pages/Login',
+  component: Login,
+  argTypes: {
+    responseData: {
+      type: object,
+      defaultValue: templates['template-button'][0],
+    },
+    isLogin: { defaultValue: true },
+  },
   parameters: {
     viewport: {
       viewports: INITIAL_VIEWPORTS,
@@ -25,7 +34,7 @@ export default {
 };
 
 function Template(args) {
-  return <NotFound {...args} />;
+  return <Login {...args} />;
 }
 
 export const IphonexStoryPage = Template.bind({});

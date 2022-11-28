@@ -6,7 +6,7 @@ import { getMe, logout } from '../../../service/authApi';
 import useQuery from '../../../hooks/useQuery';
 import Text from '../../atoms/Text';
 import ImageIcon from '../../atoms/ImageIcon';
-import MobileHiddenToggleViewer from '../../atoms/MobileHiddenToggleViewer';
+import HiddenToggleViewer from '../../atoms/HiddenToggleViewer';
 import Button from '../../atoms/Button';
 import List from '../../atoms/List';
 import Toggle from '../../molecules/Toggle';
@@ -26,6 +26,7 @@ export default function LeftMenu() {
   const setUser = useSetRecoilState(userData);
   const setIsFinishPatch = useSetRecoilState(isFinishPatch);
   const [userInfo, query] = useQuery();
+
   useEffect(() => {
     setIsFinishPatch(false);
 
@@ -33,9 +34,7 @@ export default function LeftMenu() {
   }, []);
 
   useEffect(() => {
-    if (!userInfo) return;
-
-    if (userInfo.result === 'fail' || !userInfo) {
+    if (!userInfo || userInfo.result === 'fail') {
       setIsLogin(false);
       setUserStoryList('reset');
       setIsFinishPatch(true);
@@ -100,39 +99,27 @@ export default function LeftMenu() {
               StoryStorage
             </Text>
           </Logo>
-          <MobileHiddenToggleViewer reverse>
+          <HiddenToggleViewer hiddenView="tablet" reverse>
             <ImageIcon
               icon="menu"
               alt="menu-icon"
               pointer
               onClick={handleClickMenu}
             />
-          </MobileHiddenToggleViewer>
+          </HiddenToggleViewer>
         </div>
       </Header>
-      <MobileHiddenToggleViewer toggle={onToggle}>
+      <HiddenToggleViewer hiddenView="tablet" toggle={onToggle}>
         <Body>
           {loggedIn ? (
-            <>
-              <Button
-                border
-                borderRadius="20rem"
-                margin="0 0 1rem 0"
-                onClick={handleLogOut}
-              >
-                Sign out
-              </Button>
-              <Button
-                border
-                bg="pointColor"
-                borderRadius="20rem"
-                margin="0 0 1rem 0"
-                textColor="whiteColor"
-                onClick={handleClickAddButton}
-              >
-                Add Story
-              </Button>
-            </>
+            <Button
+              border
+              borderRadius="20rem"
+              margin="0 0 1rem 0"
+              onClick={handleLogOut}
+            >
+              Sign out
+            </Button>
           ) : (
             <Button
               border
@@ -143,6 +130,16 @@ export default function LeftMenu() {
               Sign in
             </Button>
           )}{' '}
+          <Button
+            border
+            bg="pointColor"
+            borderRadius="20rem"
+            margin="0 0 1rem 0"
+            textColor="whiteColor"
+            onClick={handleClickAddButton}
+          >
+            Add Story
+          </Button>
           <Text size="small" color="DarkGray" margin="0.5rem 0">
             Element
           </Text>
@@ -170,7 +167,7 @@ export default function LeftMenu() {
             );
           })}
         </Body>
-      </MobileHiddenToggleViewer>
+      </HiddenToggleViewer>
     </Wrapper>
   );
 }
