@@ -12,6 +12,8 @@ export const VALIDATION_ERROR_MESSAGE = {
   },
 };
 
+export const NOT_LOGIN = 'Please Log In';
+
 export const REQUEST_ERROR = {
   TIME_OUT: 'Request failed. Please check the entered data.',
 };

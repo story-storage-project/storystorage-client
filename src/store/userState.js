@@ -62,6 +62,7 @@ const selectStory = selectorFamily({
     ({ categoryName, storyId }) =>
     ({ get }) => {
       if (!get(isFinishPatch)) return;
+
       const userStory = get(addUserStoryList);
 
       if (!Object.keys(userStory).length || !userStory[categoryName]) return;
@@ -102,14 +103,12 @@ const deleteUserStoryList = selector({
   get: ({ get }) => get(storyList),
   set: ({ get, set }, arg) => {
     const list = get(userStoryList);
-    const [category, id, data] = arg;
+    const [category, id] = arg;
 
-    const updateData = list[category].map(item => {
+    const updateData = list[category].filter(item => {
       const { _id: storyId } = item;
-      if (storyId === id) {
-        return data;
-      }
-      return item;
+
+      return storyId !== id;
     });
 
     set(storyList, prev => ({
