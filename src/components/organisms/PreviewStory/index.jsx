@@ -7,19 +7,24 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import CodeEditor from '../CodeEditor';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import useElementCompiler from '../../../hooks/useElementCompiler';
+import Button from '../../atoms/Button';
+import CodeEditor from '../CodeEditor';
+import Input from '../../atoms/Input';
 import {
   getNodeList,
   storeAllElementProperties,
 } from '../../../utils/stringHtmlParser';
 import insertClass from '../../../utils/insertPreviewClass';
-import Button from '../../atoms/Button';
+
 import { html, css, page } from '../../../store/codeState';
 import Text from '../../atoms/Text';
 import { userData, userStoryList, isLogin } from '../../../store/userState';
-import { VALIDATION_ERROR_MESSAGE } from '../../../constants/errorMessage';
+import {
+  NOT_LOGIN,
+  VALIDATION_ERROR_MESSAGE,
+} from '../../../constants/errorMessage';
 
 export default function PreviewStory({
   createFailMessage,
@@ -31,7 +36,7 @@ export default function PreviewStory({
   const [errorMessage, setErrorMessage] = useState('');
   const style = useRef();
   const conditionalCss = useRef();
-  const setUserStoryList = useSetRecoilState(userStoryList);
+  const [storyList, setUserStoryList] = useRecoilState(userStoryList);
   const userInfo = useRecoilValue(userData);
 
   const htmlCode = useRecoilValue(html);
@@ -84,6 +89,10 @@ export default function PreviewStory({
   );
 
   const createStoryHandler = () => {
+    if (!loggedIn) {
+      alert(NOT_LOGIN);
+    }
+
     if (!categoryName || !storyName || !htmlCode || !cssCode) {
       setErrorMessage(VALIDATION_ERROR_MESSAGE.NULL);
       return;
@@ -118,12 +127,13 @@ export default function PreviewStory({
                   name="categroy"
                   onChange={handleOnChangeCategoryInput}
                   placeholder="Please select or enter a category"
+                  value={categoryName}
                 />
               </label>
               <datalist id="category">
-                <option value="Atoms" label="Atoms" />
-                <option value="Molecules" label="Molecules" />
-                <option label="chr" />
+                {Object.keys(storyList).map(category => (
+                  <option key={category} value={category} label={category} />
+                ))}
               </datalist>
             </InputWrapper>
             <InputWrapper>
@@ -232,28 +242,28 @@ const InputWrapper = styled.div`
   }
 `;
 
-const Input = styled.input`
-  font-family: 'Roboto', sans-serif;
-  color: #333;
-  padding: 0.5rem;
-  margin: 0 auto;
-  border-radius: 0.2rem;
-  background-color: rgb(255, 255, 255);
-  border-inline: 1px solid ${props => props.theme.colors.pointColor};
-  min-width: 15rem;
-  max-width: 15rem;
+// const Input = styled.input`
+//   font-family: 'Roboto', sans-serif;
+//   color: #333;
+//   padding: 0.5rem;
+//   margin: 0 auto;
+//   border-radius: 0.2rem;
+//   background-color: rgb(255, 255, 255);
+//   border-inline: 1px solid ${props => props.theme.colors.pointColor};
+//   min-width: 15rem;
+//   max-width: 15rem;
 
-  min-height: 1rem;
-  max-height: 1rem;
-  display: block;
-  border: 0.3px solid;
-  outline: 0;
+//   min-height: 1rem;
+//   max-height: 1rem;
+//   display: block;
+//   border: 0.3px solid;
+//   outline: 0;
 
-  &:hover {
-    border-inline: 1px solid ${props => props.theme.colors.pointColor};
-    background-color: ${props => props.theme.colors.lightGray};
-  }
-`;
+//   &:hover {
+//     border-inline: 1px solid ${props => props.theme.colors.pointColor};
+//     background-color: ${props => props.theme.colors.lightGray};
+//   }
+// `;
 
 const PreviewWrapper = styled.div`
   display: flex;

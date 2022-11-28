@@ -11,6 +11,7 @@ export const lightTheme = {
   body: '#FBFBFB',
   leftMenu: '#f2f2f2',
   rightMenu: '#19171113',
+  transparent: 'transparent',
 };
 
 export const darkTheme = {
@@ -22,6 +23,7 @@ export const darkTheme = {
   body: '#474E68',
   leftMenu: '#404258',
   rightMenu: '#50577A',
+  transparent: 'transparent',
 };
 
 base.codeThemeBright = {

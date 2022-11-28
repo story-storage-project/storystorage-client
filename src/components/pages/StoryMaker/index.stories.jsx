@@ -1,12 +1,12 @@
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import NotFound from '.';
+import StoryMaker from '.';
 import Layout from '../../templates/Layout';
 
 export default {
-  title: 'Pages/NotFound',
-  component: NotFound,
+  title: 'Pages/StoryMaker',
+  component: StoryMaker,
   parameters: {
     viewport: {
       viewports: INITIAL_VIEWPORTS,
@@ -25,7 +25,7 @@ export default {
 };
 
 function Template(args) {
-  return <NotFound {...args} />;
+  return <StoryMaker {...args} />;
 }
 
 export const IphonexStoryPage = Template.bind({});
