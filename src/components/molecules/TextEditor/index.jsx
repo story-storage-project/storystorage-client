@@ -144,7 +144,7 @@ const DivTextArea = styled.div`
   font-family: 'Mukta', sans-serif;
   font-size: ${props => props.theme.fontSize.code};
   font-weight: 300;
-  background-color: ${props => props.theme.codeThemeBright.backgrounColor};
+  background-color: ${props => props.theme.colors.codeTheme.backgrounColor};
 `;
 
 export default TextEditor;

@@ -13,10 +13,10 @@ const Wrapper = styled.span(
 `,
 );
 
-export default function MobileHiddenToggleViewer({ children, ...props }) {
+export default function HiddenToggleViewer({ children, ...props }) {
   return <Wrapper {...props}>{children}</Wrapper>;
 }
 
-MobileHiddenToggleViewer.propTypes = {
+HiddenToggleViewer.propTypes = {
   children: PropTypes.node.isRequired,
 };

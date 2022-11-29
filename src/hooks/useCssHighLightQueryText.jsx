@@ -87,7 +87,7 @@ const Code = styled.span`
 const TagCode = styled(Code)`
   max-width: inherit;
   word-break: break-all;
-  color: ${props => props.theme.codeThemeBright.tagColor};
+  color: ${props => props.theme.colors.codeTheme.tagColor};
 `;
 
 const IncorrectTagCode = styled(TagCode)`
@@ -97,11 +97,11 @@ const IncorrectTagCode = styled(TagCode)`
 const Punctuati = styled(Code)`
   max-width: inherit;
   word-break: break-all;
-  color: ${props => props.theme.codeThemeBright.punctuation};
+  color: ${props => props.theme.colors.codeTheme.punctuation};
 `;
 
 const AttributeName = styled(Code)`
-  color: ${props => props.theme.codeThemeBright.cssAttributeValue};
+  color: ${props => props.theme.colors.codeTheme.cssAttributeValue};
 `;
 
 const InCorrectAttributeName = styled(AttributeName)`

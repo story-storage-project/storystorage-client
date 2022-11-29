@@ -58,6 +58,7 @@ const Container = styled.div`
   justify-content: center;
   padding: 0 0 0 1.5rem;
   height: auto;
+  min-height: 70vh;
 
   @media ${props => props.theme.viewSize.mobile} {
     padding: 0 1rem;
@@ -69,7 +70,7 @@ const CategoryText = styled(Text)`
   z-index: 10;
   width: 100%;
   color: white;
-  background-color: #0088ff;
+  background-color: ${props => props.theme.colors.pointColor};
 
   @media ${props => props.theme.viewSize.tablet} {
     display: none;

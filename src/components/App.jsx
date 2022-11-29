@@ -1,5 +1,5 @@
 import React from 'react';
-import { RecoilRoot } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { ThemeProvider } from 'styled-components';
 import {
   RouterProvider,
@@ -7,7 +7,7 @@ import {
   createRoutesFromElements,
   Route,
 } from 'react-router-dom';
-import base, { lightTheme } from './theme/default';
+import base, { lightTheme, darkTheme } from './theme/default';
 import GlobalStyle from './theme/GlobalStyle';
 
 import Layout from './templates/Layout';
@@ -16,6 +16,7 @@ import StoryMaker from './pages/StoryMaker';
 import StoryPage from './pages/StoryPage';
 import NotFound from './pages/NotFound';
 import StoryAllPage from './pages/StoryAllPage';
+import { uiTheme } from '../store/globalState';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -31,14 +32,16 @@ const router = createBrowserRouter(
 );
 
 function App() {
-  const theme = { ...base, colors: lightTheme };
+  const themeColor = useRecoilValue(uiTheme);
+  const theme = {
+    ...base,
+    colors: themeColor === 'lightTheme' ? lightTheme : darkTheme,
+  };
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <RecoilRoot>
-        <RouterProvider router={router} fallbackElement={<div>로딩주웅</div>} />
-      </RecoilRoot>
+      <RouterProvider router={router} fallbackElement={<div>로딩주웅</div>} />
     </ThemeProvider>
   );
 }

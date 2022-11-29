@@ -17,6 +17,7 @@ import {
   isFinishPatch,
   userStoryList,
 } from '../../../store/userState';
+import { uiTheme } from '../../../store/globalState';
 
 export default function LeftMenu() {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ export default function LeftMenu() {
   const setUser = useSetRecoilState(userData);
   const setIsFinishPatch = useSetRecoilState(isFinishPatch);
   const [userInfo, query] = useQuery();
+  const [themeColor, setThemeColor] = useRecoilState(uiTheme);
 
   useEffect(() => {
     setIsFinishPatch(false);
@@ -49,6 +51,12 @@ export default function LeftMenu() {
     setUserStoryList(() => elementList);
     setIsFinishPatch(true);
   }, [userInfo]);
+
+  const handleChangeTheme = () => {
+    return themeColor === 'lightTheme'
+      ? setThemeColor('darkTheme')
+      : setThemeColor('lightTheme');
+  };
 
   const handleClickLogo = () => {
     navigate('/');
@@ -97,7 +105,16 @@ export default function LeftMenu() {
             />
             <Text textColor="pointColor" size="large" bold="600">
               StoryStorage
-            </Text>
+            </Text>{' '}
+            <ImageIcon
+              icon={themeColor === 'lightTheme' ? 'sun' : 'moon'}
+              alt="moon"
+              pointer
+              hover
+              width="1.4rem"
+              height="1.4rem"
+              onClick={handleChangeTheme}
+            />
           </Logo>
           <HiddenToggleViewer hiddenView="tablet" reverse>
             <ImageIcon
@@ -235,6 +252,5 @@ const Logo = styled.div`
 `;
 
 const LogoIcon = styled(ImageIcon)`
-  filter: invert(36%) sepia(100%) saturate(1092%) hue-rotate(189deg)
-    brightness(95%) contrast(85%);
+  filter: ${props => props.theme.colors.filter};
 `;
