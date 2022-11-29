@@ -4,7 +4,7 @@ const base = {};
 
 export const lightTheme = {
   textColor: 'black',
-  lightGray: '#0000000F',
+  lightGray: '#e8e8e8',
   darkGray: '#37352F66',
   pointColor: '#2383E2',
   greenColor: '#2bbc63',
@@ -31,7 +31,7 @@ export const lightTheme = {
 
 export const darkTheme = {
   textColor: '#FFFFFF',
-  lightGray: '#bfbfbf',
+  lightGray: '#767676',
   darkGray: '#37352F66',
   pointColor: '#ECB365',
   greenColor: '#2bbc63',

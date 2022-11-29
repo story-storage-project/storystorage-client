@@ -9,15 +9,22 @@ const Wrapper = styled.img`
   cursor: ${props => (props.pointer ? 'pointer' : 'default')};
 
   ${props => {
-    if (props.border) {
+    if (props.invert) {
       return css`
-        border-radius: 50%;
-        padding: 5px;
-        border: 1px solid ${props.theme.colors.darkGray};
+        filter: invert();
       `;
     }
   }}
 
+  ${props => {
+    if (props.border) {
+      return css`
+        border-radius: 50%;
+        padding: 5px;
+        border: 1px solid ${props.theme.colors.lightGray};
+      `;
+    }
+  }}
   ${props => {
     if (props.hover) {
       return css`
@@ -28,7 +35,7 @@ const Wrapper = styled.img`
         }
       `;
     }
-  }}
+  }};
 `;
 
 function ImageIcon({ icon, alt, ...props }) {

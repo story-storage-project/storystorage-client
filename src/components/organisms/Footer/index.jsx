@@ -1,13 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useRecoilValue } from 'recoil';
 import Text from '../../atoms/Text';
 import ImageIcon from '../../atoms/ImageIcon';
+import { uiTheme } from '../../../store/globalState';
 
 export default function Footer() {
+  const theme = useRecoilValue(uiTheme);
   return (
     <FooterStyled>
-      <Text textColor="darkGray">Story Storage by alex © 2022</Text>{' '}
-      <ImageIcon icon="GitHub-Mark-32px" alt="github-logo" pointer border />
+      <Text textColor={theme === 'lightTheme' ? 'darkGray' : 'lightGray'}>
+        Story Storage by alex © 2022
+      </Text>{' '}
+      <ImageIcon
+        icon="GitHub-Mark-32px"
+        alt="github-logo"
+        pointer
+        border
+        invert={theme !== 'lightTheme'}
+      />
     </FooterStyled>
   );
 }
