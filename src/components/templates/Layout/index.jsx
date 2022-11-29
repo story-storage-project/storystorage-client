@@ -5,11 +5,11 @@ import { useRecoilState } from 'recoil';
 import LeftMenu from '../../organisms/LeftMenu';
 import Modal from '../../molecules/Modal';
 import { NOT_LOGIN } from '../../../constants/errorMessage';
-import { isLoginModal } from '../../../store/globalState';
+import { isOnLoginReqModal } from '../../../store/globalState';
 import Footer from '../../organisms/Footer';
 
 export default function Layout() {
-  const [isLogModal, setIsLoginModal] = useRecoilState(isLoginModal);
+  const [isLogModal, setIsLoginModal] = useRecoilState(isOnLoginReqModal);
 
   return (
     <>

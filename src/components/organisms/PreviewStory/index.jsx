@@ -21,10 +21,8 @@ import insertClass from '../../../utils/insertPreviewClass';
 import { html, css, page } from '../../../store/codeState';
 import Text from '../../atoms/Text';
 import { userData, userStoryList, isLogin } from '../../../store/userState';
-import {
-  NOT_LOGIN,
-  VALIDATION_ERROR_MESSAGE,
-} from '../../../constants/errorMessage';
+import { isOnLoginReqModal } from '../../../store/globalState';
+import { VALIDATION_ERROR_MESSAGE } from '../../../constants/errorMessage';
 
 export default function PreviewStory({
   createFailMessage,
@@ -34,6 +32,7 @@ export default function PreviewStory({
   const [storyName, setStoryName] = useState('');
   const [categoryName, setCategoryName] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const setIsLoginModal = useSetRecoilState(isOnLoginReqModal);
   const style = useRef();
   const conditionalCss = useRef();
   const [storyList, setUserStoryList] = useRecoilState(userStoryList);
@@ -90,7 +89,7 @@ export default function PreviewStory({
 
   const createStoryHandler = () => {
     if (!loggedIn) {
-      alert(NOT_LOGIN);
+      return setIsLoginModal(true);
     }
 
     if (!categoryName || !storyName || !htmlCode || !cssCode) {
@@ -238,32 +237,9 @@ const InputWrapper = styled.div`
 
   label {
     padding: 0;
-    color: black;
+    color: ${props => props.theme.colors.textColor};
   }
 `;
-
-// const Input = styled.input`
-//   font-family: 'Roboto', sans-serif;
-//   color: #333;
-//   padding: 0.5rem;
-//   margin: 0 auto;
-//   border-radius: 0.2rem;
-//   background-color: rgb(255, 255, 255);
-//   border-inline: 1px solid ${props => props.theme.colors.pointColor};
-//   min-width: 15rem;
-//   max-width: 15rem;
-
-//   min-height: 1rem;
-//   max-height: 1rem;
-//   display: block;
-//   border: 0.3px solid;
-//   outline: 0;
-
-//   &:hover {
-//     border-inline: 1px solid ${props => props.theme.colors.pointColor};
-//     background-color: ${props => props.theme.colors.lightGray};
-//   }
-// `;
 
 const PreviewWrapper = styled.div`
   display: flex;

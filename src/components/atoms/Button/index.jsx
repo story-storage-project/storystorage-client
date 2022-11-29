@@ -24,7 +24,7 @@ const StyledButton = styled.button(
   cursor: pointer;
 
   &:hover {
-    border: 1px solid blue;
+    border: 1px solid ${theme.colors.pointColor};
   }
 
   color: ${

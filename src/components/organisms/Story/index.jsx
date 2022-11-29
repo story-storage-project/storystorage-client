@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Button from '../../atoms/Button';
 import Text from '../../atoms/Text';
+import Input from '../../atoms/Input';
 import CodeEditor from '../CodeEditor';
 import { VALIDATION_ERROR_MESSAGE } from '../../../constants/errorMessage';
 import { deleteStory, patchStory } from '../../../service/storyApi';
@@ -265,6 +266,17 @@ const Header = styled.div`
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
+  align-items: flex-start;
+
+  @media ${props => props.theme.viewSize.mobileS} {
+    min-width: 20rem;
+    max-width: 20rem;
+    align-items: center;
+  }
+
+  @media ${props => props.theme.viewSize.tablet} {
+    /* align-items: flex-start; */
+  }
 `;
 
 const Message = styled.div`
@@ -281,11 +293,11 @@ const InputContainer = styled.div`
   margin: 0 0 0 2rem;
   min-height: 3rem;
 
-  /* @media ${props => props.theme.viewSize.mobile} {
-    min-width: 7rem;
-    max-width: 7rem;
+  @media ${props => props.theme.viewSize.mobileS} {
+    flex-direction: column;
+    align-items: flex-start;
     margin: 0;
-  } */
+  }
 `;
 
 const InputWrapper = styled.div`
@@ -293,35 +305,12 @@ const InputWrapper = styled.div`
 
   label {
     padding: 0;
-    color: black;
+    color: ${props => props.theme.colors.textColor};
   }
 `;
 
 const ButtonWrapper = styled.div`
   display: flex;
-`;
-
-const Input = styled.input`
-  font-family: 'Roboto', sans-serif;
-  color: #333;
-  padding: 0.5rem;
-  margin: 0 auto;
-  border-radius: 0.2rem;
-  background-color: rgb(255, 255, 255);
-  border-inline: 1px solid ${props => props.theme.colors.pointColor};
-  min-width: 15rem;
-  max-width: 15rem;
-
-  min-height: 1rem;
-  max-height: 1rem;
-  display: block;
-  border: 0.3px solid;
-  outline: 0;
-
-  &:hover {
-    border-inline: 1px solid ${props => props.theme.colors.pointColor};
-    background-color: ${props => props.theme.colors.lightGray};
-  }
 `;
 
 const PreviewContainer = styled.div`
@@ -331,28 +320,38 @@ const PreviewContainer = styled.div`
   align-items: flex-start;
   position: relative;
   min-width: 23rem;
+  max-width: 80vw;
+  max-height: 50vw;
   min-height: 10rem;
-  width: fit-content;
-  height: fit-content;
+  /* width: fit-content;
+  height: fit-content; */
   margin: 1rem 2rem 0 2rem;
   padding: 0.3rem 0;
   border: 1px solid ${props => props.theme.colors.lightGray};
   border-radius: 10px;
+  overflow-x: scroll;
+  overflow-y: scroll;
 
   a:-webkit-any-link {
     color: black;
+  }
+
+  @media ${props => props.theme.viewSize.mobileS} {
+    justify-content: center;
   }
 `;
 
 const PreviewWrapper = styled.div`
   margin: 2rem 1rem;
   place-content: center;
-  width: 100%;
-  height: 100%;
+  /* width: 100em;
+  height: 100em; */
   padding: 0.3rem;
+  display: flex;
 `;
 
 const Preview = styled.div`
+  flex: 2;
   width: fit-content;
   height: fit-content;
 `;

@@ -86,7 +86,7 @@ const Container = styled.div`
 const CategoryText = styled(Text)`
   width: 100%;
   color: white;
-  background-color: #0088ff;
+  background-color: ${props => props.theme.colors.pointColor};
 
   @media ${props => props.theme.viewSize.tablet} {
     display: none;
