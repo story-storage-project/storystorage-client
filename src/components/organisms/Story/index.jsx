@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { css as styledCss } from 'styled-components';
 import Button from '../../atoms/Button';
 import Text from '../../atoms/Text';
 import Input from '../../atoms/Input';
@@ -149,8 +149,8 @@ export default function Story({
   return (
     <Container codeToggle={codeToggle}>
       <Wrapper>
-        <Header>
-          <InputContainer>
+        <Header isLogin={isLogin}>
+          <InputContainer isLogin={isLogin}>
             <InputWrapper>
               <label htmlFor="margin" id="margin">
                 Story Name
@@ -271,12 +271,20 @@ const Header = styled.div`
   @media ${props => props.theme.viewSize.mobileS} {
     min-width: 20rem;
     max-width: 20rem;
-    align-items: center;
+    /* align-items: center; */
   }
 
-  @media ${props => props.theme.viewSize.tablet} {
-    /* align-items: flex-start; */
-  }
+  ${props => {
+    if (props.isLogin) {
+      return styledCss`
+        @media ${props.theme.viewSize.mobileS} {
+          min-width: 20rem;
+          max-width: 20rem;
+          align-items: center;
+        }
+      `;
+    }
+  }}
 `;
 
 const Message = styled.div`
@@ -294,10 +302,20 @@ const InputContainer = styled.div`
   min-height: 3rem;
 
   @media ${props => props.theme.viewSize.mobileS} {
-    flex-direction: column;
-    align-items: flex-start;
-    margin: 0;
+    margin: 0 0 0 3.5rem;
   }
+
+  ${props => {
+    if (props.isLogin) {
+      return styledCss`
+        @media ${props.theme.viewSize.mobileS} {
+          flex-direction: column;
+          align-items: flex-start;
+          margin: 0;
+        }
+      `;
+    }
+  }}
 `;
 
 const InputWrapper = styled.div`
