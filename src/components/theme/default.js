@@ -56,7 +56,7 @@ export const darkTheme = {
 };
 
 base.viewSize = {
-  mobileS: `(max-width: 480px)`,
+  mobileS: `(max-width: 500px)`,
   mobile: `(max-width: 750px)`,
   tablet: `(max-width: 900px)`,
   desktop: `(max-width: 1024px)`,
