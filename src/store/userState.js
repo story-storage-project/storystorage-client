@@ -28,13 +28,10 @@ const userStoryList = selector({
     set(isFinishLoad, false);
 
     if (newValue === 'reset') {
-      console.log('hihi');
       set(isFinishLoad, true);
 
       return reset(storyList);
     }
-
-    console.log(newValue);
 
     const queryStories = newValue.reduce((category, element) => {
       if (category[element.category]) {
