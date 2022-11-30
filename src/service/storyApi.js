@@ -1,24 +1,10 @@
 import API from './http';
 
-export async function getUserAllStory() {
-  return API({
-    method: 'get',
-    url: `/users/stories`,
-  });
-}
-
 export async function createStory(userId, data) {
   return API({
     method: 'post',
     url: `/users/${userId}/stories`,
     data,
-  });
-}
-
-export async function getStory(params) {
-  return API({
-    method: 'get',
-    url: `/users/stories/${params}`,
   });
 }
 
