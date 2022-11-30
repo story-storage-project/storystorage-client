@@ -60,7 +60,7 @@ base.viewSize = {
   mobile: `(max-width: 750px)`,
   tablet: `(max-width: 900px)`,
   desktop: `(max-width: 1024px)`,
-  laptopHalf: `(max-width: 1200px)`,
+  laptopHalf: `(max-width: 1250px)`,
   backgrounColor: 'red',
 };
 

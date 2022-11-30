@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { RecoilRoot, useRecoilValue, useSetRecoilState } from 'recoil';
 import Text from '../../atoms/Text';
@@ -7,30 +7,29 @@ import Story from '../../organisms/Story';
 import {
   userData,
   isLogin,
-  isFinishPatch,
   selectStory,
   editUserStoryList,
+  deleteUserStoryList,
+  isFinishLoad,
 } from '../../../store/userState';
 
 export default function StoryPage() {
   const params = useParams();
-  const navigate = useNavigate();
   const { categoryName, storyId } = params;
   const userInfo = useRecoilValue(userData);
   const loggedIn = useRecoilValue(isLogin);
-  const isFinishedPatch = useRecoilValue(isFinishPatch);
+  const isLoad = useRecoilValue(isFinishLoad);
   const setEditUserStoryList = useSetRecoilState(editUserStoryList);
+  const setDeleteUserStoryList = useSetRecoilState(deleteUserStoryList);
   const storyData = useRecoilValue(selectStory({ categoryName, storyId }));
 
   const setEditUserStory = (...editData) => {
     setEditUserStoryList(...editData);
   };
 
-  useEffect(() => {
-    if (isFinishedPatch && !storyData) {
-      navigate('/');
-    }
-  }, [isFinishedPatch, storyData]);
+  const setDeleteUserStory = (...editData) => {
+    setDeleteUserStoryList(...editData);
+  };
 
   return (
     <>
@@ -38,12 +37,13 @@ export default function StoryPage() {
       <Container>
         <Wrapper>
           <RecoilRoot>
-            {isFinishedPatch && storyData && (
+            {isLoad && storyData && (
               <Story
                 responseData={storyData}
                 userInfo={userInfo}
                 isLogin={loggedIn}
                 setEditUserStory={setEditUserStory}
+                setDeleteUserStory={setDeleteUserStory}
               />
             )}
           </RecoilRoot>

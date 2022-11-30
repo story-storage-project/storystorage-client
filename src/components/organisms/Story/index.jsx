@@ -29,6 +29,7 @@ export default function Story({
   responseData,
   isLogin,
   setEditUserStory,
+  setDeleteUserStory,
 }) {
   const {
     _id: id,
@@ -139,7 +140,7 @@ export default function Story({
       setErrorMessage(res.data);
     }
 
-    navigate(0);
+    setDeleteUserStory([category, id]);
   };
 
   const handleMoveLocation = () => {
@@ -233,6 +234,7 @@ Story.propTypes = {
   isLogin: PropTypes.bool.isRequired,
   responseData: PropTypes.object.isRequired,
   setEditUserStory: PropTypes.func.isRequired,
+  setDeleteUserStory: PropTypes.func.isRequired,
 };
 
 const Container = styled.div`
@@ -242,7 +244,7 @@ const Container = styled.div`
   width: 100%;
   height: inherit;
 
-  @media ${props => props.theme.viewSize.tablet} {
+  @media ${props => props.theme.viewSize.laptopHalf} {
     flex-direction: column;
     align-items: center;
   }

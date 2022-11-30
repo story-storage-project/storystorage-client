@@ -5,39 +5,55 @@ import { RecoilRoot, useRecoilValue, useSetRecoilState } from 'recoil';
 import Text from '../../atoms/Text';
 import Story from '../../organisms/Story';
 import {
+  storyList,
   userData,
   isLogin,
-  userStoryList,
   editUserStoryList,
+  deleteUserStoryList,
+  isFinishLoad,
 } from '../../../store/userState';
 
 export default function StoryAllPage() {
   const params = useParams();
   const { categoryName } = params;
-  const userStoryLists = useRecoilValue(userStoryList);
+  const userStoryLists = useRecoilValue(storyList);
   const [storyCategoryList, setUserCategoryStoryList] =
     useState(userStoryLists);
   const setEditUserStoryList = useSetRecoilState(editUserStoryList);
+  const setDeleteUserStoryList = useSetRecoilState(deleteUserStoryList);
   const userInfo = useRecoilValue(userData);
   const loggedIn = useRecoilValue(isLogin);
+  const finishLoad = useRecoilValue(isFinishLoad);
+  const [fetch, setFetch] = useState(false);
 
   useEffect(() => {
+    if (!finishLoad) return;
+    setFetch(false);
+
     if (!categoryName) {
+      setFetch(true);
+
       return setUserCategoryStoryList(userStoryLists);
     }
 
     const list = {};
     list[categoryName] = userStoryLists[categoryName];
     setUserCategoryStoryList(() => list);
-  }, [userStoryLists, categoryName]);
+    setFetch(true);
+  }, [storyCategoryList, finishLoad, userStoryLists, categoryName]);
 
   const setEditUserStory = (...editData) => {
     setEditUserStoryList(...editData);
   };
 
+  const setDeleteUserStory = (...editData) => {
+    setDeleteUserStoryList(...editData);
+  };
+
   return (
     <div>
-      {Object.values(storyCategoryList)[0] &&
+      {fetch &&
+        Object.values(storyCategoryList)[0] &&
         Object.entries(storyCategoryList).map(stories => {
           const [category, storiesArray] = stories;
 
@@ -59,6 +75,7 @@ export default function StoryAllPage() {
                           responseData={story}
                           isLogin={loggedIn}
                           setEditUserStory={setEditUserStory}
+                          setDeleteUserStory={setDeleteUserStory}
                         />
                       </RecoilRoot>
                     );

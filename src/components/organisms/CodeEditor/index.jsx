@@ -44,7 +44,7 @@ const Container = styled.div`
     margin-top: ${props => (props.editorFlexType === 'row' ? 0 : '3rem')};
   }
 
-  @media ${props => props.theme.viewSize.tablet} {
+  @media ${props => props.theme.viewSize.laptop} {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
@@ -63,7 +63,7 @@ const CodeEditorContainer = styled.div`
   width: 100%;
   height: 100%;
 
-  @media ${props => props.theme.viewSize.tablet} {
+  @media ${props => props.theme.viewSize.laptop} {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;

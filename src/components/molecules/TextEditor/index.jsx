@@ -47,20 +47,20 @@ const Wrapper = styled.div`
     height: 50rem;
   }
 
-  @media (min-width: 1301px) and (max-width: 1500px) {
+  @media (min-width: 1250px) and (max-width: 1500px) {
     width: 500px;
     height: 600px;
   }
 
-  @media (min-width: 1101px) and (max-width: 1300px) {
-    width: 400px;
+  @media (min-width: 901px) and (max-width: 1250px) {
+    width: 600px;
     height: 600px;
   }
 
-  @media (min-width: 901px) and (max-width: 1100px) {
+  /* @media (min-width: 901px) and (max-width: 1100px) {
     width: 300px;
     height: 500px;
-  }
+  } */
 
   @media (min-width: 801px) and (max-width: 900px) {
     width: 500px;
