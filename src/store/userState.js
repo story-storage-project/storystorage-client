@@ -11,13 +11,13 @@ const isLogin = atom({
   default: false,
 });
 
-const isFinishPatch = atom({
-  key: 'isFinishPatch',
+const isFinishLoad = atom({
+  key: 'isFinishLoad',
   default: false,
 });
 
 const storyList = atom({
-  key: 'userStories',
+  key: 'storyList',
   default: templates,
 });
 
@@ -25,9 +25,16 @@ const userStoryList = selector({
   key: 'userStoryList',
   get: ({ get }) => get(storyList),
   set: ({ set, reset }, newValue) => {
+    set(isFinishLoad, false);
+
     if (newValue === 'reset') {
+      console.log('hihi');
+      set(isFinishLoad, true);
+
       return reset(storyList);
     }
+
+    console.log(newValue);
 
     const queryStories = newValue.reduce((category, element) => {
       if (category[element.category]) {
@@ -41,6 +48,7 @@ const userStoryList = selector({
     }, {});
 
     set(storyList, queryStories);
+    set(isFinishLoad, true);
   },
 });
 
@@ -56,31 +64,13 @@ const addUserStoryList = selector({
   },
 });
 
-const selectStory = selectorFamily({
-  key: 'selectStory',
-  get:
-    ({ categoryName, storyId }) =>
-    ({ get }) => {
-      if (!get(isFinishPatch)) return;
-
-      const userStory = get(addUserStoryList);
-
-      if (!Object.keys(userStory).length || !userStory[categoryName]) return;
-
-      const test = userStory[categoryName].find(story => {
-        const { _id: id } = story;
-        return id === storyId;
-      });
-
-      return test;
-    },
-});
-
 const editUserStoryList = selector({
   key: 'editUserStoryList',
   get: ({ get }) => get(storyList),
   set: ({ get, set }, arg) => {
-    const list = get(userStoryList);
+    set(isFinishLoad, false);
+
+    const list = get(storyList);
     const [category, id, data] = arg;
 
     const updateData = list[category].map(item => {
@@ -95,14 +85,35 @@ const editUserStoryList = selector({
       ...prev,
       [category]: updateData,
     }));
+    set(isFinishLoad, true);
   },
+});
+
+const selectStory = selectorFamily({
+  key: 'selectStory',
+  get:
+    ({ categoryName, storyId }) =>
+    ({ get }) => {
+      if (!get(isFinishLoad)) return;
+
+      const userStory = get(editUserStoryList);
+
+      if (!Object.keys(userStory).length || !userStory[categoryName]) return;
+
+      const select = userStory[categoryName].find(story => {
+        const { _id: id } = story;
+        return id === storyId;
+      });
+
+      return select;
+    },
 });
 
 const deleteUserStoryList = selector({
   key: 'deleteUserStoryList',
   get: ({ get }) => get(storyList),
   set: ({ get, set }, arg) => {
-    const list = get(userStoryList);
+    const list = get(storyList);
     const [category, id] = arg;
 
     const updateData = list[category].filter(item => {
@@ -111,15 +122,27 @@ const deleteUserStoryList = selector({
       return storyId !== id;
     });
 
-    set(storyList, prev => ({
-      ...prev,
-      [category]: updateData,
-    }));
+    set(
+      storyList,
+      Object.entries(list).reduce((acc, [storyCategory, stories]) => {
+        if (storyCategory === category) {
+          if (updateData.length) {
+            acc[storyCategory] = updateData;
+          }
+
+          return acc;
+        }
+
+        acc[storyCategory] = stories;
+
+        return acc;
+      }, {}),
+    );
   },
 });
 
 export {
-  isFinishPatch,
+  isFinishLoad,
   userData,
   isLogin,
   storyList,

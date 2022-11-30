@@ -11,12 +11,7 @@ import Button from '../../atoms/Button';
 import List from '../../atoms/List';
 import Toggle from '../../molecules/Toggle';
 import Ul from '../../molecules/Ul';
-import {
-  userData,
-  isLogin,
-  isFinishPatch,
-  userStoryList,
-} from '../../../store/userState';
+import { userData, isLogin, userStoryList } from '../../../store/userState';
 import { uiTheme } from '../../../store/globalState';
 
 export default function LeftMenu() {
@@ -25,21 +20,23 @@ export default function LeftMenu() {
   const [loggedIn, setIsLogin] = useRecoilState(isLogin);
   const [userStories, setUserStoryList] = useRecoilState(userStoryList);
   const setUser = useSetRecoilState(userData);
-  const setIsFinishPatch = useSetRecoilState(isFinishPatch);
   const [userInfo, query] = useQuery();
   const [themeColor, setThemeColor] = useRecoilState(uiTheme);
 
   useEffect(() => {
-    setIsFinishPatch(false);
-
     query(getMe);
   }, []);
 
   useEffect(() => {
-    if (!userInfo || userInfo.result === 'fail') {
+    if (!userInfo) return;
+
+    if (
+      !userInfo ||
+      userInfo.result === 'noAuth' ||
+      userInfo.result === 'fail'
+    ) {
       setIsLogin(false);
       setUserStoryList('reset');
-      setIsFinishPatch(true);
 
       return setUser(() => ({}));
     }
@@ -49,7 +46,6 @@ export default function LeftMenu() {
     setUser(() => ({ id, email, name, picture }));
     setIsLogin(true);
     setUserStoryList(() => elementList);
-    setIsFinishPatch(true);
   }, [userInfo]);
 
   const handleChangeTheme = () => {
@@ -96,14 +92,20 @@ export default function LeftMenu() {
     <Wrapper modalMode={false}>
       <Header className="menuheader">
         <div className="menuFirstLine">
-          <Logo onClick={handleClickLogo}>
+          <Logo>
             <LogoIcon
               icon="storybook_logo_icon"
               alt="storybook-logo"
               width="1.4rem"
               height="1.4rem"
+              onClick={handleClickLogo}
             />
-            <Text textColor="pointColor" size="large" bold="600">
+            <Text
+              textColor="pointColor"
+              size="large"
+              bold="600"
+              onClick={handleClickLogo}
+            >
               StoryStorage
             </Text>{' '}
             <ImageIcon
