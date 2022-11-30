@@ -7,7 +7,7 @@ export default function useQuery() {
   const [cookies] = useCookies(['loggedIn']);
 
   const query = async (api, ...arg) => {
-    if (!cookies.loggedIn) setResult({ result: 'noAuth' });
+    if (!cookies.loggedIn) return setResult({ result: 'noAuth' });
     try {
       const response = arg ? await api(...arg) : await api();
 
