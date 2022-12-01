@@ -2,21 +2,21 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import useCssHighLightQueryText from '../../../hooks/useCssHighLightQueryText';
-import TextEditor from '../../molecules/TextEditor';
 import Text from '../../atoms/Text';
 import Button from '../../atoms/Button';
+import TextEditor from '../../molecules/TextEditor';
 import { insertTab, insertText } from '../../../utils/codeEditor';
 import validateCss from '../../../utils/cssValidate';
+import useCssHighLightQueryText from '../../../hooks/useCssHighLightQueryText';
 import {
   css,
-  page,
+  codeViewMode,
   isClickedSaveButton,
   selectCodeType,
 } from '../../../store/codeState';
 
 export default function CssCodeEditor({ isLogin }) {
-  const currentPageName = useRecoilValue(page);
+  const codeMode = useRecoilValue(codeViewMode);
   const [selectedCodeType, setSelectedCodeType] =
     useRecoilState(selectCodeType);
   const [isClickSaveButton, setIsClickedSaveButton] =
@@ -119,7 +119,7 @@ export default function CssCodeEditor({ isLogin }) {
         <Text>{cssValidateWarningMessage && cssValidateWarningMessage}</Text>
       </ValidateMessageWrapper>
       <TitleWrapper>
-        {currentPageName === 'story' && (
+        {codeMode === 'allInOne' && (
           <>
             <MenuButton
               value="HTML"
@@ -148,7 +148,7 @@ export default function CssCodeEditor({ isLogin }) {
         >
           CSS
         </MenuButton>
-        {currentPageName === 'story' && isLogin && (
+        {codeMode === 'allInOne' && isLogin && (
           <MenuButton
             onClick={() => setIsClickedSaveButton(!isClickSaveButton)}
           >

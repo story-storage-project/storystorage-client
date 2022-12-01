@@ -143,7 +143,7 @@ export const jsxKeyOfhtmlJsxAttributes = {
   cellPadding: 'cellpadding',
   cellSpacing: 'cellspacing',
   challenge: 'challenge',
-  charset: 'charset',
+  charSet: 'charset',
   checked: 'checked',
   cite: 'cite',
   className: 'class',

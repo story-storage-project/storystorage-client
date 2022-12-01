@@ -1,5 +1,3 @@
-// https://github.com/diegohaz/arc/wiki/Styling
-
 const base = {};
 
 export const lightTheme = {
@@ -60,7 +58,7 @@ base.viewSize = {
   mobile: `(max-width: 750px)`,
   tablet: `(max-width: 900px)`,
   desktop: `(max-width: 1024px)`,
-  laptopHalf: `(max-width: 1250px)`,
+  laptopHalf: `(max-width: 1375px)`,
   backgrounColor: 'red',
 };
 

@@ -38,29 +38,29 @@ const Wrapper = styled.div`
   flex: 1;
 
   @media (min-width: 2001px) {
-    width: 50rem;
-    height: 70rem;
+    width: 700px;
+    height: 700px;
   }
 
   @media (min-width: 1501px) and (max-width: 2000px) {
-    width: 40rem;
-    height: 50rem;
-  }
-
-  @media (min-width: 1250px) and (max-width: 1500px) {
-    width: 500px;
-    height: 600px;
-  }
-
-  @media (min-width: 901px) and (max-width: 1250px) {
     width: 600px;
     height: 600px;
   }
 
-  /* @media (min-width: 901px) and (max-width: 1100px) {
-    width: 300px;
-    height: 500px;
-  } */
+  @media (min-width: 1375px) and (max-width: 1500px) {
+    width: 500px;
+    height: 600px;
+  }
+
+  @media (min-width: 901px) and (max-width: 1374px) {
+    width: 600px;
+    height: 600px;
+  }
+
+  @media (min-width: 901px) and (max-width: 1100px) {
+    width: 600px;
+    height: 600px;
+  }
 
   @media (min-width: 801px) and (max-width: 900px) {
     width: 500px;

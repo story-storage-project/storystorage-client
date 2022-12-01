@@ -12,7 +12,7 @@ const css = atom({
 
 const codeViewMode = atom({
   key: 'codeViewMode',
-  default: 'row',
+  default: '',
 });
 
 const page = atom({

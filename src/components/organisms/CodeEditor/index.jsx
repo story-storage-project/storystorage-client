@@ -1,20 +1,46 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import HtmlCodeEditor from '../HtmlCodeEditor';
 import CssCodeEditor from '../CssCodeEditor';
 import { codeViewMode, page, selectCodeType } from '../../../store/codeState';
 
 export default function CodeEditor({ isLogin }) {
   const currentPage = useRecoilValue(page);
-  const editorFlexType = useRecoilValue(codeViewMode);
+  const [editorMode, setEditorMode] = useRecoilState(codeViewMode);
   const selectedCodeType = useRecoilValue(selectCodeType);
 
+  useEffect(() => {
+    if (currentPage === 'story') {
+      setEditorMode('allInOne');
+    } else {
+      setEditorMode('partition');
+    }
+  }, [currentPage]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      console.log(currentPage, window.innerWidth);
+      if (currentPage === 'story-maker' && window.innerWidth < 1375) {
+        setEditorMode('allInOne');
+      }
+      if (currentPage === 'story-maker' && window.innerWidth > 1375) {
+        setEditorMode('partition');
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
-    <Container editorFlexType={editorFlexType}>
-      {currentPage === 'story' ? (
-        <CodeEditorContainer viewMode={editorFlexType}>
+    <Container editorFlexType={editorMode}>
+      {currentPage === 'story' || editorMode === 'allInOne' ? (
+        <CodeEditorContainer viewMode={editorMode}>
           {selectedCodeType === 'CSS' ? (
             <CssCodeEditor isLogin={isLogin} />
           ) : (
@@ -22,7 +48,7 @@ export default function CodeEditor({ isLogin }) {
           )}
         </CodeEditorContainer>
       ) : (
-        <CodeEditorContainer viewMode={editorFlexType}>
+        <CodeEditorContainer viewMode={editorMode}>
           <HtmlCodeEditor isLogin={isLogin} />
           <CssCodeEditor isLogin={isLogin} />
         </CodeEditorContainer>
@@ -64,6 +90,12 @@ const CodeEditorContainer = styled.div`
   height: 100%;
 
   @media ${props => props.theme.viewSize.laptop} {
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  @media ${props => props.theme.viewSize.tablet} {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;

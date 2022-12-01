@@ -9,16 +9,18 @@ export default function Footer() {
   const theme = useRecoilValue(uiTheme);
   return (
     <FooterStyled>
-      <Text textColor={theme === 'lightTheme' ? 'darkGray' : 'lightGray'}>
-        Story Storage by alex © 2022
-      </Text>{' '}
-      <ImageIcon
-        icon="GitHub-Mark-32px"
-        alt="github-logo"
-        pointer
-        border
-        invert={theme !== 'lightTheme'}
-      />
+      <Wrapper>
+        <Text textColor={theme === 'lightTheme' ? 'darkGray' : 'lightGray'}>
+          Story Storage by alex © 2022
+        </Text>{' '}
+        <ImageIcon
+          icon="GitHub-Mark-32px"
+          alt="github-logo"
+          pointer
+          border
+          invert={theme !== 'lightTheme'}
+        />
+      </Wrapper>
     </FooterStyled>
   );
 }
@@ -28,6 +30,22 @@ const FooterStyled = styled.div`
   align-items: center;
   justify-content: center;
   margin: 5rem 5rem 5rem 0;
+
   width: 100%;
   height: 50px;
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 15rem 0 0;
+
+  @media ${props => props.theme.viewSize.laptopHalf} {
+    margin: 0 7rem 0 0;
+  }
+
+  @media ${props => props.theme.viewSize.tablet} {
+    margin: 1rem;
+  }
 `;

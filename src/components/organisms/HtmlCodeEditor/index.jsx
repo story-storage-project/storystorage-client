@@ -2,10 +2,10 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import useHtmlHighLightQueryText from '../../../hooks/useHtmlHighLightQueryText';
 import Button from '../../atoms/Button';
 import Text from '../../atoms/Text';
 import TextEditor from '../../molecules/TextEditor';
+import useHtmlHighLightQueryText from '../../../hooks/useHtmlHighLightQueryText';
 import {
   getCaretPosition,
   setCaretPosition,
@@ -19,13 +19,13 @@ import {
 } from '../../../utils/htmlValidate';
 import {
   html,
-  page,
   selectCodeType,
   isClickedSaveButton,
+  codeViewMode,
 } from '../../../store/codeState';
 
 export default function HtmlCodeEditor({ isLogin }) {
-  const currentPageName = useRecoilValue(page);
+  const codeMode = useRecoilValue(codeViewMode);
   const [selectedCodeType, setSelectCodeType] = useRecoilState(selectCodeType);
   const [isClickSaveButton, setIsClickedSaveButton] =
     useRecoilState(isClickedSaveButton);
@@ -213,7 +213,7 @@ export default function HtmlCodeEditor({ isLogin }) {
         >
           JSX
         </MenuButton>
-        {currentPageName === 'story' && (
+        {codeMode === 'allInOne' && (
           <>
             <MenuButton
               value="CSS"

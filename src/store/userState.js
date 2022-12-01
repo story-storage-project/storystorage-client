@@ -65,8 +65,6 @@ const editUserStoryList = selector({
   key: 'editUserStoryList',
   get: ({ get }) => get(storyList),
   set: ({ get, set }, arg) => {
-    set(isFinishLoad, false);
-
     const list = get(storyList);
     const [category, id, data] = arg;
 
@@ -78,11 +76,12 @@ const editUserStoryList = selector({
       return item;
     });
 
+    set(isFinishLoad, true);
+
     set(storyList, prev => ({
       ...prev,
       [category]: updateData,
     }));
-    set(isFinishLoad, true);
   },
 });
 
