@@ -20,7 +20,7 @@ Story Storage는 독립적으로 UI를 저장할 수 있는 UI 저장소입니�
       Main
     </td>
     <td>
-      <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/1.main.gif" target="_blank">
+      <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/snapshot-home.gif" target="_blank">
         <img src="./public/readme/snapshot-home.gif" alt="main">
       </a>
     </td>
@@ -35,7 +35,7 @@ Story Storage는 독립적으로 UI를 저장할 수 있는 UI 저장소입니�
     <tr>
     <td align="center">Login, Create Story</td>
     <td>
-      <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/2.login.gif" target="_blank">
+      <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/snapshot-login.gif" target="_blank">
         <img src="./public/readme/snapshot-login.gif" alt="login">
       </a>
     </td>
@@ -50,7 +50,7 @@ Story Storage는 독립적으로 UI를 저장할 수 있는 UI 저장소입니�
       반응형
     </td>
     <td>
-      <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/3.mywork.gif" target="_blank">
+      <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/snapshot-mediaquery.gif" target="_blank">
         <img src="./public/readme/snapshot-mediaquery.gif" alt="mediaquery">
       </a>
     </td>
@@ -62,7 +62,7 @@ Story Storage는 독립적으로 UI를 저장할 수 있는 UI 저장소입니�
       테마
     </td>
     <td>
-      <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/4.node-menu.gif" target="_blank">
+      <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/snapshot-theme.gif" target="_blank">
         <img src="./public/readme/snapshot-theme.gif" alt="theme">
       </a>
     </td>
@@ -77,7 +77,7 @@ Story Storage는 독립적으로 UI를 저장할 수 있는 UI 저장소입니�
       PWD 적용
     </td>
     <td>
-      <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/5.node-hover.gif" target="_blank">
+      <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/snapshot-pwd.gif" target="_blank">
         <img src="./public/readme/snapshot-pwd.gif" alt="pwd">
       </a>
     </td>
