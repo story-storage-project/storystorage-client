@@ -1,17 +1,96 @@
 # Story Storage
 
-Story Storage는 독립적으로 ui를 저장할 수 있는 ui 저장소입니다.
-매번 새로 만들 필요없이 저장해놓은 ui를 간편하게 복사하여 사용할 수 있습니다.
+Story Storage는 독립적으로 UI를 저장할 수 있는 UI 저장소입니다.  
+매번 새로 만들 필요없이 저장해놓은 UI를 간편하게 복사하여 사용할 수 있습니다.
 간단하고 직관적인 인터페이스를 제공합니다.
 
 ## Layout
 
+<details>
+<summary>snapshot</summary>
+
 <table>
+  <tr align="center">
+    <td>Page</td>
+    <td>Screenshot</td>
+    <td>Features</td>
+  </tr>
   <tr>
-    <td><img src="./src/assets/readme03.png" alt="node"></td>
-    <td><img src="./src/assets/readme04.png" alt="node"></td>
+    <td align="center">
+      Main
+    </td>
+    <td>
+      <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/1.main.gif" target="_blank">
+        <img src="./public/readme/snapshot-home.gif" alt="main">
+      </a>
+    </td>
+    <td>
+    <ul>
+      <li>public template element 버튼 리스트</li>
+      <li>element 테스트 할 수 있는 기능</li>
+      <li>Add Story 눌러서 테스트 할 수 있지만 저장은 되지 않음</li>
+    </ul>
+    </td>
+  </tr>
+    <tr>
+    <td align="center">Login, Create Story</td>
+    <td>
+      <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/2.login.gif" target="_blank">
+        <img src="./public/readme/snapshot-login.gif" alt="login">
+      </a>
+    </td>
+    <td>
+    <ul>
+      <li>Add Story에서 html, css 코드 입력 후 생성하는 기능</li>
+    </ul>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      반응형
+    </td>
+    <td>
+      <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/3.mywork.gif" target="_blank">
+        <img src="./public/readme/snapshot-mediaquery.gif" alt="mediaquery">
+      </a>
+    </td>
+    <td>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      테마
+    </td>
+    <td>
+      <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/4.node-menu.gif" target="_blank">
+        <img src="./public/readme/snapshot-theme.gif" alt="theme">
+      </a>
+    </td>
+    <td>
+    <ul>
+      <li>light, dark 두 가지 버전</li>
+    </ul>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      PWD 적용
+    </td>
+    <td>
+      <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/5.node-hover.gif" target="_blank">
+        <img src="./public/readme/snapshot-pwd.gif" alt="pwd">
+      </a>
+    </td>
+    <td>
+    <ul>
+      <li>앱 저장 기능</li>
+      <li>iphone에서 홈 화면 추가 -> 홈 화면에 앱 등록 기능</li>
+    </ul>
+    </td>
   </tr>
 </table>
+
+</details>
 
 ### Table of contents
 
@@ -30,13 +109,14 @@ Story Storage는 독립적으로 ui를 저장할 수 있는 ui 저장소입니�
 
 ## Motivation
 
-매번 button, input,.. 레이아웃 등 ui를 제작할 때마다 "전에 만들었던 걸 리스트로 볼 수 있다면 좋겠다." 라는 생각을 하곤 했습니다. 생각만 하지 말고 그걸 실현해보자는 마음에 이 프로젝트를 기획하게 되었습니다.
+매번 button, input,.. 레이아웃 등 UI를 제작할 때마다 "전에 만들었던 걸 리스트로 볼 수 있다면 좋겠다." 라는 생각을 하곤 했습니다. 생각만 하지 말고 그걸 실현해보자는 마음에 이 프로젝트를 기획하게 되었습니다.
 Storybook에서 컴포넌트별로 분리해서 확인할 수 있는 부분을 모티브 삼아 이름을 Story Storage라고 짓게 되었습니다.
 
 ## Goal
 
-외부 라이브러리 없이 직접 구현하는 것이 이번 프로젝트의 가장 큰 목표였습니다.  
-외부 라이브러리를 쓰지 않는 것이 효율적인 일이라 생각하지는 않지만, 이전 프로젝트에서 작은 기능 한 부분을 외부 라이브러리를 사용하지 않고 직접 구현했던 경험을 통해 더 많은 배움과 새로운 시각을 얻을 수 있었습니다. 이번에도 더 많은 것을 배워보고 싶어 이러한 목표를 설정하였습니다.
+외부 라이브러리 없이 직접 구현하는 것이 이번 프로젝트의 가장 큰 목표였습니다.
+이전 프로젝트에서 작은 기능 한 부분을 직접 구현하면서, 더 많은 배움과 새로운 시각을 얻을 수 있었습니다.  
+두 번째 목표는 간편하고 직관적인 형태로 구성하고, 반응형 웹과 pwd 적용을 통해 사용자 경험을 높일 수 있게 하는 것이었습니다.
 
 ## Build
 
