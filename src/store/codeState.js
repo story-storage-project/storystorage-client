@@ -17,7 +17,7 @@ const codeViewMode = atom({
 
 const page = atom({
   key: 'page',
-  default: 'story',
+  default: '',
 });
 
 const selectCodeType = atom({

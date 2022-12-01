@@ -20,8 +20,9 @@ export default function CodeEditor({ isLogin }) {
   }, [currentPage]);
 
   useEffect(() => {
+    if (!currentPage) return;
+
     const handleResize = () => {
-      console.log(currentPage, window.innerWidth);
       if (currentPage === 'story-maker' && window.innerWidth < 1375) {
         setEditorMode('allInOne');
       }
@@ -30,12 +31,13 @@ export default function CodeEditor({ isLogin }) {
       }
     };
 
+    handleResize();
     window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [currentPage]);
 
   return (
     <Container editorFlexType={editorMode}>
