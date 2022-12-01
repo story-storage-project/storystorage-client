@@ -12,6 +12,7 @@ import {
   deleteUserStoryList,
   isFinishLoad,
 } from '../../../store/userState';
+import { addStyle, deleteStyle, editStyle } from '../../../store/globalState';
 
 export default function StoryPage() {
   const params = useParams();
@@ -22,13 +23,35 @@ export default function StoryPage() {
   const setEditUserStoryList = useSetRecoilState(editUserStoryList);
   const setDeleteUserStoryList = useSetRecoilState(deleteUserStoryList);
   const storyData = useRecoilValue(selectStory({ categoryName, storyId }));
+  const setAddStyle = useSetRecoilState(addStyle);
+  const setEditStyle = useSetRecoilState(editStyle);
+  const setDeleteStyle = useSetRecoilState(deleteStyle);
+
+  const setStyle = (mode, id, data) => {
+    switch (mode) {
+      case 'add': {
+        return setAddStyle([id, data]);
+      }
+      case 'edit': {
+        return setEditStyle([id, data]);
+      }
+      case 'delete': {
+        return setDeleteStyle(id);
+      }
+      default:
+        break;
+    }
+  };
 
   const setEditUserStory = (...editData) => {
     setEditUserStoryList(...editData);
   };
 
-  const setDeleteUserStory = (...editData) => {
-    setDeleteUserStoryList(...editData);
+  const setDeleteUserStory = deleteData => {
+    const [, id] = deleteData;
+
+    setStyle('delete', id);
+    setDeleteUserStoryList(deleteData);
   };
 
   return (
@@ -44,6 +67,7 @@ export default function StoryPage() {
                 isLogin={loggedIn}
                 setEditUserStory={setEditUserStory}
                 setDeleteUserStory={setDeleteUserStory}
+                setStyle={setStyle}
               />
             )}
           </RecoilRoot>
@@ -82,9 +106,4 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100%;
   margin: 1rem 0 0 0;
-
-  @media ${props => props.theme.viewSize.mobile} {
-    padding: 0 0 2rem 0;
-    margin: 2rem;
-  }
 `;

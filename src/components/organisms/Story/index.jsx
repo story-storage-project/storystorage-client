@@ -8,21 +8,15 @@ import Text from '../../atoms/Text';
 import Input from '../../atoms/Input';
 import CodeEditor from '../CodeEditor';
 import { VALIDATION_ERROR_MESSAGE } from '../../../constants/errorMessage';
-import { deleteStory, patchStory } from '../../../service/storyApi';
-import useElementCompiler from '../../../hooks/useElementCompiler';
-import useQuery from '../../../hooks/useQuery';
 import insertClass from '../../../utils/insertPreviewClass';
 import {
   getNodeList,
   storeAllElementProperties,
 } from '../../../utils/stringHtmlParser';
-import {
-  html,
-  css,
-  codeViewMode,
-  page,
-  isClickedSaveButton,
-} from '../../../store/codeState';
+import { deleteStory, patchStory } from '../../../service/storyApi';
+import useElementCompiler from '../../../hooks/useElementCompiler';
+import useQuery from '../../../hooks/useQuery';
+import { html, css, page, isClickedSaveButton } from '../../../store/codeState';
 
 export default function Story({
   userInfo,
@@ -30,6 +24,7 @@ export default function Story({
   isLogin,
   setEditUserStory,
   setDeleteUserStory,
+  setStyle,
 }) {
   const {
     _id: id,
@@ -47,10 +42,6 @@ export default function Story({
   const [storyName, setStoryName] = useState(name);
   const [htmlCode, setHtmlCode] = useRecoilState(html);
   const [cssCode, setCssCode] = useRecoilState(css);
-  const conditionalCss = useRef();
-  const style = useRef();
-
-  const setCodeViewMode = useSetRecoilState(codeViewMode);
   const setPage = useSetRecoilState(page);
   const [isClickSaveButton, setIsClickedSaveButton] =
     useRecoilState(isClickedSaveButton);
@@ -59,21 +50,13 @@ export default function Story({
   useEffect(() => {
     setHtmlCode(htmlData);
     setCssCode(cssData);
-    setCodeViewMode('column');
     setPage('story');
-
-    if (!style.current) {
-      style.current = document.createElement('style');
-      document.head.appendChild(style.current);
-    }
   }, [responseData]);
 
   useEffect(() => {
-    if (!style.current || !cssData) return;
+    if (!cssData) return;
 
-    conditionalCss.current = insertClass(id, cssCode);
-
-    style.current.innerHTML = conditionalCss.current;
+    setStyle('add', id, insertClass(id, cssCode));
   }, [cssCode]);
 
   const allProperties = useMemo(() => {
@@ -97,18 +80,21 @@ export default function Story({
       return;
     }
 
-    const handleUpdateCode = async () => {
+    const handleEditCode = async () => {
       setErrorMessage('');
 
       const editData = { html: htmlCode, css: cssCode };
 
       const res = await query(patchStory, userInfo.id, id, editData);
+
       if (res.result === 'fail') {
         setErrorMessage(res.data);
       }
+
+      setEditUserStory([category, id, res.data]);
     };
 
-    handleUpdateCode();
+    handleEditCode();
     setIsClickedSaveButton(false);
   }, [isClickSaveButton, response]);
 
@@ -141,6 +127,7 @@ export default function Story({
     }
 
     setDeleteUserStory([category, id]);
+    navigate('/');
   };
 
   const handleMoveLocation = () => {
@@ -235,6 +222,7 @@ Story.propTypes = {
   responseData: PropTypes.object.isRequired,
   setEditUserStory: PropTypes.func.isRequired,
   setDeleteUserStory: PropTypes.func.isRequired,
+  setStyle: PropTypes.func.isRequired,
 };
 
 const Container = styled.div`
@@ -244,9 +232,16 @@ const Container = styled.div`
   width: 100%;
   height: inherit;
 
+  @media ${props => props.theme.viewSize.mobile} {
+    align-items: center;
+  }
+
+  @media ${props => props.theme.viewSize.tablet} {
+  }
+
   @media ${props => props.theme.viewSize.laptopHalf} {
     flex-direction: column;
-    align-items: center;
+    overflow-x: hidden;
   }
 `;
 
@@ -269,12 +264,6 @@ const Header = styled.div`
   justify-content: flex-start;
   flex-direction: column;
   align-items: flex-start;
-
-  @media ${props => props.theme.viewSize.mobileS} {
-    min-width: 20rem;
-    max-width: 20rem;
-    /* align-items: center; */
-  }
 
   ${props => {
     if (props.isLogin) {
@@ -343,8 +332,6 @@ const PreviewContainer = styled.div`
   max-width: 80vw;
   max-height: 50vw;
   min-height: 10rem;
-  /* width: fit-content;
-  height: fit-content; */
   margin: 1rem 2rem 0 2rem;
   padding: 0.3rem 0;
   border: 1px solid ${props => props.theme.colors.lightGray};
@@ -364,8 +351,6 @@ const PreviewContainer = styled.div`
 const PreviewWrapper = styled.div`
   margin: 2rem 1rem;
   place-content: center;
-  /* width: 100em;
-  height: 100em; */
   padding: 0.3rem;
   display: flex;
 `;

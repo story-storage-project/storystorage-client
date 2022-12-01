@@ -3,15 +3,19 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import PreviewStory from '../../organisms/PreviewStory';
+import { REQUEST_ERROR } from '../../../constants/errorMessage';
 import { createStory } from '../../../service/storyApi';
 import { userData, addUserStoryList } from '../../../store/userState';
-import { REQUEST_ERROR } from '../../../constants/errorMessage';
+import { addStyle, deleteStyle, editStyle } from '../../../store/globalState';
 
 export default function StoryMaker() {
   const navigate = useNavigate();
   const [createFailMessage, setCreateFailMessage] = useState('');
   const userInfo = useRecoilValue(userData);
   const addUserStory = useSetRecoilState(addUserStoryList);
+  const setAddStyle = useSetRecoilState(addStyle);
+  const setEditStyle = useSetRecoilState(editStyle);
+  const setDeleteStyle = useSetRecoilState(deleteStyle);
 
   const saveStoryData = async storyData => {
     if (!storyData) return;
@@ -38,11 +42,28 @@ export default function StoryMaker() {
     }
   };
 
+  const setStyle = (mode, id, data) => {
+    switch (mode) {
+      case 'add': {
+        return setAddStyle([id, data]);
+      }
+      case 'edit': {
+        return setEditStyle([id, data]);
+      }
+      case 'delete': {
+        return setDeleteStyle(id);
+      }
+      default:
+        break;
+    }
+  };
+
   return (
     <Container>
       <PreviewStory
         createFailMessage={createFailMessage}
         createStoryRequest={saveStoryData}
+        setStyle={setStyle}
       />
     </Container>
   );

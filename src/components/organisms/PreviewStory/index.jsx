@@ -20,23 +20,21 @@ import insertClass from '../../../utils/insertPreviewClass';
 
 import { html, css, page } from '../../../store/codeState';
 import Text from '../../atoms/Text';
-import { userData, userStoryList, isLogin } from '../../../store/userState';
+import { userStoryList, isLogin } from '../../../store/userState';
 import { isOnLoginReqModal } from '../../../store/globalState';
 import { VALIDATION_ERROR_MESSAGE } from '../../../constants/errorMessage';
 
 export default function PreviewStory({
   createFailMessage,
   createStoryRequest,
+  setStyle,
 }) {
   const loggedIn = useRecoilValue(isLogin);
   const [storyName, setStoryName] = useState('');
   const [categoryName, setCategoryName] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const setIsLoginModal = useSetRecoilState(isOnLoginReqModal);
-  const style = useRef();
-  const conditionalCss = useRef();
-  const [storyList, setUserStoryList] = useRecoilState(userStoryList);
-  const userInfo = useRecoilValue(userData);
+  const storyList = useRecoilValue(userStoryList);
 
   const htmlCode = useRecoilValue(html);
   const cssCode = useRecoilValue(css);
@@ -44,10 +42,6 @@ export default function PreviewStory({
 
   useEffect(() => {
     setPage('story-maker');
-    if (!style.current) {
-      style.current = document.createElement('style');
-      document.head.appendChild(style.current);
-    }
   }, []);
 
   useEffect(() => {
@@ -55,10 +49,9 @@ export default function PreviewStory({
   }, [createFailMessage]);
 
   useEffect(() => {
-    if (!style.current || !cssCode) return;
-    conditionalCss.current = insertClass('preview', cssCode);
+    if (!cssCode) return;
 
-    style.current.innerHTML = conditionalCss.current;
+    setStyle('add', 'preview', insertClass('preview', cssCode));
   }, [cssCode]);
 
   const allProperties = useMemo(() => {
@@ -107,10 +100,6 @@ export default function PreviewStory({
     };
 
     createStoryRequest(data);
-  };
-
-  const setUserStory = editData => {
-    setUserStoryList(editData);
   };
 
   return (
@@ -170,11 +159,7 @@ export default function PreviewStory({
         </PreviewWrapper>
       </Wrapper>
       <OptionWrapper>
-        <CodeEditor
-          userInfo={userInfo}
-          isLogin={loggedIn}
-          setUserStoryList={setUserStory}
-        />
+        <CodeEditor isLogin={loggedIn} />
       </OptionWrapper>
     </Container>
   );
@@ -183,6 +168,7 @@ export default function PreviewStory({
 PreviewStory.propTypes = {
   createFailMessage: PropTypes.string,
   createStoryRequest: PropTypes.func.isRequired,
+  setStyle: PropTypes.func.isRequired,
 };
 
 PreviewStory.defaultProps = {

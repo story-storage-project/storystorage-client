@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { getMe, logout } from '../../../service/authApi';
-import useQuery from '../../../hooks/useQuery';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import Text from '../../atoms/Text';
 import ImageIcon from '../../atoms/ImageIcon';
 import HiddenToggleViewer from '../../atoms/HiddenToggleViewer';
@@ -11,17 +9,29 @@ import Button from '../../atoms/Button';
 import List from '../../atoms/List';
 import Toggle from '../../molecules/Toggle';
 import Ul from '../../molecules/Ul';
+import { getMe, logout } from '../../../service/authApi';
+import useQuery from '../../../hooks/useQuery';
+import {
+  uiTheme,
+  styleInnerHTML,
+  styleObject,
+  editStyle,
+} from '../../../store/globalState';
 import { userData, isLogin, userStoryList } from '../../../store/userState';
-import { uiTheme } from '../../../store/globalState';
 
 export default function LeftMenu() {
   const navigate = useNavigate();
+  const locate = useLocation();
   const [onToggle, setOnToggle] = useState(false);
   const [loggedIn, setIsLogin] = useRecoilState(isLogin);
   const [userStories, setUserStoryList] = useRecoilState(userStoryList);
   const setUser = useSetRecoilState(userData);
   const [userInfo, query] = useQuery();
   const [themeColor, setThemeColor] = useRecoilState(uiTheme);
+  const styleObjectData = useRecoilValue(styleObject);
+  const styleStringCode = useRecoilValue(styleInnerHTML);
+  const setEditStyle = useSetRecoilState(editStyle);
+  const style = useRef();
 
   useEffect(() => {
     query(getMe);
@@ -48,6 +58,23 @@ export default function LeftMenu() {
     setUserStoryList(() => elementList);
   }, [userInfo]);
 
+  useEffect(() => {
+    if (!style.current) {
+      style.current = document.createElement('style');
+      document.head.appendChild(style.current);
+    }
+
+    if (locate.pathname === '/story-maker') {
+      setEditStyle('reset');
+    }
+  }, [locate.pathname]);
+
+  useEffect(() => {
+    if (!style.current) return;
+
+    style.current.innerHTML = styleStringCode;
+  }, [styleObjectData]);
+
   const handleChangeTheme = () => {
     return themeColor === 'lightTheme'
       ? setThemeColor('darkTheme')
@@ -69,6 +96,7 @@ export default function LeftMenu() {
     setUser(() => ({}));
     setUserStoryList('reset');
 
+    navigate('/');
     navigate(0);
   };
 

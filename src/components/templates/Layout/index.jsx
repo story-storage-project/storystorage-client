@@ -2,11 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import { Outlet } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import LeftMenu from '../../organisms/LeftMenu';
 import Modal from '../../molecules/Modal';
+import LeftMenu from '../../organisms/LeftMenu';
+import Footer from '../../organisms/Footer';
 import { NOT_LOGIN } from '../../../constants/errorMessage';
 import { isOnLoginReqModal } from '../../../store/globalState';
-import Footer from '../../organisms/Footer';
 
 export default function Layout() {
   const [isLogModal, setIsLoginModal] = useRecoilState(isOnLoginReqModal);
