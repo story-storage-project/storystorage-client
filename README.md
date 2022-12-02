@@ -11,15 +11,12 @@ Story Storage는 독립적으로 UI를 저장할 수 있는 UI 저장소입니�
 
 <table>
   <tr align="center">
-    <td>Page</td>
     <td>Screenshot</td>
     <td>Features</td>
   </tr>
   <tr>
-    <td align="center">
-      Main
-    </td>
     <td>
+      <p>Main Page</p>
       <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/snapshot-home.gif" target="_blank">
         <img src="./public/readme/snapshot-home.gif" alt="main">
       </a>
@@ -28,13 +25,13 @@ Story Storage는 독립적으로 UI를 저장할 수 있는 UI 저장소입니�
     <ul>
       <li>public template element 버튼 리스트</li>
       <li>element 테스트 할 수 있는 기능</li>
-      <li>Add Story 눌러서 테스트 할 수 있지만 저장은 되지 않음</li>
+      <li>Add Story 눌러서 테스트 할 수 기능(저장 기능은 로그인시에 가능)</li>
     </ul>
     </td>
   </tr>
     <tr>
-    <td align="center">Login, Create Story</td>
     <td>
+      <p>Login, Create Story</p>
       <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/snapshot-login.gif" target="_blank">
         <img src="./public/readme/snapshot-login.gif" alt="login">
       </a>
@@ -46,10 +43,8 @@ Story Storage는 독립적으로 UI를 저장할 수 있는 UI 저장소입니�
     </td>
   </tr>
   <tr>
-    <td align="center">
-      반응형
-    </td>
     <td>
+      <p>반응형</p>
       <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/snapshot-mediaquery.gif" target="_blank">
         <img src="./public/readme/snapshot-mediaquery.gif" alt="mediaquery">
       </a>
@@ -58,10 +53,8 @@ Story Storage는 독립적으로 UI를 저장할 수 있는 UI 저장소입니�
     </td>
   </tr>
   <tr>
-    <td align="center">
-      테마
-    </td>
     <td>
+      <p>테마 변경</p>
       <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/snapshot-theme.gif" target="_blank">
         <img src="./public/readme/snapshot-theme.gif" alt="theme">
       </a>
@@ -73,10 +66,8 @@ Story Storage는 독립적으로 UI를 저장할 수 있는 UI 저장소입니�
     </td>
   </tr>
   <tr>
-    <td align="center">
-      PWD 적용
-    </td>
     <td>
+      <p>PWD 적용</p>
       <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/snapshot-pwd.gif" target="_blank">
         <img src="./public/readme/snapshot-pwd.gif" alt="pwd">
       </a>
