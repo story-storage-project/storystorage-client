@@ -220,7 +220,7 @@ export default function LeftMenu() {
 }
 
 const Wrapper = styled.div(
-  ({ theme, ...props }) => `
+  ({ theme }) => `
     display: flex;
     flex-direction: column;
     position: sticky;
