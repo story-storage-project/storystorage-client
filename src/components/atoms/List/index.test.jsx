@@ -18,9 +18,8 @@ afterEach(() => {
 });
 
 describe('List', () => {
-  let tree;
   beforeEach(() => {
-    tree = render(
+    render(
       <List>
         <div>list test</div>
       </List>,

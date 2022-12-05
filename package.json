@@ -29,12 +29,20 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --coverage --verbose",
+    "test": "react-scripts test --coverage --verbose --watchAll",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
     "pre-commit": "lint-staged && rm -rf .git/hooks && ln -s ../.husky .git/hooks",
     "prepare": "husky install && husky add .husky/pre-commit 'npm run pre-commit'"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/components/**/*.{js,jsx}",
+      "!<rootDir>/node_modules/",
+      "!<rootDir>/path/to/dir/",
+      "!**/*.stories.{js,jsx}"
+    ]
   },
   "lint-staged": {
     "**/*.{js, jsx, html, css, json}": [

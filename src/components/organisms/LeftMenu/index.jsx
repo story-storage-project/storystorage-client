@@ -117,7 +117,7 @@ export default function LeftMenu() {
   };
 
   return (
-    <Wrapper modalMode={false}>
+    <Wrapper>
       <Header className="menuheader">
         <div className="menuFirstLine">
           <Logo>
@@ -236,7 +236,7 @@ const Wrapper = styled.div(
     @media ${theme.viewSize.tablet} {
       box-sizing: border-box;
       width: 100%;
-      height: ${props.modalMode ? '100vh' : 'auto'};
+      height: auto;
       padding: 1rem;
     }
 
