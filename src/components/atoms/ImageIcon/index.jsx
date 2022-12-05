@@ -25,6 +25,7 @@ const Wrapper = styled.img`
       `;
     }
   }}
+
   ${props => {
     if (props.hover) {
       return css`
@@ -38,7 +39,7 @@ const Wrapper = styled.img`
   }};
 `;
 
-function ImageIcon({ icon, alt, ...props }) {
+export default function ImageIcon({ icon, alt, ...props }) {
   // eslint-disable-next-line global-require, import/no-dynamic-require
   const png = require(`../../../assets/${icon}.png`);
 
@@ -49,5 +50,3 @@ ImageIcon.propTypes = {
   icon: PropTypes.string.isRequired,
   alt: PropTypes.string.isRequired,
 };
-
-export default ImageIcon;
