@@ -19,16 +19,18 @@ const StyleInput = styled.input`
   outline: 0;
 
   &:hover {
-    /* border: none; */
     border: 1px solid ${props => props.theme.colors.pointColor};
     background-color: ${props => props.theme.colors.lightGray};
   }
 `;
 
-export default function Input({ value, ...props }) {
-  return <StyleInput value={value} {...props} />;
+export default function Input({ value, onChange, ...props }) {
+  return (
+    <StyleInput type="text" value={value} onChange={onChange} {...props} />
+  );
 }
 
 Input.propTypes = {
   value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
 };

@@ -6,7 +6,9 @@ const TextStyle = styled.div(
   ({ theme, ...props }) => `
     padding: ${props.padding ? props.padding : '0.3rem'};
     margin: ${props.margin ? props.margin : '0'};
-    color: ${props.color ? props.color : theme.colors[props.textColor]};
+    color: ${
+      props.color ? theme.colors[props.color] : theme.colors[props.textColor]
+    };
     font-size: ${
       props.size ? theme.fontSize[props.size] : theme.fontSize.default
     };
@@ -16,7 +18,7 @@ const TextStyle = styled.div(
   `,
 );
 
-function Text({ children, ...props }) {
+export default function Text({ children, ...props }) {
   return <TextStyle {...props}>{children}</TextStyle>;
 }
 
@@ -28,15 +30,13 @@ Text.propTypes = {
     'darkGray',
     'pointColor',
   ]),
-  size: PropTypes.oneOf(['small', 'medium', 'large', 'xLarge']),
+  size: PropTypes.oneOf(['small', 'default', 'large', 'xLarge']),
   bg: PropTypes.bool,
 };
 
 Text.defaultProps = {
   children: 'Text',
   textColor: 'textColor',
-  size: 'medium',
+  size: 'default',
   bg: false,
 };
-
-export default Text;
