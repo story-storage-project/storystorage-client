@@ -2,7 +2,7 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import 'jest-styled-components';
-import { render } from 'testUtil';
+import { render } from 'test/utils/testUtil';
 import { lightTheme, darkTheme } from 'components/theme/default';
 import List from '.';
 
@@ -18,8 +18,9 @@ afterEach(() => {
 });
 
 describe('List', () => {
+  let tree;
   beforeEach(() => {
-    render(
+    tree = render(
       <List>
         <div>list test</div>
       </List>,
@@ -27,7 +28,7 @@ describe('List', () => {
   });
 
   it('should render without crashing', () => {
-    expect(screen).toBeDefined();
+    expect(tree).toBeDefined();
   });
 
   it('should be visible a menuEmojiText', () => {

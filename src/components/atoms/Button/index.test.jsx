@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
 import React from 'react';
 import { fireEvent, screen } from '@testing-library/react';
-import { render } from 'testUtil';
+import { render } from 'test/utils/testUtil';
 import { lightTheme, darkTheme } from 'components/theme/default';
 import Button from '.';
 
@@ -18,13 +18,14 @@ afterEach(() => {
 
 describe('Button - onClick', () => {
   let onClick;
+  let tree;
   beforeEach(() => {
     onClick = jest.fn();
-    render(<Button onClick={onClick}>{label}</Button>);
+    tree = render(<Button onClick={onClick}>{label}</Button>);
   });
 
   it('should render without crashing', () => {
-    expect(screen).toBeDefined();
+    expect(tree).toBeDefined();
   });
   it('should be visible a button', () => {
     const button = screen.getByRole('button');

@@ -2,7 +2,7 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import 'jest-styled-components';
-import { render } from 'testUtil';
+import { render } from 'test/utils/testUtil';
 import base, { lightTheme, darkTheme } from 'components/theme/default';
 import Text from '.';
 
@@ -18,12 +18,13 @@ afterEach(() => {
 });
 
 describe('Text', () => {
+  let tree;
   beforeEach(() => {
-    render(<Text>Text test</Text>);
+    tree = render(<Text>Text test</Text>);
   });
 
   it('should render without crashing', () => {
-    expect(screen).toBeDefined();
+    expect(tree).toBeDefined();
   });
 
   it('should be visible a textDiv', () => {

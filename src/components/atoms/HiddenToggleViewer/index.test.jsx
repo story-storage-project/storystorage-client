@@ -2,7 +2,7 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import 'jest-styled-components';
-import { render } from 'testUtil';
+import { render } from 'test/utils/testUtil';
 import base from 'components/theme/default';
 import HiddenToggleViewer from '.';
 
@@ -18,7 +18,7 @@ describe('HiddenToggleViewer - props.reverse', () => {
   });
 
   it('should render without crashing', () => {
-    expect(screen).toBeDefined();
+    expect(tree).toBeDefined();
   });
 
   it('should be visible a span', () => {
@@ -55,7 +55,7 @@ describe('HiddenToggleViewer - props.toggle', () => {
 
   it('if toggle is true for the specified viewsize, should be display property is visible', () => {
     tree = render(
-      <HiddenToggleViewer hiddenView="tablet" toggle={true}>
+      <HiddenToggleViewer hiddenView="tablet" toggle>
         <div>test</div>
       </HiddenToggleViewer>,
     );
