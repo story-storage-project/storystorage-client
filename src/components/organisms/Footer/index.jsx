@@ -7,19 +7,26 @@ import { uiTheme } from '../../../store/globalState';
 
 export default function Footer() {
   const theme = useRecoilValue(uiTheme);
+
   return (
     <FooterStyled>
       <Wrapper>
         <Text textColor={theme === 'lightTheme' ? 'darkGray' : 'lightGray'}>
           Story Storage by alex © 2022
         </Text>{' '}
-        <ImageIcon
-          icon="GitHub-Mark-32px"
-          alt="github-logo"
-          pointer
-          border
-          invert={theme !== 'lightTheme'}
-        />
+        <a
+          href="https://github.com/story-storage-project/storystorage-client"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <ImageIcon
+            icon="GitHub-Mark-32px"
+            alt="github-logo"
+            pointer
+            border
+            invert={theme !== 'lightTheme'}
+          />
+        </a>
       </Wrapper>
     </FooterStyled>
   );

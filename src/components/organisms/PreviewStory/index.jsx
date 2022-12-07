@@ -45,7 +45,7 @@ export default function PreviewStory({
   useEffect(() => {
     if (!cssCode) return;
 
-    setStyle('add', 'preview', insertClass('preview', cssCode));
+    setStyle('update', 'preview', insertClass('preview', cssCode));
   }, [cssCode]);
 
   const allProperties = useMemo(() => {

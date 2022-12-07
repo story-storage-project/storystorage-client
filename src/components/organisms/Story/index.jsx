@@ -56,7 +56,7 @@ export default function Story({
   useEffect(() => {
     if (!cssData) return;
 
-    setStyle('add', id, insertClass(id, cssCode));
+    setStyle('update', id, insertClass(id, cssCode));
   }, [cssCode]);
 
   const allProperties = useMemo(() => {
