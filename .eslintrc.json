@@ -8,6 +8,13 @@
   "parser": "@babel/eslint-parser",
   "parserOptions": { "requireConfigFile": "false" },
   "extends": ["airbnb", "eslint:recommended", "plugin:prettier/recommended"],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"]
+      }
+    }
+  },
   "rules": {
     "react/jsx-props-no-spreading": "off",
     "react/forbid-prop-types": [
