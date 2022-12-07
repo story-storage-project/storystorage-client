@@ -49,6 +49,39 @@ const userStoryList = selector({
   },
 });
 
+const updateUserData = selector({
+  key: 'updateUserData',
+  get: ({ get }) => {
+    get(isLogin);
+    get(userStoryList);
+    get(userData);
+  },
+  set: ({ set, reset }, arg) => {
+    if (arg === 'logOut') {
+      set(isLogin, false);
+      reset(storyList);
+      reset(userData);
+      return;
+    }
+
+    const { data, result } = arg;
+
+    if (result === 'noAuth' || result === 'fail') {
+      set(isLogin, false);
+      reset(storyList);
+      set(userStoryList, 'reset');
+      reset(userData);
+    }
+
+    if (data) {
+      const { _id: id, email, name, picture, elementList } = data;
+      set(isLogin, true);
+      set(userStoryList, elementList);
+      set(userData, () => ({ id, email, name, picture }));
+    }
+  },
+});
+
 const addUserStoryList = selector({
   key: 'addUserStoryList',
   get: ({ get }) => get(storyList),
@@ -147,4 +180,5 @@ export {
   addUserStoryList,
   editUserStoryList,
   deleteUserStoryList,
+  updateUserData,
 };
