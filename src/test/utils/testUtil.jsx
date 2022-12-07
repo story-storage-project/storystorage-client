@@ -4,8 +4,8 @@ import { render } from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
 import { CookiesProvider } from 'react-cookie';
 import { RecoilRoot } from 'recoil';
-import base, { lightTheme } from './components/theme/default';
-import GlobalStyle from './components/theme/GlobalStyle';
+import base, { lightTheme } from 'components/theme/default';
+import GlobalStyle from 'components/theme/GlobalStyle';
 
 const theme = {
   ...base,
@@ -32,6 +32,8 @@ const customRender = (ui, options) => {
 export * from '@testing-library/react';
 
 export { customRender as render };
+
+export { AllTheProviders };
 
 AllTheProviders.propTypes = {
   children: PropTypes.node.isRequired,
