@@ -1,7 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  useRecoilState,
+  useRecoilValue,
+  useResetRecoilState,
+  useSetRecoilState,
+} from 'recoil';
 import Text from '../../atoms/Text';
 import ImageIcon from '../../atoms/ImageIcon';
 import HiddenToggleViewer from '../../atoms/HiddenToggleViewer';
@@ -15,57 +20,41 @@ import {
   uiTheme,
   styleInnerHTML,
   styleObject,
-  editStyle,
+  updateStyle,
 } from '../../../store/globalState';
-import { userData, isLogin, userStoryList } from '../../../store/userState';
+import {
+  isLogin,
+  userStoryList,
+  updateUserData,
+} from '../../../store/userState';
 
 export default function LeftMenu() {
   const navigate = useNavigate();
   const locate = useLocation();
   const [onToggle, setOnToggle] = useState(false);
-  const [loggedIn, setIsLogin] = useRecoilState(isLogin);
-  const [userStories, setUserStoryList] = useRecoilState(userStoryList);
-  const setUser = useSetRecoilState(userData);
-  const [userInfo, query] = useQuery();
-  const [themeColor, setThemeColor] = useRecoilState(uiTheme);
+  const loggedIn = useRecoilValue(isLogin);
+  const userStories = useRecoilValue(userStoryList);
   const styleObjectData = useRecoilValue(styleObject);
   const styleStringCode = useRecoilValue(styleInnerHTML);
-  const setEditStyle = useSetRecoilState(editStyle);
+  const resetStyle = useResetRecoilState(updateStyle);
+  const updateUser = useSetRecoilState(updateUserData);
+  const [themeColor, setThemeColor] = useRecoilState(uiTheme);
   const style = useRef();
+  const [, query] = useQuery();
 
   useEffect(() => {
-    query(getMe);
+    const getUserData = async () => {
+      const userData = await query(getMe);
+      updateUser(userData);
+    };
+
+    getUserData();
   }, []);
-
-  useEffect(() => {
-    if (!userInfo) return;
-
-    if (
-      !userInfo ||
-      userInfo.result === 'noAuth' ||
-      userInfo.result === 'fail'
-    ) {
-      setIsLogin(false);
-      setUserStoryList('reset');
-
-      return setUser(() => ({}));
-    }
-
-    const { _id: id, email, name, picture, elementList } = userInfo.data;
-
-    setUser(() => ({ id, email, name, picture }));
-    setIsLogin(true);
-    setUserStoryList(() => elementList);
-  }, [userInfo]);
 
   useEffect(() => {
     if (!style.current) {
       style.current = document.createElement('style');
       document.head.appendChild(style.current);
-    }
-
-    if (locate.pathname === '/story-maker') {
-      setEditStyle('reset');
     }
   }, [locate.pathname]);
 
@@ -92,15 +81,14 @@ export default function LeftMenu() {
   const handleLogOut = async () => {
     await logout();
 
-    setIsLogin(false);
-    setUser(() => ({}));
-    setUserStoryList('reset');
+    updateUser('logout');
 
     navigate('/');
     navigate(0);
   };
 
   const handleClickAddButton = () => {
+    resetStyle('reset');
     navigate('/story-maker');
   };
 
@@ -138,7 +126,7 @@ export default function LeftMenu() {
             </Text>{' '}
             <ImageIcon
               icon={themeColor === 'lightTheme' ? 'sun' : 'moon'}
-              alt="moon"
+              alt={themeColor === 'lightTheme' ? 'sun' : 'moon'}
               pointer
               hover
               width="1.4rem"

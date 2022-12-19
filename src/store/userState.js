@@ -52,9 +52,11 @@ const userStoryList = selector({
 const updateUserData = selector({
   key: 'updateUserData',
   get: ({ get }) => {
-    get(isLogin);
-    get(userStoryList);
-    get(userData);
+    const data = {};
+    data.IsLogin = get(isLogin);
+    data.storyList = get(userStoryList);
+    data.user = get(userData);
+    return data;
   },
   set: ({ set, reset }, arg) => {
     if (arg === 'logOut') {
