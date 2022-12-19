@@ -19,6 +19,7 @@ afterEach(() => {
 describe('Button - onClick', () => {
   let onClick;
   let tree;
+
   beforeEach(() => {
     onClick = jest.fn();
     tree = render(<Button onClick={onClick}>{label}</Button>);
@@ -27,6 +28,7 @@ describe('Button - onClick', () => {
   it('should render without crashing', () => {
     expect(tree).toBeDefined();
   });
+
   it('should be visible a button', () => {
     const button = screen.getByRole('button');
     const children = screen.getByText(label);
