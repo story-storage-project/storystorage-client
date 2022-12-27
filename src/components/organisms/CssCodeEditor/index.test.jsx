@@ -97,7 +97,7 @@ describe('CssCodeEditor - default UI', () => {
     await act(() => promise);
 
     const htmlButton = screen.queryByText('HTML');
-    const jsxButton = screen.queryByText('HTML');
+    const jsxButton = screen.queryByText('JSX');
     const cssButton = screen.getByRole('button', {
       name: 'CSS',
     });
