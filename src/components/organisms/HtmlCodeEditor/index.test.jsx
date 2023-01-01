@@ -308,7 +308,7 @@ describe('HtmlCodeEditor - click event', () => {
   });
 });
 
-describe('CssCodeEditor - keyDown event', () => {
+describe('HtmlCodeEditor - keyDown event', () => {
   let textArea;
 
   const mockSetQueryHtml = jest.fn();

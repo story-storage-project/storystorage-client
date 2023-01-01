@@ -23,7 +23,7 @@ jest.mock('react-router-dom', () => ({
   useParams: () => params,
 }));
 
-describe('PreviewStory', () => {
+describe('Story', () => {
   let htmlOnChange;
   let cssOnChange;
   let pageOnChange;
@@ -102,7 +102,7 @@ describe('PreviewStory', () => {
   });
 });
 
-describe('PreviewStory - onchange', () => {
+describe('Story - onchange', () => {
   let categoryInput;
   let storyNameInput;
   let onChange;

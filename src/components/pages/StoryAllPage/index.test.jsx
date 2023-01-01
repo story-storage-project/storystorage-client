@@ -8,7 +8,7 @@ import { RecoilRoot } from 'recoil';
 import { isFinishLoad } from 'store/userState';
 import StoryAllPage from '.';
 
-describe('StoryMaker', () => {
+describe('StoryAllPage', () => {
   it('Should show story elements, if isFinishLoad state value is true', async () => {
     const promise = Promise.resolve();
 
