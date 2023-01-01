@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -40,7 +41,7 @@ export default function StoryAllPage() {
 
     const list = {};
     list[categoryName] = userStoryLists[categoryName];
-    setUserCategoryStoryList(() => list);
+    setUserCategoryStoryList(list);
     setFetch(true);
   }, [storyCategoryList, isLoad, userStoryLists, categoryName]);
 
@@ -63,36 +64,35 @@ export default function StoryAllPage() {
     <div>
       {fetch &&
         Object.values(storyCategoryList)[0] &&
-        Object.entries(storyCategoryList).map(stories => {
+        Object.entries(storyCategoryList).map((stories, index) => {
           const [category, storiesArray] = stories;
 
           return (
-            <>
-              <CategoryText size="small" key={category}>
-                {category}
-              </CategoryText>
+            <div key={category + index}>
+              <CategoryText size="small">{category}</CategoryText>
               <Container>
                 <Wrapper>
                   {storiesArray.map(story => {
                     const { _id: id } = story;
 
                     return (
-                      <RecoilRoot>
-                        <Story
-                          key={id}
-                          userInfo={userInfo}
-                          responseData={story}
-                          isLogin={loggedIn}
-                          setEditUserStory={setEditUserStory}
-                          setDeleteUserStory={setDeleteUserStory}
-                          setStyle={setStyle}
-                        />
-                      </RecoilRoot>
+                      <div key={id}>
+                        <RecoilRoot>
+                          <Story
+                            userInfo={userInfo}
+                            responseData={story}
+                            isLogin={loggedIn}
+                            setEditUserStory={setEditUserStory}
+                            setDeleteUserStory={setDeleteUserStory}
+                            setStyle={setStyle}
+                          />
+                        </RecoilRoot>
+                      </div>
                     );
                   })}
                 </Wrapper>
               </Container>
-            </>
+            </div>
           );
         })}
     </div>

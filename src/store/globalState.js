@@ -1,4 +1,4 @@
-import { atom, selector } from 'recoil';
+import { atom, DefaultValue, selector } from 'recoil';
 
 const isOnLoginReqModal = atom({
   key: 'isOnLoginReqModal',
@@ -32,7 +32,7 @@ const updateStyle = selector({
   key: 'updateStyle',
   get: ({ get }) => get(styleObject),
   set: ({ get, set, reset }, arg) => {
-    if (arg === 'reset') {
+    if (arg instanceof DefaultValue) {
       return reset(styleObject);
     }
 

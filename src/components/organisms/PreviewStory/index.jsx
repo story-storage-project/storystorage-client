@@ -57,6 +57,7 @@ export default function PreviewStory({
 
   const renderElements = () => {
     if (!allProperties) return;
+
     return useElementCompiler(allProperties);
   };
 
@@ -97,7 +98,7 @@ export default function PreviewStory({
   };
 
   return (
-    <Container>
+    <Container data-testid="previewStory">
       <Wrapper>
         <Header>
           <InputContainer>

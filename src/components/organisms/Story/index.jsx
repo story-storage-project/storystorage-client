@@ -84,7 +84,6 @@ export default function Story({
       setErrorMessage('');
 
       const editData = { html: htmlCode, css: cssCode };
-
       const res = await query(patchStory, userInfo.id, id, editData);
 
       if (res.result === 'fail') {
