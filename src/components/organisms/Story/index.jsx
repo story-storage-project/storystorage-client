@@ -56,7 +56,7 @@ export default function Story({
   useEffect(() => {
     if (!cssData) return;
 
-    setStyle('add', id, insertClass(id, cssCode));
+    setStyle('update', id, insertClass(id, cssCode));
   }, [cssCode]);
 
   const allProperties = useMemo(() => {
@@ -84,7 +84,6 @@ export default function Story({
       setErrorMessage('');
 
       const editData = { html: htmlCode, css: cssCode };
-
       const res = await query(patchStory, userInfo.id, id, editData);
 
       if (res.result === 'fail') {

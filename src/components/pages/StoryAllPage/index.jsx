@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -12,26 +13,24 @@ import {
   deleteUserStoryList,
   isFinishLoad,
 } from '../../../store/userState';
-import { addStyle, deleteStyle, editStyle } from '../../../store/globalState';
+import { updateStyle } from '../../../store/globalState';
 
 export default function StoryAllPage() {
   const params = useParams();
   const { categoryName } = params;
+  const isLoad = useRecoilValue(isFinishLoad);
+  const loggedIn = useRecoilValue(isLogin);
+  const userInfo = useRecoilValue(userData);
   const userStoryLists = useRecoilValue(storyList);
-  const [storyCategoryList, setUserCategoryStoryList] =
-    useState(userStoryLists);
   const setEditUserStoryList = useSetRecoilState(editUserStoryList);
   const setDeleteUserStoryList = useSetRecoilState(deleteUserStoryList);
-  const userInfo = useRecoilValue(userData);
-  const loggedIn = useRecoilValue(isLogin);
-  const finishLoad = useRecoilValue(isFinishLoad);
+  const setUpdateStyle = useSetRecoilState(updateStyle);
   const [fetch, setFetch] = useState(false);
-  const setAddStyle = useSetRecoilState(addStyle);
-  const setEditStyle = useSetRecoilState(editStyle);
-  const setDeleteStyle = useSetRecoilState(deleteStyle);
+  const [storyCategoryList, setUserCategoryStoryList] =
+    useState(userStoryLists);
 
   useEffect(() => {
-    if (!finishLoad) return;
+    if (!isLoad) return;
     setFetch(false);
 
     if (!categoryName) {
@@ -42,24 +41,12 @@ export default function StoryAllPage() {
 
     const list = {};
     list[categoryName] = userStoryLists[categoryName];
-    setUserCategoryStoryList(() => list);
+    setUserCategoryStoryList(list);
     setFetch(true);
-  }, [storyCategoryList, finishLoad, userStoryLists, categoryName]);
+  }, [storyCategoryList, isLoad, userStoryLists, categoryName]);
 
   const setStyle = (mode, id, data) => {
-    switch (mode) {
-      case 'add': {
-        return setAddStyle([id, data]);
-      }
-      case 'edit': {
-        return setEditStyle([id, data]);
-      }
-      case 'delete': {
-        return setDeleteStyle(id);
-      }
-      default:
-        break;
-    }
+    return setUpdateStyle([mode, id, data]);
   };
 
   const setEditUserStory = (...editData) => {
@@ -77,36 +64,35 @@ export default function StoryAllPage() {
     <div>
       {fetch &&
         Object.values(storyCategoryList)[0] &&
-        Object.entries(storyCategoryList).map(stories => {
+        Object.entries(storyCategoryList).map((stories, index) => {
           const [category, storiesArray] = stories;
 
           return (
-            <>
-              <CategoryText size="small" key={category}>
-                {category}
-              </CategoryText>
+            <div key={category + index}>
+              <CategoryText size="small">{category}</CategoryText>
               <Container>
                 <Wrapper>
                   {storiesArray.map(story => {
                     const { _id: id } = story;
 
                     return (
-                      <RecoilRoot>
-                        <Story
-                          key={id}
-                          userInfo={userInfo}
-                          responseData={story}
-                          isLogin={loggedIn}
-                          setEditUserStory={setEditUserStory}
-                          setDeleteUserStory={setDeleteUserStory}
-                          setStyle={setStyle}
-                        />
-                      </RecoilRoot>
+                      <div key={id}>
+                        <RecoilRoot>
+                          <Story
+                            userInfo={userInfo}
+                            responseData={story}
+                            isLogin={loggedIn}
+                            setEditUserStory={setEditUserStory}
+                            setDeleteUserStory={setDeleteUserStory}
+                            setStyle={setStyle}
+                          />
+                        </RecoilRoot>
+                      </div>
                     );
                   })}
                 </Wrapper>
               </Container>
-            </>
+            </div>
           );
         })}
     </div>

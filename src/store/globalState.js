@@ -1,4 +1,4 @@
-import { atom, selector } from 'recoil';
+import { atom, DefaultValue, selector } from 'recoil';
 
 const isOnLoginReqModal = atom({
   key: 'isOnLoginReqModal',
@@ -28,64 +28,44 @@ const styleInnerHTML = selector({
   },
 });
 
-const addStyle = selector({
-  key: 'addStyle',
+const updateStyle = selector({
+  key: 'updateStyle',
   get: ({ get }) => get(styleObject),
-  set: ({ set }, arg) => {
-    const [id, data] = arg;
-
-    set(styleObject, prev => ({
-      ...prev,
-      [id]: data,
-    }));
-  },
-});
-
-const editStyle = selector({
-  key: 'editStyle',
-  get: ({ get }) => get(styleObject),
-  set: ({ set, reset }, arg) => {
-    if (arg === 'reset') {
+  set: ({ get, set, reset }, arg) => {
+    if (arg instanceof DefaultValue) {
       return reset(styleObject);
     }
 
-    const [id, data] = arg;
+    const [type, storyId, data] = arg;
 
-    set(styleObject, prev => ({
-      ...prev,
-      [id]: data,
-    }));
+    switch (type) {
+      case 'update': {
+        return set(styleObject, prev => ({
+          ...prev,
+          [storyId]: data,
+        }));
+      }
+      case 'delete': {
+        const copyStyleObj = get(styleObject);
+
+        return set(
+          styleObject,
+          Object.entries(copyStyleObj).reduce((acc, [id, style]) => {
+            if (id === storyId) {
+              return acc;
+            }
+
+            acc[id] = style;
+
+            return acc;
+          }),
+          {},
+        );
+      }
+      default:
+        break;
+    }
   },
 });
 
-const deleteStyle = selector({
-  key: 'deleteStyle',
-  get: ({ get }) => get(styleObject),
-  set: ({ get, set }, targetId) => {
-    const copyStyleObj = get(styleObject);
-
-    set(
-      styleObject,
-      Object.entries(copyStyleObj).reduce((acc, [id, style]) => {
-        if (id === targetId) {
-          return acc;
-        }
-
-        acc[id] = style;
-
-        return acc;
-      }),
-      {},
-    );
-  },
-});
-
-export {
-  isOnLoginReqModal,
-  uiTheme,
-  styleObject,
-  styleInnerHTML,
-  addStyle,
-  editStyle,
-  deleteStyle,
-};
+export { isOnLoginReqModal, uiTheme, styleObject, styleInnerHTML, updateStyle };

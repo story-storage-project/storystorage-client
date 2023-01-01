@@ -1,14 +1,15 @@
 /* eslint-disable import/no-unresolved */
 import React from 'react';
 import { screen } from '@testing-library/react';
-import { render } from 'testUtil';
+import { render } from 'test/utils/testUtil';
 import TextEditor from '.';
 
 afterEach(() => {
   jest.clearAllMocks();
 });
 
-describe.only('ImageIcon', () => {
+describe('TextEditor', () => {
+  let tree;
   beforeEach(() => {
     const onChange = jest.fn();
     const onKeyDown = jest.fn();
@@ -17,7 +18,7 @@ describe.only('ImageIcon', () => {
       current: { clientWidth: 1200 },
     });
 
-    render(
+    tree = render(
       <TextEditor
         value="text editor test"
         onChange={onChange}
@@ -31,7 +32,7 @@ describe.only('ImageIcon', () => {
   });
 
   it('should render without crashing', () => {
-    expect(screen).toBeDefined();
+    expect(tree).toBeDefined();
   });
 
   it('should render textarea and div', () => {

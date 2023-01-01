@@ -2,7 +2,7 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import 'jest-styled-components';
-import { render } from 'testUtil';
+import { render } from 'test/utils/testUtil';
 import { lightTheme, darkTheme } from 'components/theme/default';
 import Input from '.';
 
@@ -18,15 +18,17 @@ afterEach(() => {
 });
 
 describe('Input', () => {
-  const onChange = jest.fn();
+  let tree;
+
   beforeEach(() => {
-    render(
+    const onChange = jest.fn();
+    tree = render(
       <Input value="input-test" onChange={onChange} placeholder="input-test" />,
     );
   });
 
   it('should render without crashing', () => {
-    expect(screen).toBeDefined();
+    expect(tree).toBeDefined();
   });
 
   it('should be visible a img', () => {

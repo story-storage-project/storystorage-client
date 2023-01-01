@@ -12,35 +12,21 @@ import {
   deleteUserStoryList,
   isFinishLoad,
 } from '../../../store/userState';
-import { addStyle, deleteStyle, editStyle } from '../../../store/globalState';
+import { updateStyle } from '../../../store/globalState';
 
 export default function StoryPage() {
   const params = useParams();
   const { categoryName, storyId } = params;
-  const userInfo = useRecoilValue(userData);
-  const loggedIn = useRecoilValue(isLogin);
   const isLoad = useRecoilValue(isFinishLoad);
+  const loggedIn = useRecoilValue(isLogin);
+  const userInfo = useRecoilValue(userData);
+  const storyData = useRecoilValue(selectStory({ categoryName, storyId }));
   const setEditUserStoryList = useSetRecoilState(editUserStoryList);
   const setDeleteUserStoryList = useSetRecoilState(deleteUserStoryList);
-  const storyData = useRecoilValue(selectStory({ categoryName, storyId }));
-  const setAddStyle = useSetRecoilState(addStyle);
-  const setEditStyle = useSetRecoilState(editStyle);
-  const setDeleteStyle = useSetRecoilState(deleteStyle);
+  const setUpdateStyle = useSetRecoilState(updateStyle);
 
   const setStyle = (mode, id, data) => {
-    switch (mode) {
-      case 'add': {
-        return setAddStyle([id, data]);
-      }
-      case 'edit': {
-        return setEditStyle([id, data]);
-      }
-      case 'delete': {
-        return setDeleteStyle(id);
-      }
-      default:
-        break;
-    }
+    return setUpdateStyle([mode, id, data]);
   };
 
   const setEditUserStory = (...editData) => {

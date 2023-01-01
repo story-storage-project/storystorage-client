@@ -45,7 +45,7 @@ export default function PreviewStory({
   useEffect(() => {
     if (!cssCode) return;
 
-    setStyle('add', 'preview', insertClass('preview', cssCode));
+    setStyle('update', 'preview', insertClass('preview', cssCode));
   }, [cssCode]);
 
   const allProperties = useMemo(() => {
@@ -57,6 +57,7 @@ export default function PreviewStory({
 
   const renderElements = () => {
     if (!allProperties) return;
+
     return useElementCompiler(allProperties);
   };
 
@@ -97,7 +98,7 @@ export default function PreviewStory({
   };
 
   return (
-    <Container>
+    <Container data-testid="previewStory">
       <Wrapper>
         <Header>
           <InputContainer>

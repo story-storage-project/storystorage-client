@@ -29,7 +29,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --coverage --verbose --watchAll",
+    "test": "react-scripts test --coverage --watchAll",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
@@ -42,7 +42,10 @@
       "!<rootDir>/node_modules/",
       "!<rootDir>/path/to/dir/",
       "!**/*.stories.{js,jsx}"
-    ]
+    ],
+    "moduleNameMapper": {
+      "axios": "axios/dist/node/axios.cjs"
+    }
   },
   "lint-staged": {
     "**/*.{js, jsx, html, css, json}": [
@@ -113,7 +116,11 @@
     "jest-environment-jsdom": "^29.3.1",
     "jest-styled-components": "^7.1.1",
     "lint-staged": "^13.0.3",
+    "msw": "^0.49.1",
     "storybook-addon-styled-component-theme": "^2.0.0",
     "webpack": "^5.75.0"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }

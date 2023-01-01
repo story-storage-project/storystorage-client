@@ -1,10 +1,9 @@
 /* eslint-disable import/no-unresolved */
 import React from 'react';
-import { screen } from '@testing-library/react';
-import { render } from 'testUtil';
+import { render } from 'test/utils/testUtil';
 import Ul from '.';
 
-describe.only('ImageIcon', () => {
+describe('Ul', () => {
   let tree;
   beforeEach(() => {
     tree = render(
@@ -15,7 +14,7 @@ describe.only('ImageIcon', () => {
   });
 
   it('should render without crashing', () => {
-    expect(screen).toBeDefined();
+    expect(tree).toBeDefined();
   });
 
   it('should render with style defaults', () => {

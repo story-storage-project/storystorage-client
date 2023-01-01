@@ -21,12 +21,16 @@ const TextEditor = forwardRef((props, ref) => {
 });
 
 TextEditor.propTypes = {
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   onKeyDown: PropTypes.func.isRequired,
   placeholder: PropTypes.string.isRequired,
   onScroll: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
+};
+
+TextEditor.defaultProps = {
+  value: '',
 };
 
 const Wrapper = styled.div`
