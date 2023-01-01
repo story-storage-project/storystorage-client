@@ -6,6 +6,7 @@ import { CookiesProvider } from 'react-cookie';
 import { RecoilRoot } from 'recoil';
 import base, { lightTheme } from 'components/theme/default';
 import GlobalStyle from 'components/theme/GlobalStyle';
+import { isLogin } from 'store/userState';
 
 const theme = {
   ...base,
@@ -15,7 +16,11 @@ const theme = {
 function AllTheProviders({ children }) {
   return (
     <CookiesProvider>
-      <RecoilRoot>
+      <RecoilRoot
+        initializeState={({ set }) => {
+          set(isLogin, true);
+        }}
+      >
         <ThemeProvider theme={theme}>
           <GlobalStyle />
           {children}
@@ -29,9 +34,25 @@ const customRender = (ui, options) => {
   return render(ui, { wrapper: AllTheProviders, ...options });
 };
 
+function exceptRecoilProviders({ children }) {
+  return (
+    <CookiesProvider>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        {children}
+      </ThemeProvider>
+    </CookiesProvider>
+  );
+}
+
+const exceptRecoilRender = (ui, options) => {
+  return render(ui, { wrapper: exceptRecoilProviders, ...options });
+};
+
 export * from '@testing-library/react';
 
 export { customRender as render };
+export { exceptRecoilRender };
 
 export { AllTheProviders };
 

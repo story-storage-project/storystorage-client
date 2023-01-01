@@ -42,7 +42,10 @@
       "!<rootDir>/node_modules/",
       "!<rootDir>/path/to/dir/",
       "!**/*.stories.{js,jsx}"
-    ]
+    ],
+    "moduleNameMapper": {
+      "axios": "axios/dist/node/axios.cjs"
+    }
   },
   "lint-staged": {
     "**/*.{js, jsx, html, css, json}": [

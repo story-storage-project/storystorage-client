@@ -10,6 +10,20 @@ const mockTemplates = templates['template-button'].map(template => {
 
 const baseURL = process.env.REACT_APP_BASE_URL;
 
+export const mockData = {
+  noAuth: {},
+
+  loginUserData: {
+    _id: '6382e288e3b1623a23e22ce7',
+    name: 'alex',
+    email: 'alexalex@mgmail.com',
+    picture:
+      'https://lh3.googleusercontent.com/a/ALm5wu3pKmTTwgjlqEK2dUnq6F8cr5sGGjJEd5lajadpUw=s96-c',
+    elementList: mockTemplates,
+    __v: 39,
+  },
+};
+
 const handlers = [
   rest.get(`${baseURL}/user/me`, async (req, res, ctx) =>
     res(
