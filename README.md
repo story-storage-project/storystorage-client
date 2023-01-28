@@ -1,8 +1,14 @@
 # Story Storage
 
+<a href="https://www.storystorage.me/" target="_blank">
+  <img src="./public/readme/preview01.png" alt="preview-image" width="500px" />
+</a>
+
 Story Storage는 독립적으로 UI를 저장할 수 있는 UI 저장소입니다.  
 매번 새로 만들 필요없이 저장해놓은 UI를 간편하게 복사하여 사용할 수 있습니다.
 간단하고 직관적인 인터페이스를 제공합니다.
+
+<br />
 
 ## Layout
 
@@ -83,6 +89,8 @@ Story Storage는 독립적으로 UI를 저장할 수 있는 UI 저장소입니�
 
 </details>
 
+<br />
+
 ### Table of contents
 
 - [Intro](https://github.com/story-storage-project/storystorage-client#story-storage)
@@ -98,10 +106,14 @@ Story Storage는 독립적으로 UI를 저장할 수 있는 UI 저장소입니�
 - [Feature](https://github.com/story-storage-project/storystorage-client#feature)
 - [아쉬운 점](https://github.com/story-storage-project/storystorage-client#%EC%95%84%EC%89%AC%EC%9A%B4-%EC%A0%90)
 
+<br />
+
 ## Motivation
 
 매번 button, input,.. 레이아웃 등 UI를 제작할 때마다 "전에 만들었던 걸 리스트로 볼 수 있다면 좋겠다." 라는 생각을 하곤 했습니다. 생각만 하지 말고 그걸 실현해보자는 마음에 이 프로젝트를 기획하게 되었습니다.
 Storybook에서 컴포넌트별로 분리해서 확인할 수 있는 부분을 모티브 삼아 이름을 Story Storage라고 짓게 되었습니다.
+
+<br />
 
 ## Goal
 
@@ -109,11 +121,15 @@ Storybook에서 컴포넌트별로 분리해서 확인할 수 있는 부분을 �
 이전 프로젝트에서 작은 기능 한 부분을 직접 구현하면서, 더 많은 배움과 새로운 시각을 얻을 수 있었습니다.  
 두 번째 목표는 간편하고 직관적인 형태로 구성하고, 반응형 웹과 pwd 적용을 통해 사용자 경험을 높일 수 있게 하는 것이었습니다.
 
+<br />
+
 ## Build
 
 - Client: netlify
-- Server: aws beanstalk
-- Url: http://www.storystorage.me/
+- Server: aws beanstalk (현재 일시정지 상태)
+- Url: https://www.storystorage.me/
+
+<br />
 
 ## Framework
 
@@ -122,6 +138,8 @@ Storybook에서 컴포넌트별로 분리해서 확인할 수 있는 부분을 �
 | React             | Express      |
 | Recoil            | jsonwebtoken |
 | Styled Components | mongoose     |
+
+<br />
 
 ## Installation
 
@@ -200,6 +218,8 @@ npm start
 
 </details>
 
+<br />
+
 ## Schedule
 
 - 2022.11
@@ -212,7 +232,9 @@ npm start
 - 11.19 ~ 11.20 : 로그인 작업
 - 11.21 ~ 11.24 : html 엘리먼트 수정 작업 및 리팩토링
 - 11.24 ~ 11.25 : 배포
-- 11.26 ~ : 리팩토링, 테스트 코드 작성
+- 11.26 ~ 12.30: 리팩토링, 테스트 코드 작성
+
+<br />
 
 ## Folder structure
 
@@ -328,6 +350,8 @@ Server
 
 </details>
 
+<br />
+
 ## Challenge
 
 ### Atomic Design 적용
@@ -335,7 +359,11 @@ Server
 아토믹 디자인을 도입하게 된 이유도 이 프로젝트의 목적인 '재사용'과 연관 지어 결정하게 되었습니다.
 atom ~ page까지의 다섯 가지 분류를 모두 적용해 보면서 아토믹 디자인이 어떤 것인지 익혀보려 하였습니다.
 
-#### 느낀 점
+<br />
+
+> 느낀 점
+
+<br />
 
 1. 초반 설계의 중요성
 
@@ -356,7 +384,11 @@ atom ~ page까지의 다섯 가지 분류를 모두 적용해 보면서 아토�
 
 firebase 등 npm 설치 없이 로그인을 적용할 방법을 알아보던 중 passport 라이브러리 없이 적용하는 방법을 알게되어 적용해보게 되었습니다.
 
-#### 구현 방법
+<br />
+
+> 구현 방법
+
+<br />
 
 1. 클라이언트에서 로그인 버튼을 누르면 구글 인가 서버 url로 접속합니다.
 
@@ -424,7 +456,11 @@ API.interceptors.response.use(
 
 axios의 interceptors를 이용하여 error status code가 401일 경우 요청을 우회하여 refresh 토큰을 검증하는 서버로 요청을 보낸 후 성공 메시지를 받게 되면 다시 처리하지 못했던 요청을 처리해주었습니다.
 
-#### 이슈
+<br />
+
+> 이슈
+
+<br />
 
 - 배포 시 쿠키가 클라이언트에 등록되지 않는 이슈
 - 네트워크 탭에는 request, response 모두 쿠키가 담겨 있지만 어플리케이션에서 쿠키탭을 확인하면 쿠키가 적용되지 않는 이슈가 있었습니다. 이는 배포 후에 사이트가 https가 적용되어 설정했던 secure 옵션이 바로 적용되지 않은 점, cookie에 domain 설정이 되어있지 않았던 점이 문제로 작용하였습니다.
@@ -441,13 +477,26 @@ axios의 interceptors를 이용하여 error status code가 401일 경우 요청�
 
   배포 사이트와 로컬 사이트 둘 다 테스트하기 위해서 cookie에 들어갈 옵션 중 https용 쿠키 옵션을 따로 빼서 환경 설정에 따라 적용되도록 해주었습니다.
 
-#### 느낀 점
+<br />
+
+> 느낀 점
+
+<br />
 
 - 로그인 과정을 진행하면서 전에 사용했던 passport 라이브러리에서 헷갈렸던 부분들을 정리할 기회가 되었습니다. 그와 더불어 어렵게만 느껴졌던 passport라는 라이브러리가 따로 서버에서 처리해줘야 복잡한 요청을 두 개의 라우트와 strategy 설정을 통해서 관리하기 쉽게 해준다는 것을 깨닫게 되었습니다. 어떠한 과정으로 로그인이 진행되는지 직접 해보고 나니 그전엔 로그인되는 과정을 모른 채 라이브러리의 사용법만을 알려고 노력했기 때문에 어려웠다는 걸 알게 되었습니다. 라이브러리의 사용법보다는 과정을 이해하려 한다면 라이브러리를 좀 더 쉽게 사용할 수 있을 거라는 생각을 하게 된 계기가 되었습니다.
 
-## StoryBook 적용
+### StoryBook 적용
 
 - 아토믹 디자인과 함께 적용해보고 싶었던 storybook을 적용해보았습니다.
+
+### Test Lines coverage 90프로 이상
+
+|                  | File      | Stmts | Branch | Funcs | Lines |
+| ---------------- | --------- | ----- | ------ | ----- | ----- |
+| Client Unit Test | All files | 93.03 | 87.94  | 90.44 | 93.78 |
+| Server Unit Test | All files | 99.24 | 82.64  | 75.58 | 99.24 |
+
+<br />
 
 ## Feature
 
@@ -455,7 +504,11 @@ axios의 interceptors를 이용하여 error status code가 401일 경우 요청�
 
 엘리먼트를 등록하기 위해서는 html(+ jsx), css 코드 에디터가 필요했습니다. 처음에 생각한 선택지는 code mirror, markdown code editor를 생각했지만 제가 구현하고자 했던 에디터는 javascript처럼 특별한 연산이 필요한 작업이 아니었기 때문에 라이브러리 없이 구현할 수 있지 않을까라는 생각에, 앞서 생각했던 선택지를 배제하게 되었습니다. textarea 위에 div를 얹을 수 있을 것 같다는 생각이 들어 textarea와 div를 이용해서 구현하게 되었습니다.
 
-#### 구현 기능
+<br />
+
+> 구현 기능
+
+<br />
 
 1. vscode처럼 `<div>`, `{` 태그를 입력하면 자동으로 닫힘태그가 입력되는 기능
 
@@ -472,7 +525,11 @@ axios의 interceptors를 이용하여 error status code가 401일 경우 요청�
 - 조건문의 개수가 많아지게 되어 `useHtmlHighLightQueryText`라는 custom hook을 만들게 되었습니다.
   `const [htmlCode, queryHtml, setQueryHtml] = useHtmlHighLightQueryText(htmlData);` queryHtml에는 span 엘리먼트의 값이 들어있습니다. 컴포넌트의 return문 안에 위치하여 값으로 작용하도록 해주었습니다. setQueryHtml는 span을 만드는 함수가 담겨있습니다. onKeyDown 이벤트 함수안에 넣어 키가 입력될 때 실행되도록 해주었습니다.
 
-#### 느낀 점
+<br />
+
+> 느낀 점
+
+<br />
 
 - 코드 에디터의 기능이 생각보다 수작업으로 해야 하는 작업이 많다는 걸 느끼게 되었습니다. 하나씩 비교를 해주어야 하는 부분이 많아 조건문의 개수가 많아져 코드의 가독성이 점점 떨어지게 되었는데, 이 부분을 잘 모듈화하여 포장하는 작업을 잘하질 못한 것 같아 아쉬웠습니다.
   기능 구현 부분에서 시간을 많이 쏟게 되어 렌더링 최적화에 대해 많은 신경을 쓰지 못한 점도 아쉬운 부분이 많습니다. 지금의 구현 방법으로는 텍스트를 입력할 때마다 계속 새로운 span태그가 생성되어 텍스트의 양이 많아질 때는 굉장히 느려지는 이슈가 있습니다. 이 방법을 보완하기 위해서 어떻게 개선해야 할지 렌더링 최적화와 같이 고민해보고 리팩토링 해보려합니다.
@@ -528,7 +585,11 @@ export default function useElementCompiler(data) {
 
 모든 데이터의 취상위 루트를 fragment로 감싸주어 최상위 노드가 여러 개일 경우 발생할 수 있는 이슈를 방지해주고자 하였습니다.
 
-#### 느낀 점
+<br />
+
+> 느낀 점
+
+<br />
 
 - 태그를 작성하는 것이 아닌 함수를 만들어 가공하는 작업을 거친 후 만든다는 게 직관적이지 않고 눈에 보이는 작업이 아니라서 어려운 부분이 있었습니다. 많은 라이브러리를 참고하면서 처음엔 1차, 2차 가공이 아닌 처음 시작부터 createElement를 호출하면서 작업하였습니다. 그러다 보니 중간에 오류가 나게 되면 어느 부분에서 문제가 생겼는지 확인하기 쉽지가 않았습니다. 더 알아보니 리액트의 태그를 콘솔에 출력해보면 객체를 반환한다는 것을 알 수 있었습니다.
   <img src="./src/assets/readme01.png" alt="node">
@@ -540,18 +601,28 @@ export default function useElementCompiler(data) {
 
 css를 적용하는 부분은 처음에는 React inline style을 계획하였습니다. 하지만 inline style은 hover, focus등 의사클래스를 지원하지 않는다는 부분을 알게 되어 방향을 수정하였습니다. 그다음 접근 방향으로는 새로운 CSSStyleSheet를 만들어 새로운 rule을 주입해 만들어주는 방법으로 접근해보려 하였습니다. 이 방향으로 알아보던 중 head에 style태그를 만들어서 innerHTML을 이용한 방법을 알게 되어 이 방법을 선택하여 진행하게 되었습니다.
 
-#### 느낀 점
+<br />
+
+> 느낀 점
+
+<br />
 
 - styled components 또는 emotion 등 css in js 라이브러리들이 CSSOM을 직접 조작하며 스타일을 적용한다는 걸 알게 된 좋은 계기가 되었습니다. 리팩토링 시 계획했던 CSSStyleSheet에 rule을 주입하는 방법으로 다시 리팩토링 해보고 싶습니다.
+
+<br />
 
 ## 아쉬운 점
 
 - 이번 프로젝트를 진행하면서 parsing을 하는 작업을 많이 거치게 되었습니다. 그러다 보니 코드가 길어지게 되면서 코드의 모듈화가 필요하다는 것을 절실히 느꼈습니다. 최대한 모듈화하고 가독성 좋게 만들어 보려 했지만, 아직 부족한 부분이 많고 만족스러운 코드가 되지 않은 것 같아 아쉬운 마음이 듭니다. 코드를 작성하면서 어떤 것을 더 공부해야 더 재사용하기 쉽고 보기 좋은 코드를 만들어낼 수 있는지 많은 궁금증이 들었고 답답한 마음이 많이 들게 되었습니다. 이번 프로젝트를 통해서 깨달았던 것들과 궁금했던 부분을 정리하여 더 좋은 코드로 리팩토링 해보고자 합니다.
 
+<br />
+
 ## 프로젝트를 통해 배운 점
 
 - 기초가 중요하다는 점을 또 한 번 느끼게 되었습니다. string을 DOM으로 바꾸면서 DOM에 대한 이해가 많이 필요했는데 node마다 type이 있고 html과 svg는 name space가 달라 parsing하는 과정을 html과 다르게 해주어야 한다는 것도 알게 되었습니다.
 - 이번 프로젝트를 통해 라이브러리 코드를 보는 과정을 많이 겪으면서 라이브러리를 만든 분들에 대한 생각이 달라지는 계기가 되었습니다. 그저 적용만 했을 때보다 코드를 보며 스스로 만들어보는 과정을 겪게 되니 라이브러리를 만든 분들이 대단하다는 생각을 많이 했던 것 같습니다. 그리고 전에는 새로운 라이브러리를 보고 적용해보고 싶다는 생각이 많이 들었다면, 이제는 어떻게 만들었는지 코드가 궁금해진다는 생각이 먼저 들게 되었고, 저도 더 좋은 코드를 작성해서 공유할 수 있는 개발자가 되고 싶다는 목표가 생겼습니다.
+
+<br />
 
 ## Creator
 
