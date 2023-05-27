@@ -1,137 +1,420 @@
 # Story Storage
 
 <a href="https://www.storystorage.me/" target="_blank">
-  <img src="./public/readme/preview01.png" alt="preview-image" width="500px" />
+  <img width="400" alt="image" src="https://github.com/story-storage-project/storystorage-client/assets/84281505/885e5987-6a50-4224-b3b3-ed132fa5485c">
 </a>
 
-Story Storage는 독립적으로 UI를 저장할 수 있는 UI 저장소입니다.  
-매번 새로 만들 필요없이 저장해놓은 UI를 간편하게 복사하여 사용할 수 있습니다.
-간단하고 직관적인 인터페이스를 제공합니다.
+[Story Storage](https://www.storystorage.me/)는 코드 에디터를 이용해 바로 html 엘리먼트와 스타일을 저장할 수 있는 UI Element 저장소입니다. 매번 새로 만들 필요없이 저장해놓은 엘리먼트를 바로 코드를 복사해 사용할 수 있습니다.
 
 <br />
 
-## Layout
+## Table of contents
 
-<details>
-<summary>snapshot</summary>
-
-<table>
-  <tr align="center">
-    <td>Screenshot</td>
-    <td>Features</td>
-  </tr>
-  <tr>
-    <td>
-      <p>Main Page</p>
-      <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/snapshot-home.gif" target="_blank">
-        <img src="./public/readme/snapshot-home.gif" alt="main">
-      </a>
-    </td>
-    <td>
-    <ul>
-      <li>public template element 버튼 리스트</li>
-      <li>element 테스트 할 수 있는 기능</li>
-      <li>Add Story 눌러서 테스트 할 수 기능(저장 기능은 로그인시에 가능)</li>
-    </ul>
-    </td>
-  </tr>
-    <tr>
-    <td>
-      <p>Login, Create Story</p>
-      <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/snapshot-login.gif" target="_blank">
-        <img src="./public/readme/snapshot-login.gif" alt="login">
-      </a>
-    </td>
-    <td>
-    <ul>
-      <li>Add Story에서 html, css 코드 입력 후 생성하는 기능</li>
-    </ul>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <p>반응형</p>
-      <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/snapshot-mediaquery.gif" target="_blank">
-        <img src="./public/readme/snapshot-mediaquery.gif" alt="mediaquery">
-      </a>
-    </td>
-    <td>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <p>테마 변경</p>
-      <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/snapshot-theme.gif" target="_blank">
-        <img src="./public/readme/snapshot-theme.gif" alt="theme">
-      </a>
-    </td>
-    <td>
-    <ul>
-      <li>light, dark 두 가지 버전</li>
-    </ul>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <p>PWD 적용</p>
-      <a href="https://github.com/story-storage-project/storystorage-client/tree/development/public/readme/snapshot-pwd.gif" target="_blank">
-        <img src="./public/readme/snapshot-pwd.gif" alt="pwd">
-      </a>
-    </td>
-    <td>
-    <ul>
-      <li>앱 저장 기능</li>
-      <li>iphone에서 홈 화면 추가 -> 홈 화면에 앱 등록 기능</li>
-    </ul>
-    </td>
-  </tr>
-</table>
-
-</details>
-
-<br />
-
-### Table of contents
-
-- [Intro](https://github.com/story-storage-project/storystorage-client#story-storage)
-- [Layout](https://github.com/story-storage-project/storystorage-client#layout)
-- [Motivation](https://github.com/story-storage-project/storystorage-client#motivation)
-- [Goal](https://github.com/story-storage-project/storystorage-client#goal)
+- [Objectives](https://github.com/story-storage-project/storystorage-client#objectives)
 - [Build](https://github.com/story-storage-project/storystorage-client#build)
-- [Frameword](https://github.com/story-storage-project/storystorage-client#framework)
+- [Service Demo](https://github.com/story-storage-project/storystorage-client#service-demo)
+- [Challenges](https://github.com/story-storage-project/storystorage-client#challenges)
+  - [코드 에디터 제작](https://github.com/story-storage-project/storystorage-client#%EC%BD%94%EB%93%9C-%EC%97%90%EB%94%94%ED%84%B0-%EC%A0%9C%EC%9E%91)
+    - [코드 하이라이트 기능 제작하기](https://github.com/story-storage-project/storystorage-client#%EC%BD%94%EB%93%9C-%ED%95%98%EC%9D%B4%EB%9D%BC%EC%9D%B4%ED%8A%B8-%EA%B8%B0%EB%8A%A5)
+    - [Tab 클릭 시 2칸 들여쓰기 되는 기능 추가](https://github.com/story-storage-project/storystorage-client#tab-%ED%81%B4%EB%A6%AD-%EC%8B%9C-2%EC%B9%B8-%EB%93%A4%EC%97%AC%EC%93%B0%EA%B8%B0-%EB%90%98%EB%8A%94-%EA%B8%B0%EB%8A%A5-%EC%B6%94%EA%B0%80)
+  - [JSX Parser 제작](https://github.com/story-storage-project/storystorage-client#jsx-parser-%EC%A0%9C%EC%9E%91)
+  - [문자열을 CSS로 parsing하기](https://github.com/story-storage-project/storystorage-client#%EB%AC%B8%EC%9E%90%EC%97%B4%EC%9D%84-css%EB%A1%9C-parsing%ED%95%98%EA%B8%B0)
+    - [React의 inline style로 적용해보기](https://github.com/story-storage-project/storystorage-client#react%EC%9D%98-inline-style%EB%A1%9C-%EC%A0%81%EC%9A%A9%ED%95%B4%EB%B3%B4%EA%B8%B0)
+    - [CSSOM에 접근해 style 적용하기](https://github.com/story-storage-project/storystorage-client#cssom%EC%97%90-%EC%A0%91%EA%B7%BC%ED%95%B4-style-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0)
+  - [Atomic Design 적용](https://github.com/story-storage-project/storystorage-client#atomic-design-%EC%A0%81%EC%9A%A9)
+    - [Styled Component와 함께 적용하기](https://github.com/story-storage-project/storystorage-client#styled-component%EC%99%80-%ED%95%A8%EA%BB%98-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0)
+    - [컴포넌트 구조 설계하기](https://github.com/story-storage-project/storystorage-client#%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8-%EA%B5%AC%EC%A1%B0-%EC%84%A4%EA%B3%84%ED%95%98%EA%B8%B0)
+    - [아토믹 디자인 적용 후 느낀 점](https://github.com/story-storage-project/storystorage-client#%EC%95%84%ED%86%A0%EB%AF%B9-%EB%94%94%EC%9E%90%EC%9D%B8-%EC%A0%81%EC%9A%A9-%ED%9B%84-%EB%8A%90%EB%82%80-%EC%A0%90)
+  - [반응형 제작](https://github.com/story-storage-project/storystorage-client#%EB%B0%98%EC%9D%91%ED%98%95-%EC%A0%9C%EC%9E%91)
+    - [스토리북을 활용한 반응형 제작](https://github.com/story-storage-project/storystorage-client#%EC%8A%A4%ED%86%A0%EB%A6%AC%EB%B6%81%EC%9D%84-%ED%99%9C%EC%9A%A9%ED%95%9C-%EB%B0%98%EC%9D%91%ED%98%95-%EC%A0%9C%EC%9E%91)
+    - [반응형 도입 이후 코드 에디터의 크기 문제](https://github.com/story-storage-project/storystorage-client#%EB%B0%98%EC%9D%91%ED%98%95-%EB%8F%84%EC%9E%85-%EC%9D%B4%ED%9B%84-%EC%BD%94%EB%93%9C-%EC%97%90%EB%94%94%ED%84%B0%EC%9D%98-%ED%81%AC%EA%B8%B0-%EB%AC%B8%EC%A0%9C)
+  - [Unit Test](https://github.com/story-storage-project/storystorage-client#unit-test)
+    - [Test Util 제작하기](https://github.com/story-storage-project/storystorage-client#test-util-%EC%A0%9C%EC%9E%91%ED%95%98%EA%B8%B0)
+    - [recoil을 사용하는 컴포넌트 테스트하기](https://github.com/story-storage-project/storystorage-client#recoil%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8-%ED%85%8C%EC%8A%A4%ED%8A%B8%ED%95%98%EA%B8%B0)
+    - [테스트를 작성하고 나서의 고찰](https://github.com/story-storage-project/storystorage-client#%ED%85%8C%EC%8A%A4%ED%8A%B8%EB%A5%BC-%EC%9E%91%EC%84%B1%ED%95%98%EA%B3%A0-%EB%82%98%EC%84%9C%EC%9D%98-%EA%B3%A0%EC%B0%B0)
+- [Framework](https://github.com/story-storage-project/storystorage-client#framework)
 - [Installation](https://github.com/story-storage-project/storystorage-client#installation)
 - [Schedule](https://github.com/story-storage-project/storystorage-client#schedule)
-- [Folder structure](https://github.com/story-storage-project/storystorage-client#folder-structure)
-- [Challenge](https://github.com/story-storage-project/storystorage-client#challenge)
-- [Feature](https://github.com/story-storage-project/storystorage-client#feature)
-- [아쉬운 점](https://github.com/story-storage-project/storystorage-client#%EC%95%84%EC%89%AC%EC%9A%B4-%EC%A0%90)
+- [Creator](https://github.com/story-storage-project/storystorage-client#creator)
 
 <br />
 
-## Motivation
+# Objectives
 
-매번 button, input,.. 레이아웃 등 UI를 제작할 때마다 "전에 만들었던 걸 리스트로 볼 수 있다면 좋겠다." 라는 생각을 하곤 했습니다. 생각만 하지 말고 그걸 실현해보자는 마음에 이 프로젝트를 기획하게 되었습니다.
-Storybook에서 컴포넌트별로 분리해서 확인할 수 있는 부분을 모티브 삼아 이름을 Story Storage라고 짓게 되었습니다.
-
-<br />
-
-## Goal
-
-외부 라이브러리 없이 직접 구현하는 것이 이번 프로젝트의 가장 큰 목표였습니다.
-이전 프로젝트에서 작은 기능 한 부분을 직접 구현하면서, 더 많은 배움과 새로운 시각을 얻을 수 있었습니다.  
-두 번째 목표는 간편하고 직관적인 형태로 구성하고, 반응형 웹과 pwd 적용을 통해 사용자 경험을 높일 수 있게 하는 것이었습니다.
+이전 프로젝트에서 라이브러리 없이 기능을 구현해보니 더 많은 배움과 새로운 시각을 얻을 수 있었다는 걸 깨달았습니다. 좀 더 배움의 시간을 가지기 위해 외부 라이브러리 없이 직접 구현하는 것을 이번 프로젝트의 목표로 설정했습니다.
 
 <br />
 
-## Build
+# Build
 
 - Client: netlify
-- Server: aws beanstalk (현재 일시정지 상태)
+- Server: aws beanstalk
 - Url: https://www.storystorage.me/
 
 <br />
 
-## Framework
+# Service Demo
+
+<p align="center">
+  <img width="800" alt="preview01" src="https://github.com/story-storage-project/storystorage-client/assets/84281505/a8313c6e-7e82-4458-8f64-795bf31cffe5">
+</p>
+
+<br />
+
+<details>
+  <summary>반응형, theme 확인하기</summary>
+  <p align="center">
+    <img width="800" alt="preview01" src="https://github.com/story-storage-project/storystorage-client/assets/84281505/298e40e6-3269-4257-bfb4-0801b0e6da0e">
+  </p>
+
+  <p align="center">
+    <img width="800" alt="preview01" src="https://github.com/story-storage-project/storystorage-client/assets/84281505/473734fa-d3cd-4a2d-8a11-9b45a67ca833">
+  </p>
+</details>
+
+<br />
+
+# Challenges
+
+## 코드 에디터 제작
+
+엘리먼트를 등록하기 위해서는 html, css 코드 에디터가 필요했습니다. 쉽게 코드 미러 라이브러리를 적용할 수도 있지만, javascript처럼 특별한 연산이 필요한 에디터가 아니라는 생각에 직접 만들어보게 되었습니다. 제가 만든 코드 에디터의 기능으로는 간단하게 다음과 같습니다.
+
+- 태그별로 색상이 달라지는 하이라이트 기능
+- tab을 클릭하면 2칸이 이동되는 기능
+- 브라켓 자동 닫힘 기능
+  - html 태그를 입력하면 자동으로 닫힘 태그가 생성되고 caret(커서)의 위치가 태그 중간으로 위치가 변경됩니다.
+  - css의 경우 중괄호가 자동으로 닫히는 기능이 있습니다.
+
+<br />
+
+### 코드 하이라이트 기능 제작하기
+
+코드 하이라이트는 코드 에디터 내에 코드마다 색상을 다르게 줄 수 있는 기능입니다.
+
+코드 에디터에서 쓰일 `textarea` 태그는 inline-block 속성으로 태그 내에 다른 태그를 넣을 수 없습니다. 하지만 코드의 종류에 따라 색상을 적용하는 하이라이트를 적용하려면 스타일링이 다른 여러 개의 태그를 넣어야만 합니다. 이 기능을 어떻게 제작해야 하나 고민하다 div 태그를 이용해 에디터를 제작하는 방향으로 진행했습니다.
+
+div 태그의 `contenteditable` 속성을 추가하면 textarea처럼 타이핑이 가능해집니다. 하지만 textarea와는 다른 점이 많았습니다.
+
+1. textarea는 클릭하면 바로 caret이 생성되지만 div 태그는 보이지 않고 타이핑 해야만 caret이 보입니다.
+2. div에는 onChange 이벤트가 존재하지 않아, onInput 이벤트를 사용해야 합니다.
+   1. textarea처럼 value가 없어 비제어 컴포넌트 방식으로 관리해야 합니다.
+3. div에 값을 재할당하는 경우 caret이 맨 앞으로 위치하는 문제가 있습니다.
+
+결국 text의 입력은 textare가 담당하고, 출력은 div가 담당하게 하도록 하는 방식으로 2가지 태그를 한 번에 써보자 라는 결정을 하게 됐습니다. 이렇게 함으로써 에디터를 제어 컴포넌트 방식으로 관리할 수 있게 되었습니다.
+
+<p align="center">
+  <img src="https://github.com/story-storage-project/storystorage-client/assets/84281505/f983a1b4-2fe2-49ff-a040-72aec53e26b2" alt="textarea" />
+</p>
+
+text 입력값을 받아들이는 setState와 text에 따른 스타일링된 태그들이 담긴 ref 데이터를 return하는 `useHtmlHighLightQueryText` 라는 커스텀 훅을 만들었습니다. text 입력값이 들어올 때 마다 text를 주석, 공백, 괄호 등으로 `split` 을 적용해 배열로 만든 후 각각의 text에 맞는 스타일링된 태그들을 반환합니다.
+
+<br />
+
+타이핑 되자마자 하이라이트가 적용되어야 하기 때문에 debounce나 throttle을 적용하지 못했습니다. 대신 useCallback을 사용해 타이핑 될 때마다 실행되는 `useHtmlHighLightQueryText`훅 내의 스타일링된 태그를 생성하는 함수가 매번 생성되지 않도록 설정했습니다.
+
+<br />
+
+### Tab 클릭 시 2칸 들여쓰기 되는 기능 추가
+
+기본적으로 `textarea`에서 tab을 클릭하게 되면 focus가 해당 textarea를 벗어나 다른 요소로 이동하게 됩니다. 보통의 코드 에디터는 tab을 누르면 2칸의 공백이 생기게 되는 것이 일반적이라 생각하여 Tab 기능을 추가하게 됐습니다.
+
+tab의 기능을 위해 `insertTab`이라는 util 함수를 제작해 사용했습니다.
+
+```js
+export function insertTab(event, textBox, caretPositionArg) {
+  event.preventDefault();
+  const caretPosition = getCaretPosition(textBox, caretPositionArg);
+  const preText = textBox.value.substring(0, caretPosition);
+  const postText = textBox.value.substring(caretPosition, textBox.value.length);
+  const copyTextBox = textBox;
+  copyTextBox.value = `${preText}\t${postText}`;
+
+  return copyTextBox.value;
+}
+```
+
+`insertTab`의 기능으로는 아래와 같습니다.
+
+1. “tab” keyDown 이벤트가 발생했을 때 `e.preventDefault()`를 이용해 포커스가 이동되지 않도록 합니다.
+2. 현재의 caret 위치를 구합니다.
+3. 처음부터 현재의 caret 위치까지의 text를 저장합니다.
+4. 현재 caret위치부터 끝까지의 text를 저장합니다.
+5. 3번과 4번을 더하고, 사이에 `\t`을 추가하여 textarea의 text를 업데이트합니다.
+
+모든 문자열을 반환해 업데이트 하는 작업이 이뤄지기 때문에, caret은 그 즉시 위치 값이 없어지게 됩니다. text를 업데이트하기 전 caret의 위치 값을 저장하고, 업데이트 후에 caret의 위치까지 올바른 위치로 가게 해주는 작업도 해주었습니다.
+
+<br />
+
+## JSX Parser 제작
+
+프로젝트의 구현을 React로 선택했기 때문에 코드에디터로 받은 string을 JSX 엘리먼트로 parsing하는 작업은 필수였습니다.
+
+처음의 계획은 HTML을 거치지 않고 string에서 JSX 태그로 바로 변환하는 방법을 생각했습니다. `innerHTML`의 react 버전인 `dangerouslySetInnerHTML`을 이용하면 바로 변환할 수 있기 때문입니다. 하지만 사용하고 나서 문제점을 발견하게 되었습니다.
+
+```js
+<div>
+  <textarea value="test" />
+  <button>bye</button>
+</div>
+```
+
+위와 같은 상황에서 `button`이 `textarea`의 value 자체로 인식되는 등 싱글 태그가 적용되지 않는 문제가 생겼습니다. 그리고 React에서도 사용을 지양하길 바라는 마음이 느껴지는 태그 이름이라는 점도 한몫했습니다. JSX로 parsing하기 전 string 코드의 validation 과정을 거치기 때문에 XSS의 위험 요소를 감소시킨 상황이긴 했지만요. 그래서 저는 직접 JSX 엘리먼트를 만들 수 있는 JSX parser를 제작하게 되었습니다.
+
+JSX로 작성된 코드는 Babel을 통해 브라우저에서 실행할 수 있도록 Javascript 코드인 `React.createElement`로 변환됩니다. `React.createElement`의 구조는 다음과 같습니다. 인자로 요소 타입, props, children을 받습니다.
+
+```js
+//react
+const element = (
+  <div className: 'greeting'>
+    Parent Element
+    <span>Child Element</span>
+  </div>
+);
+
+// pure javascript
+const element = React.createElement(
+  'div',
+  {className: 'greeting'},
+  React.createElement('span', null, 'Child Element')
+);
+
+```
+
+컴포넌트 내에 컴포넌트가 들어있는 경우 최상단의 React.createElement가 있고 children으로 또 다른 createElement가 실행되는 것을 확인할 수 있습니다.
+
+저는 HTML로 parsing한 데이터를 이용해 createElement를 실행하는 방법으로 JSX 엘리먼트를 만들게 되었습니다. 순서는 간단하게 다음과 같습니다.
+
+<p align="center">
+  <img src="https://github.com/story-storage-project/storystorage-client/assets/84281505/fa576dc3-1cf0-4b2b-8e7d-fa0ffbf2488d" alt="textarea" />
+</p>
+
+1. string을 `DOMParser`로 실행하여 HTML NodeList 데이터를 얻습니다.
+2. NodeList를 탐색하면서 node의 타입이 3(TEXT NODE) 또는 8(COMMENT)가 나오기 전까지 위와 같은 데이터 형식을 만듭니다. (혹시나 모를 중첩 에러를 대비해 데이터의 최상단 노드 타입으로 fragment를 설정했습니다.)
+3. 2번에서 가공된 데이터를 이용해 createElement를 재귀적으로 실행하는 함수를 컴포넌트의 return문 안에서 실행하여 JSX 엘리먼트를 생성합니다. (JSX 엘리먼트는 Symbol 객체로 이루어져 있습니다.)
+
+<br />
+
+## 문자열을 CSS로 parsing하기
+
+문자열을 CSS로 적용하기 위해 시도해본 건 크게 3가지입니다.
+
+<br />
+
+### React의 inline style로 적용해보기
+
+제일 처음 string을 style로 적용하는 방법으로 떠올린 건 React의 inline style 방법이었습니다.
+
+```js
+return <div style={{ color: 'red' }}></div>;
+```
+
+React에서는 inline style을 객체를 이용해 적용할 수 있습니다.
+
+문자열로 받은 CSS를 객체로 변환하여, HTML에서 JSX 엘리먼트를 생성할 때 props로 style 객체를 전달해주는 방식으로 적용하는 방식으로 진행하려 했습니다. 하지만 프로젝트 진행 도중, 이 방법으로는 hover나 focus등의 pseudo class를 사용하지 못한다는 문제점을 알게 됐습니다.
+
+pseudo class를 지원하지 않고, 기본적인 style만 적용해보려고 했으나 유저가 pseudo class를 입력했을 때 그것을 제거하는 작업 또한 쉽지 않은 부분이 있어 다른 방식을 찾아보게 됐습니다.
+
+<br />
+
+### CSSOM에 접근해 style 적용하기
+
+inline style의 한계를 느끼고 이제 다시 원점으로 돌아와 고민해보기 시작했습니다. 그러던 중 styled component나 emotion같은 CSS in JS 방식 라이브러리들은 어떻게 스타일을 적용하고 있는 거지? 라는 궁금증이 생겨 찾아보았습니다.
+
+<p align="center">
+  <img src="https://github.com/story-storage-project/storystorage-client/assets/84281505/69f889f9-a891-4807-a7bc-6f9598992a97" width="800" alt="textarea" />
+</p>
+
+styled component는 CSSStyleSheet를 생성하고 각 항목마다 CSSStyleRule이 생성되는 방식이었습니다. 대부분의 CSS in JS 방식이 이 방식을 사용한다는 것을 알게 됐습니다.
+
+이것을 보고, 저도 CSSStyleRule을 추가하는 방식으로 구현하면 되지 않을까? 라는 생각이 들었습니다.
+
+```js
+const sheet = new CSSStyleSheet();
+sheet.insertRule(...)
+```
+
+생성자 함수를 통해 간단하게 StyleSheet를 생성할 수 있고, `insertRule`을 통해 rule을 주입할 수 있습니다.
+
+insertRule을 사용해서 할 수도 있지만, 저는 굉장히 간단한 방법으로도 CSSStyleSheet를 추가할 수 있다는 것을 알게 됐습니다. 바로 style 태그를 새로 생성하는 것입니다.
+
+```js
+style.current = document.createElement('style');
+document.head.appendChild(style.current);
+style.current.innerHTML = styleStringCode;
+```
+
+ref를 이용해 style element를 만들고 head에 추가합니다. 그리고 validation이 완료된 string code를 innerHTML을 이용해 추가하면 아주 간단하게 style을 설정할 수 있었습니다.
+
+조금은 허무하지만 부족한 프로젝트 시간 내에서 style 적용 작업을 마무리하기 위해서 원초적인 방법인 innerHTML로 해결하게 되었습니다. innerHTML을 이용하면 hover 등 의사 클래스도 문제없이 적용되었고, 시간 안에 해결할 수 있었습니다.
+
+<br />
+
+## Atomic Design 적용
+
+초반에 구조에 대한 방향을 지정하지 않고 프로젝트 진행을 하면서 도중에 구조를 변경하는 것은 꽤 시간이 오래 걸리고 힘든 작업이라는 걸 느끼게 되었습니다. 그래서 저는 프로젝트 초반에 명확한 기준을 도입하기 위해 재사용 목적에 잘 맞는 아토믹 디자인을 적용해보았습니다.
+
+<br />
+
+### Styled Component와 함께 적용하기
+
+아토믹 디자인을 적용하면서 styled component를 활용했습니다. css in js 방식으로 props를 이용해 css 구성요소를 자유롭게 설정할 수 있다는 장점을 이용해 원자(Atom) 컴포넌트를 제작할 때 props를 적극 활용하게 되었습니다.
+
+<br />
+
+### 컴포넌트 구조 설계하기
+
+아토믹 디자인은 원자(atom) 단위에서 분자(molecules), 유기체(organisms). 이렇게 점진적인 방식으로 구성됩니다. 이번 프로젝트 구조를 설계할 때에도 원자 단위부터 설계하고, 조합해 나가는 순서로 설계하였습니다.
+
+구조를 설계하며 제일 고민했던 부분은 분자와 유기체를 구분하는 부분이었습니다. 분자와 유기체 둘 다 두 개 이상의 원자로도 구성될 수 있는 특성이 있어 둘의 경계가 모호하다고 생각했습니다. 둘을 합쳐 하나로 사용할 수도 있지만, 저는 둘의 경계를 context와 재사용성의 유무로 결정하게 됐습니다.
+
+context가 포함된 경우 재사용성이 떨어진다 생각하여 유기체로 구성했고, context에 의존하지 않고 SRP를 지킬 수 있는 컴포넌트의 경우엔 분자로 구성하게 되었습니다. 이번 프로젝트에서 html, css의 두 가지 코드 에디터가 필요했는데 분자 컴포넌트로 `TextEditor` 를 설정하고 이것을 이용해 `CssCodeEditor`와 `HtmlCodeEditor`라는 유기체 컴포넌트를 제작했습니다.
+
+<br />
+
+### 아토믹 디자인 적용 후 느낀 점
+
+적용 후 느낀 점으로는 크게 아래와 같습니다.
+
+- 명확한 계층 구조로 컴포넌트 탐색이 쉽다.
+- 좀 더 탄탄한 컴포넌트를 작성할 수 있다.
+- 정형화된 틀이 없다.
+
+저의 경우 기본적인 아토믹 디자인의 5가지 계층을 모두 적용하게 됐는데, 처음에는 헷갈렸던 구조가 적응 이후에는 폴더의 이름 자체가 크기로 느껴져 컴포넌트 탐색 시 좀 더 수월했던 경험을 했습니다.
+
+아토믹 디자인을 적용하게 되면 초기 컴포넌트 설계를 형식에 맞춰 적용해야 하고, 컴포넌트의 크기를 구분해야 하므로 설계 시 시간이 많이 드는 특징이 있습니다. 아토믹 디자인을 적용하게 되면 좀 더 탄탄한 컴포넌트를 작성할 수 있다는 장점이 있습니다. 하지만 이 장점은 단점으로도 작용합니다.
+탄탄한 컴포넌트가 될 수도 있지만 다른 추가 사항이 생긴다면 다시 수정해야 하는 데에도 드는 시간이 작지 않다는 점입니다. 이번 프로젝트처럼 저 혼자서 하는 프로젝트라면 저만의 규칙을 적용하면 되지만, 팀 프로젝트나 이미 진행 중인 프로젝트의 경우 구분 방식을 결정하는 커뮤니케이션에 대한 비용이 클 수 있지 않을까 라는 생각이 들었습니다.
+
+<br />
+
+## 반응형 제작
+
+모바일, 태블릿, 데스크탑 3가지의 반응형으로 제작했습니다. 3가지 반응형 디자인을 피그마로 목업을 제작한 후 먼저 데스크탑 사이즈로 간단한 목업 페이지를 만들었습니다. 그리고 모바일 사이즈부터 미디어 쿼리를 이용해 적용했습니다.
+
+모바일로도 확인할 수 있게되니 직접 사용하면서 어떤 점이 불편한지, 어떤 부분을 개선해야 하는지 즉각적으로 알 수 있었습니다.
+
+<br />
+
+### 스토리북을 활용한 반응형 제작
+
+<p align="center">
+  <img src="https://github.com/story-storage-project/storystorage-client/assets/84281505/563d7af8-692e-4423-9511-150847fbe996" width="800" alt="textarea" />
+</p>
+
+이번 반응형 제작에는 스토리북을 많이 활용하게 되었습니다. 스토리북에서는 뷰포트 사이즈를 설정할 수 있는 viewport addon을 적용해 간편하게 페이지들의 사이즈를 확인할 수 있었습니다. 처음엔 스토리북에 설정해야 할 것들이 꽤 있어 적용하는 부분에 시간이 조금 걸렸지만, 웹에서 각각의 페이지에 들어가지 않고도 페이지들을 확인할 수 있다는 점이 테스트하기에 용이했습니다.
+
+<br />
+
+### 반응형 도입 이후 코드 에디터의 크기 문제
+
+제가 만든 코드 에디터는 textarea 위에 div 태그를 얹은 형태로 제작되어 있습니다. textarea의 caret만 이용하고 텍스트는 div로 감싸서 표시해주는 형태입니다.
+
+처음에는 코드 에디터 사이즈를 고정하지 않고 유연하게 사이즈 조절이 되도록 설정하니 textarea와 div 태그가 조금씩 어긋나기 시작하는 문제가 생겼습니다. 사이즈와 속성값을 같게 설정했지만, 태그 내에 제가 알 수 없는 부분에서 오류가 생기기 시작했습니다.
+
+사이즈를 뷰포트 사이즈에 맞게 3단계로 고정하려 했지만, 뷰포트의 각 단계에서 다음 단계로 갈 때 코드 에디터가 너무 작게 보이거나, 또는 너무 커서 짤려 보이는 문제가 있었습니다. 그래서 저는 코드 에디터 컴포넌트만 미디어 쿼리로 10단계의 고정형 사이즈를 설정하여 문제를 해결했습니다.
+
+<br />
+
+## Unit Test
+
+테스트 작성이 익숙치 않아 좀 더 익혀보고자 라인 커버리지 60프로를 목표로 삼았고, 결과로는 서버와 클라이언트 모두 90프로 이상의 라인 커버리지를 달성했습니다.
+
+<br />
+
+### Test Util 제작하기
+
+이번 테스트 때는 testing-library/react와 jest를 사용했습니다.
+
+```js
+function AllTheProviders({ children }) {
+  return (
+    <CookiesProvider>
+      <RecoilRoot>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          {children}
+        </ThemeProvider>
+      </RecoilRoot>
+    </CookiesProvider>
+  );
+}
+
+const customRender = (ui, options) => {
+  return render(ui, { wrapper: AllTheProviders, ...options });
+};
+
+export { customRender as render };
+// testing-library의 render 대신 customRender를 import하여 사용합니다.
+```
+
+```js
+tree = render(
+  <CookiesProvider>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <Footer />
+    </ThemeProvider>
+  </CookiesProvider>,
+);
+
+// 이 방식으로 사용해야하는 것을
+
+tree = render(<Footer />);
+
+// 이렇게 간단하게 사용할 수 있습니다.
+```
+
+프로젝트 내에서는 Recoil과 Cookie Provider그리고 Theme Provider를 이용하기 때문에 컴포넌트를 테스트하기 위해서는 컴포넌트를 감싸야 하는 Provider들이 3개가 필요합니다. 테스트 시에 각 각의 컴포넌트마다 모두 Provider를 적용하게 된다면 코드가 길어지고 비효율적인 방법이 될 것입니다. 이를 방지하기 위해서 미리 적용한 AllTheProviders라는 Provider를 만들어 testing-library render의 wrapper로 AllTheProviders를 적용하는 커스텀 util을 만들어 사용했습니다.
+
+<br />
+
+### recoil을 사용하는 컴포넌트 테스트하기
+
+Recoil을 사용하고 있는 컴포넌트를 테스트하는 게 제일 고민이 컸던 부분이었습니다. 커스텀훅으로 분리되어 있는 것이 아닐 때 컴포넌트 내 recoil state의 값의 변경을 테스트하는 건 쉽지 않았습니다. 이것을 해결하기 위해 recoil observer를 이용하게 되었습니다.
+
+```js
+export default function RecoilObserver({ node, onChange }) {
+  const value = useRecoilValue(node);
+
+  useEffect(() => onChange(value), [onChange, value]);
+
+  return null;
+}
+```
+
+RecoilObserver를 사용하여 node에 해당 recoil state의 이름을 넣고 컴포넌트가 렌더될 때 해당 state가 실행이 되었는지 또는 어떤 값과 실행됐는지 체크할 수 있었습니다.
+
+```js
+const onChange = jest.fn();
+
+act(() => {
+  render(
+    <RecoilRoot>
+      <RecoilObserver node={codeViewMode} onChange={onChange} />
+      <CodeEditor />
+    </RecoilRoot>,
+  );
+});
+
+await waitFor(() => {
+  expect(onChange).toHaveBeenCalledWith('allInOne');
+});
+```
+
+위와 같은 방법으로 codeViewMode라는 recoil state가 “allInOne”이라는 값과 함께 호출 됐는지 확인할 수 있었습니다.
+
+<br />
+
+### 테스트를 작성하고 나서의 고찰
+
+프로젝트 일정이 촉박하여 테스트 작성에 대한 충분한 고려를 하지 않고 테스트를 작성하게 되었습니다. 그러다보니 테스트 코드 작성이 더 까다롭고 어렵게 느껴져 조금은 답답한 감정을 느끼게 되었습니다. 제 테스트 코드에 대한 문제가 무엇인지 파악하기 위해 프로젝트 이후 단위 테스트에 대해 조금 더 공부해보는 시간을 가지게 되었습니다.
+살펴보고 나니, 테스트를 작성하는 목적이 잘못 되었다는 것을 깨달았습니다. 라인 커버리지가 높다고 좋은 것이 아니며, 코드의 수가 많아질수록 유지보수성이 떨어진다는 걸 예상하지 못했던 것입니다.
+
+앞으로 테스트를 작성해야 할 때는 커버리지에만 집중하는 것이 아니라, 해당 코드에서 중요한 부분과 필요한 테스트에 대해 신중히 고려한 후에 테스트를 작성해야 한다는 것을 배우게 됐습니다.
+
+<br />
+
+# Framework
 
 | Frontend          | Backend      |
 | ----------------- | ------------ |
@@ -141,7 +424,7 @@ Storybook에서 컴포넌트별로 분리해서 확인할 수 있는 부분을 �
 
 <br />
 
-## Installation
+# Installation
 
 <details>
 <summary>Client Installation</summary>
@@ -220,7 +503,7 @@ npm start
 
 <br />
 
-## Schedule
+# Schedule
 
 - 2022.11
 
@@ -236,394 +519,6 @@ npm start
 
 <br />
 
-## Folder structure
-
-<details>
-<summary>Client Folder</summary>
-
-```
-Client
-   ├─ components
-   │  ├─ App.jsx
-   │  ├─ atoms
-   │  │  ├─ Button
-   │  │  ├─ ImageIcon
-   │  │  ├─ Input
-   │  │  ├─ List
-   │  │  ├─ HiddenToggleViewer
-   │  │  └─ Text
-   │  ├─ molecules
-   │  │  ├─ Modal
-   │  │  ├─ TextEditor
-   │  │  ├─ Toggle
-   │  │  └─ Ul
-   │  ├─ organisms
-   │  │  ├─ CodeEditor
-   │  │  ├─ CssCodeEditor
-   │  │  ├─ Footer
-   │  │  ├─ HtmlCodeEditor
-   │  │  ├─ LeftMenu
-   │  │  ├─ PreviewStory
-   │  │  └─ Story
-   │  ├─ pages
-   │  │  ├─ Login
-   │  │  ├─ NotFound
-   │  │  ├─ StoryAllPage
-   │  │  ├─ StoryMaker
-   │  │  └─ StoryPage
-   │  ├─ templates
-   │  │  └─ Layout
-   │  └─ theme
-   │     ├─ GlobalStyle.js
-   │     └─ default.js
-   ├─ constants
-   │  ├─ errorMessage.js
-   │  ├─ nodeTypes.js
-   │  └─ webNamespaces.js
-   ├─ data
-   │  ├─ cssJsxProperties.js
-   │  ├─ htmlElements.js
-   │  ├─ htmlJsxAttributes.js
-   │  └─ templates
-   ├─ hooks
-   │  ├─ useCssHighLightQueryText.jsx
-   │  ├─ useElementCompiler.jsx
-   │  ├─ useHtmlHighLightQueryText.jsx
-   │  ├─ useQuery.jsx
-   │  └─ useSetStyleState.jsx
-   ├─ index.jsx
-   ├─ service
-   │  ├─ authApi.js
-   │  ├─ getGoogleUrl.js
-   │  ├─ http.js
-   │  └─ storyApi.js
-   ├─ store
-   │  ├─ codeState.js
-   │  └─ userState.js
-   └─ utils
-      ├─ codeEditor.js
-      ├─ cssPropertyParser.js
-      ├─ cssValidate.js
-      ├─ htmlValidate.js
-      ├─ insertPreviewClass.js
-      ├─ keyMaker.js
-      └─ stringHtmlParser.jsx
-
-```
-
-</details>
-
-<details>
-<summary>Server Folder</summary>
-
-```
-Server
-├── constants
-├── data
-│   └── templates
-│       └── templates.js
-├── db
-│   └── database.js
-├── models
-│   ├── Story.js
-│   └── User.js
-├── routes
-│   ├── controller
-│   │   ├── authController.js
-│   │   ├── storyController.js
-│   │   └── userController.js
-│   ├── middleware
-│   │   └── verifyAuth.js
-│   ├── authRouter.js
-│   ├── index.js
-│   ├── storyRouter.js
-│   └── userRouter.js
-├── service
-│   └── session.service.js
-├── utils
-│   ├── appErrors.js
-│   └── jwt.js
-├── app.js
-├── config.js
-└── README.md
-```
-
-</details>
-
-<br />
-
-## Challenge
-
-### Atomic Design 적용
-
-아토믹 디자인을 도입하게 된 이유도 이 프로젝트의 목적인 '재사용'과 연관 지어 결정하게 되었습니다.
-atom ~ page까지의 다섯 가지 분류를 모두 적용해 보면서 아토믹 디자인이 어떤 것인지 익혀보려 하였습니다.
-
-<br />
-
-> 느낀 점
-
-<br />
-
-1. 초반 설계의 중요성
-
-- 기준이 명확한 디자인 설계가 굉장히 중요하다는 것을 배웠습니다. 패턴을 나누는 기준이 명확하지 않아 초반에 설계할 때 많은 시간을 쓰게 되었는데 이때 시간을 쓰지 않았더라면 후에 수정하려 할 때 많은 복잡도가 요구될 것 같다는 생각이 들었습니다.
-
-2. 폴더 분류의 기준
-
-- 디자인 패턴을 적용하기 전에는 패턴이라는 것이 명확하게 정해져 있는 것으로 생각했지만 조금 더 알아보고 사용해보니 패턴이라는 것은 틀만 주어지고 그것을 어떻게 응용하느냐에 따라 다른 결과를 낼 수 있다는 걸 알게 되었습니다. 그러다 보니 제가 적용한 방법이 옳은 것인지 탐구하는 시간을 많이 가지게 되었습니다. 특히 `molecules`와 `organisms`을 구분할 때 모호함을 많이 느끼게 되어 많은 고민을 하게 되었는데, 다른 글들을 참고하여 구분하는 기준을 컨텍스트의 유무로 나누어 분류하였습니다. 처음에는 폴더 분류가 익숙하지 않았지만, 시간이 지날수록 커스텀화하여 쓸 수 있다는 점이 큰 장점으로 와 닿았습니다.
-
-3. 장점
-
-- 적용 후 시간이 지날수록 많은 장점을 느끼게 되었습니다.
-  이전에 components 폴더 안에 모든 컴포넌트를 한 번에 넣어놓고 작업했던 것 보다 원하는 컴포넌트를 찾기에 효율적이었습니다. 처음엔 명시적이지 않던 폴더의 이름들이 적응 후에는 이름 자체가 모듈의 크기로 느껴져 더 명시적이고 뚜렷한 느낌을 받게 되었습니다.
-
----
-
-### Google oauth jwt 토큰 로그인 적용
-
-firebase 등 npm 설치 없이 로그인을 적용할 방법을 알아보던 중 passport 라이브러리 없이 적용하는 방법을 알게되어 적용해보게 되었습니다.
-
-<br />
-
-> 구현 방법
-
-<br />
-
-1. 클라이언트에서 로그인 버튼을 누르면 구글 인가 서버 url로 접속합니다.
-
-```js
-// google auth url
-const getGoogleUrl = from => {
-  const rootUrl = `https://accounts.google.com/o/oauth2/v2/auth`;
-
-  const options = {
-    redirect_uri: config.googleOauth.redirect,
-    client_id: config.googleOauth.clientId,
-    access_type: 'offline',
-    response_type: 'code',
-    prompt: 'consent',
-    scope: [
-      'https://www.googleapis.com/auth/userinfo.profile',
-      'https://www.googleapis.com/auth/userinfo.email',
-    ].join(' '),
-    state: from,
-  };
-
-  const qs = new URLSearchParams(options);
-
-  return `${rootUrl}?${qs.toString()}`;
-};
-```
-
-2. redirect url로 등록한 서버의 주소로 get 요청이 들어오면 서버에서 request의 code를 받아 서버에서 code와 client id, secret, grant_type 등 옵션을 넣어 oauth2.googleapis 서버로 직접 post 요청을 보냅니다. 인증을 받게되면 id token과 access token을 얻습니다.
-
-3. access token이 포함된 주소로 요청을 보내 유저 정보를 받고 가입이 되어 있지 않으면 유저를 등록합니다.
-
-4. 서버만 가지고 있는 access token의 private key, refresh token의 private key를 이용하여 각각의 jwt 토큰을 만들어 response에 cookie를 설정하고 client의 주소로 redirect 응답을 보냅니다.
-
-5. 클라이언트의 요청마다 cookie에 저장되어 있는 access token을 서버의 access token public key로 검증합니다.
-
-6. 유저에게 등록된 access token의 만료기간이 끝나고 refresh token만이 남아있을 경우 클라이언트에서 요청시 요청을 우회하여 refresh 토큰을 검증하는 서버로 요청을 보낸 후 다시 access token을 발급 받고 처리하지 못했던 클라이언트 요청을 처리합니다.
-
-```js
-const API = axios.create({...});
-
-API.interceptors.response.use(
-  res => {
-    ...
-  },
-
-  error => {
-    ...
-    if (response && response.status === 401) {
-      const originalRequest = reqConfig;
-
-      try {
-        const data = await axios.get(`${baseURL}/auth/refresh`, {
-          withCredentials: true,
-        });
-
-        if (data.result === 'success') {
-
-          return axios(originalRequest);
-        }
-      } catch (err) {
-        throw currentError;
-      }
-    }
-```
-
-axios의 interceptors를 이용하여 error status code가 401일 경우 요청을 우회하여 refresh 토큰을 검증하는 서버로 요청을 보낸 후 성공 메시지를 받게 되면 다시 처리하지 못했던 요청을 처리해주었습니다.
-
-<br />
-
-> 이슈
-
-<br />
-
-- 배포 시 쿠키가 클라이언트에 등록되지 않는 이슈
-- 네트워크 탭에는 request, response 모두 쿠키가 담겨 있지만 어플리케이션에서 쿠키탭을 확인하면 쿠키가 적용되지 않는 이슈가 있었습니다. 이는 배포 후에 사이트가 https가 적용되어 설정했던 secure 옵션이 바로 적용되지 않은 점, cookie에 domain 설정이 되어있지 않았던 점이 문제로 작용하였습니다.
-
-  ```js
-  const httpsOption =
-    config.nodeEnv === 'production'
-      ? {
-          secure: true,
-          domain: 'storystorage.me',
-        }
-      : {};
-  ```
-
-  배포 사이트와 로컬 사이트 둘 다 테스트하기 위해서 cookie에 들어갈 옵션 중 https용 쿠키 옵션을 따로 빼서 환경 설정에 따라 적용되도록 해주었습니다.
-
-<br />
-
-> 느낀 점
-
-<br />
-
-- 로그인 과정을 진행하면서 전에 사용했던 passport 라이브러리에서 헷갈렸던 부분들을 정리할 기회가 되었습니다. 그와 더불어 어렵게만 느껴졌던 passport라는 라이브러리가 따로 서버에서 처리해줘야 복잡한 요청을 두 개의 라우트와 strategy 설정을 통해서 관리하기 쉽게 해준다는 것을 깨닫게 되었습니다. 어떠한 과정으로 로그인이 진행되는지 직접 해보고 나니 그전엔 로그인되는 과정을 모른 채 라이브러리의 사용법만을 알려고 노력했기 때문에 어려웠다는 걸 알게 되었습니다. 라이브러리의 사용법보다는 과정을 이해하려 한다면 라이브러리를 좀 더 쉽게 사용할 수 있을 거라는 생각을 하게 된 계기가 되었습니다.
-
-### StoryBook 적용
-
-- 아토믹 디자인과 함께 적용해보고 싶었던 storybook을 적용해보았습니다.
-
-### Test Lines coverage 90프로 이상
-
-|                  | File      | Stmts | Branch | Funcs | Lines |
-| ---------------- | --------- | ----- | ------ | ----- | ----- |
-| Client Unit Test | All files | 93.03 | 87.94  | 90.44 | 93.78 |
-| Server Unit Test | All files | 99.24 | 82.64  | 75.58 | 99.24 |
-
-<br />
-
-## Feature
-
-### 코드 에디터 제작
-
-엘리먼트를 등록하기 위해서는 html(+ jsx), css 코드 에디터가 필요했습니다. 처음에 생각한 선택지는 code mirror, markdown code editor를 생각했지만 제가 구현하고자 했던 에디터는 javascript처럼 특별한 연산이 필요한 작업이 아니었기 때문에 라이브러리 없이 구현할 수 있지 않을까라는 생각에, 앞서 생각했던 선택지를 배제하게 되었습니다. textarea 위에 div를 얹을 수 있을 것 같다는 생각이 들어 textarea와 div를 이용해서 구현하게 되었습니다.
-
-<br />
-
-> 구현 기능
-
-<br />
-
-1. vscode처럼 `<div>`, `{` 태그를 입력하면 자동으로 닫힘태그가 입력되는 기능
-
-- onKeyDown을 이용해 글자를 체크하여 구현하였습니다. 끝 괄호를 체크하여 괄호를 만들고 커서가 텍스트 중간에 있어도 위치가 잘 유지되기 위해서 caretPosition을 이용해 앞의 text와 뒤 text를 분리하여 합쳐주는 작업을 하였습니다.
-
-2. vscode와 같은 tab 기능
-
-- textarea에서 텍스트의 위치를 조절하는 부분이 생각보다 까다로웠습니다. tab 기능을 추가하기 위해서는 커서의 위치뿐 아니라 뒤의 text 유무까지 파악해야 했기 때문에 위의 방법처럼 앞의 text와 뒤의 text를 caret의 위치로 나눈 후 그 사이에 `/t`을 삽입해주었습니다.
-- 문자열 중간에 `/t`만을 삽입하는 것이 아닌 문자열을 둘로 나눠 모든 문자열을 반환하는 작업을 해주었기 때문에 caret은 그 즉시 위치값이 없어지게 되어 삽입 전에 caret의 위치값을 저장하고, 삽입 후 caret의 위치까지 올바른 위치로 가게 해주는 작업까지 함께 해주었습니다.
-
-3. 태그 이름, 어트리뷰트 이름별로 하이라이트 색깔이 달라지는 기능
-
-- 이 기능을 추가하기 위해서 많은 라이브러리를 찾아보게 되었습니다. 다른 에디터를 개발자 도구로 확인하던 중 모든 엘리먼트들이 span으로 나뉘어있는 것을 보게 되었습니다. 거기서 힌트를 얻어 span 태그를 이용한 작업을 하게 되었습니다. textarea의 value를 얻어 그것을 `code.split(/(<!--| |-->|<|>)/)` 주석, 공백, 괄호 등으로 나눠 `split`해준 후 `map`을 돌면서 각각의 text에 맞는 span태그를 지정하여 렌더링 해주었습니다. html, jsx, css attributes, value data를 저장하여 map을 돌면서 맞는 attribute인지 확인해주는 작업을 추가하여 잘못된 경우에는 밑줄이 쳐진 span 태그를 리턴하도록 해주었습니다.
-- 조건문의 개수가 많아지게 되어 `useHtmlHighLightQueryText`라는 custom hook을 만들게 되었습니다.
-  `const [htmlCode, queryHtml, setQueryHtml] = useHtmlHighLightQueryText(htmlData);` queryHtml에는 span 엘리먼트의 값이 들어있습니다. 컴포넌트의 return문 안에 위치하여 값으로 작용하도록 해주었습니다. setQueryHtml는 span을 만드는 함수가 담겨있습니다. onKeyDown 이벤트 함수안에 넣어 키가 입력될 때 실행되도록 해주었습니다.
-
-<br />
-
-> 느낀 점
-
-<br />
-
-- 코드 에디터의 기능이 생각보다 수작업으로 해야 하는 작업이 많다는 걸 느끼게 되었습니다. 하나씩 비교를 해주어야 하는 부분이 많아 조건문의 개수가 많아져 코드의 가독성이 점점 떨어지게 되었는데, 이 부분을 잘 모듈화하여 포장하는 작업을 잘하질 못한 것 같아 아쉬웠습니다.
-  기능 구현 부분에서 시간을 많이 쏟게 되어 렌더링 최적화에 대해 많은 신경을 쓰지 못한 점도 아쉬운 부분이 많습니다. 지금의 구현 방법으로는 텍스트를 입력할 때마다 계속 새로운 span태그가 생성되어 텍스트의 양이 많아질 때는 굉장히 느려지는 이슈가 있습니다. 이 방법을 보완하기 위해서 어떻게 개선해야 할지 렌더링 최적화와 같이 고민해보고 리팩토링 해보려합니다.
-
----
-
-### string html to dom
-
-string html을 dom으로 바꾸는 작업을 해주었습니다. 처음의 접근 방법은 `innerHTML`을 사용하고자 했습니다. React에서 `innerHTML`을 사용하기 위해서는 `dangerouslySetInnerHTML` 태그를 사용해야 하지만
-
-```
-<div>
-  <textarea value="" />
-  <button></button>
-</div>
-```
-
-이러한 값을 넣었을 때 button이 textarea의 value 자체로 인식되는 등의 이슈가 생겨 저 태그가 아닌 DOMParser api를 사용하여 string을 dom으로 만드는 작업을 해주었습니다.
-
-코드 에디터에서 값이 입력되고 올바른 값인지 체크 후 `new DOMParser()`을 이용해 parser를 만든 후 `parseFromString` 메서드를 이용해 dom 엘리먼트로 변환하여 Node Lists를 얻었습니다.
-
-노드 하나 하나의 정보를 저장하기 위해서 1차 가공작업을 하였습니다. 노드 리스트는 트리 형태로 되어 있기 때문에 재귀 함수를 만들어 자식 노드들을 다 거치게 하였습니다.
-(노드 리스트는 배열이 아닌 유사 배열 객체라서 `Array.from...call`을 사용하였습니다.)
-
-`React.createElement(component, props, ...children)`  
-react createElement는 위와 같은 형태를 가지기 때문에 props라는 빈 객체를 만들어 수집한 데이터를 넣어주었고, node type을 체크하여 childNodes가 없을 때까지 노드의 attribute와 textcontent를 수집합니다. props 객체를 노드마다 만들어주면서 수집한 데이터를 안에 넣어주었습니다.
-
-<img src="./src/assets/readme02.png" alt="node">  
-1차 가공후의 모습입니다.  
-이렇게 정보를 중첩하여 저장한 후 element를 만들어 주는 재귀함수를 실행시킵니다.
-
-```js
-import { createElement, Fragment } from 'react';
-
-export default function useElementCompiler(data) {
-  if (!data) return;
-
-  const child = Array.isArray(data.children)
-    ? data.children.map(item => useElementCompiler(item)).filter(Boolean)
-    : data.children;
-
-  if (Array.isArray(child)) {
-    return createElement(
-      data.type === 'fragment' ? Fragment : data.type,
-      data.props,
-      ...child,
-    );
-  }
-
-  return createElement(data.type, data.props, data.children);
-}
-```
-
-모든 데이터의 취상위 루트를 fragment로 감싸주어 최상위 노드가 여러 개일 경우 발생할 수 있는 이슈를 방지해주고자 하였습니다.
-
-<br />
-
-> 느낀 점
-
-<br />
-
-- 태그를 작성하는 것이 아닌 함수를 만들어 가공하는 작업을 거친 후 만든다는 게 직관적이지 않고 눈에 보이는 작업이 아니라서 어려운 부분이 있었습니다. 많은 라이브러리를 참고하면서 처음엔 1차, 2차 가공이 아닌 처음 시작부터 createElement를 호출하면서 작업하였습니다. 그러다 보니 중간에 오류가 나게 되면 어느 부분에서 문제가 생겼는지 확인하기 쉽지가 않았습니다. 더 알아보니 리액트의 태그를 콘솔에 출력해보면 객체를 반환한다는 것을 알 수 있었습니다.
-  <img src="./src/assets/readme01.png" alt="node">
-  이 데이터를 확인하고 나서 저도 이것처럼 데이터를 가공하면 좀 더 눈으로 확인할 수 있는 데이터를 만들 수 있겠다는 생각에 1차, 2차 가공으로 나누게 되었습니다.
-
----
-
-### 스타일 적용
-
-css를 적용하는 부분은 처음에는 React inline style을 계획하였습니다. 하지만 inline style은 hover, focus등 의사클래스를 지원하지 않는다는 부분을 알게 되어 방향을 수정하였습니다. 그다음 접근 방향으로는 새로운 CSSStyleSheet를 만들어 새로운 rule을 주입해 만들어주는 방법으로 접근해보려 하였습니다. 이 방향으로 알아보던 중 head에 style태그를 만들어서 innerHTML을 이용한 방법을 알게 되어 이 방법을 선택하여 진행하게 되었습니다.
-
-<br />
-
-> 느낀 점
-
-<br />
-
-- styled components 또는 emotion 등 css in js 라이브러리들이 CSSOM을 직접 조작하며 스타일을 적용한다는 걸 알게 된 좋은 계기가 되었습니다. 리팩토링 시 계획했던 CSSStyleSheet에 rule을 주입하는 방법으로 다시 리팩토링 해보고 싶습니다.
-
-<br />
-
-## 아쉬운 점
-
-- 이번 프로젝트를 진행하면서 parsing을 하는 작업을 많이 거치게 되었습니다. 그러다 보니 코드가 길어지게 되면서 코드의 모듈화가 필요하다는 것을 절실히 느꼈습니다. 최대한 모듈화하고 가독성 좋게 만들어 보려 했지만, 아직 부족한 부분이 많고 만족스러운 코드가 되지 않은 것 같아 아쉬운 마음이 듭니다. 코드를 작성하면서 어떤 것을 더 공부해야 더 재사용하기 쉽고 보기 좋은 코드를 만들어낼 수 있는지 많은 궁금증이 들었고 답답한 마음이 많이 들게 되었습니다. 이번 프로젝트를 통해서 깨달았던 것들과 궁금했던 부분을 정리하여 더 좋은 코드로 리팩토링 해보고자 합니다.
-
-<br />
-
-## 프로젝트를 통해 배운 점
-
-- 기초가 중요하다는 점을 또 한 번 느끼게 되었습니다. string을 DOM으로 바꾸면서 DOM에 대한 이해가 많이 필요했는데 node마다 type이 있고 html과 svg는 name space가 달라 parsing하는 과정을 html과 다르게 해주어야 한다는 것도 알게 되었습니다.
-- 이번 프로젝트를 통해 라이브러리 코드를 보는 과정을 많이 겪으면서 라이브러리를 만든 분들에 대한 생각이 달라지는 계기가 되었습니다. 그저 적용만 했을 때보다 코드를 보며 스스로 만들어보는 과정을 겪게 되니 라이브러리를 만든 분들이 대단하다는 생각을 많이 했던 것 같습니다. 그리고 전에는 새로운 라이브러리를 보고 적용해보고 싶다는 생각이 많이 들었다면, 이제는 어떻게 만들었는지 코드가 궁금해진다는 생각이 먼저 들게 되었고, 저도 더 좋은 코드를 작성해서 공유할 수 있는 개발자가 되고 싶다는 목표가 생겼습니다.
-
-<br />
-
-## Creator
+# Creator
 
 - 임현정 glowhyun1@gmail.com
