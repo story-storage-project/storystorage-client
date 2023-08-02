@@ -101,7 +101,7 @@ div 태그의 `contenteditable` 속성을 추가하면 textarea처럼 타이핑�
    1. textarea처럼 value가 없어 비제어 컴포넌트 방식으로 관리해야 합니다.
 3. div에 값을 재할당하는 경우 caret이 맨 앞으로 위치하는 문제가 있습니다.
 
-결국 text의 입력은 textare가 담당하고, 출력은 div가 담당하게 하도록 하는 방식으로 2가지 태그를 한 번에 써보자 라는 결정을 하게 됐습니다. 이렇게 함으로써 에디터를 제어 컴포넌트 방식으로 관리할 수 있게 되었습니다.
+결국 text의 입력은 textarea가 담당하고, 출력은 div가 담당하게 하도록 하는 방식으로 2가지 태그를 한 번에 써보자 라는 결정을 하게 됐습니다. 이렇게 함으로써 에디터를 제어 컴포넌트 방식으로 관리할 수 있게 되었습니다.
 
 <p align="center">
   <img src="https://github.com/story-storage-project/storystorage-client/assets/84281505/f983a1b4-2fe2-49ff-a040-72aec53e26b2" alt="textarea" />
